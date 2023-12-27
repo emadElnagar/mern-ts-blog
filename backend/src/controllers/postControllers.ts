@@ -43,10 +43,22 @@ export const newPost: RequestHandler = async (req, res) => {
 }
 
 // Get all post
-export const GetAllControllers: RequestHandler = async (_req, res) => {
+export const GetAllPosts: RequestHandler = async (_req, res) => {
   try {
     const posts = await Post.find();
   } catch (error) {
     res.send(error);
+  }
+}
+
+// Get single post
+export const GetSinglePost: RequestHandler = async (req, res) => {
+  const post = await Post.findOne({ slug: req.params.slug });
+  if (post) {
+    res.send(post);
+  } else {
+    res.status(404).json({
+      message: 'Post Not Found'
+    });
   }
 }
