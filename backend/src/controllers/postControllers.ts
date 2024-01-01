@@ -46,6 +46,7 @@ export const newPost: RequestHandler = async (req, res) => {
 export const GetAllPosts: RequestHandler = async (_req, res) => {
   try {
     const posts = await Post.find();
+    res.send(posts);
   } catch (error) {
     res.send(error);
   }
@@ -61,4 +62,27 @@ export const GetSinglePost: RequestHandler = async (req, res) => {
       message: 'Post Not Found'
     });
   }
+}
+
+// Update post
+export const UpdatePost: RequestHandler = async (req, res) => {
+  const newPost = {
+    title: req.body.title,
+    slug: slugify(req.body.title, {
+      replacement: '-',
+      lower: true,
+      strict: true,
+    }),
+    description: req.body.description,
+    image: req.body.image
+  }
+  Post.updateOne({ _id: req.params.id }, { $set: newPost }).then(_result => {
+    res.status(200).json({
+      message: 'Post updated successfully'
+    });
+  }).catch(error => {
+    res.status(401).json({
+      message: "Error" + error.message
+    });
+  });
 }
