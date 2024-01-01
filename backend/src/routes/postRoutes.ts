@@ -10,7 +10,7 @@ postRouter.post('/new', newPost);
 postRouter.get('/all', GetAllPosts);
 
 // Get single post
-postRouter.get('/slug', GetSinglePost);
+postRouter.get('/:slug', GetSinglePost);
 
 // Update post
 postRouter.put('/:id', UpdatePost);
