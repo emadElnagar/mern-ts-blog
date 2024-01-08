@@ -11,6 +11,7 @@ export const newPost: RequestHandler = async (req, res) => {
   interface postType {
     title: string;
     slug: string;
+    author: object,
     description: string;
     image: string;
     likesCount: number;
@@ -22,19 +23,15 @@ export const newPost: RequestHandler = async (req, res) => {
       lower: true,
       strict: true,
     }),
+    author: req.body.author,
     description: req.body.description,
     image: req.body.image,
     likesCount: 0
   });
   post.save().then(post => {
     res.status(200).json({
-      _id: post._id,
-      title: post.title,
-      slug: post.slug,
-      description: post.description,
-      image: post.image,
-      likesCount: post.likesCount
-    })
+      message: "Post created successfully"
+    });
   }).catch(err => {
     res.status(401).json({
       message: err.message
