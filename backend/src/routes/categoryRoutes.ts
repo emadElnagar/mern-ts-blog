@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { getAllCategories, newCategory, updateCategory } from "../controllers/categoryController";
+import { 
+  deleteCategory, 
+  getAllCategories, 
+  newCategory, 
+  updateCategory 
+} from "../controllers/categoryController";
 
 const categoryRouter = Router();
 
@@ -11,5 +16,8 @@ categoryRouter.get('/all', getAllCategories);
 
 // Update category
 categoryRouter.put('/:id/update', updateCategory);
+
+// Delete category
+categoryRouter.delete('/:id/delete', deleteCategory);
 
 export default categoryRouter;

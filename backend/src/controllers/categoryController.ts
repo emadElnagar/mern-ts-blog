@@ -51,3 +51,16 @@ export const updateCategory: RequestHandler = async (req, res) => {
     });
   });
 }
+
+// Delete category
+export const deleteCategory: RequestHandler = (req, res) => {
+  Category.deleteOne({ _id: req.params.id }).then(_result => {
+    res.status(200).json({
+      message: "Category deleted successfully"
+    });
+  }).catch(error => {
+    res.status(401).json({
+      message: "Error" + error.message
+    });
+  });
+};
