@@ -27,11 +27,27 @@ export const newCategory: RequestHandler = async (req, res) => {
 }
 
 // Get all categories
-export const getAllCategories: RequestHandler = async (req, res) => {
+export const getAllCategories: RequestHandler = async (_req, res) => {
   try {
     const categories = await Category.find();
     res.send(categories);
   } catch (error) {
     res.send(error);
   }
+}
+
+// Update category
+export const updateCategory: RequestHandler = async (req, res) => {
+  const newCategory = {
+    title: req.body.title,
+  }
+  Category.updateOne({ _id: req.params.id }, { $set: newCategory }).then(_result => {
+    res.status(200).json({
+      message: 'Category updated successfully'
+    });
+  }).catch(error => {
+    res.status(401).json({
+      message: "Error" + error.message
+    });
+  });
 }
