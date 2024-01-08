@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import Category from "../models/Category";
 
 // Create a new category
-export const newCategory: RequestHandler =async (req, res) => {
+export const newCategory: RequestHandler = async (req, res) => {
   const foundCategoryTitle = await Category.findOne({ title: req.body.title });
   if (foundCategoryTitle) {
     res.json({ message: 'This title already exists, Try another name' });
@@ -24,4 +24,14 @@ export const newCategory: RequestHandler =async (req, res) => {
       message: err.message
     });
   });
+}
+
+// Get all categories
+export const getAllCategories: RequestHandler = async (req, res) => {
+  try {
+    const categories = await Category.find();
+    res.send(categories);
+  } catch (error) {
+    res.send(error);
+  }
 }

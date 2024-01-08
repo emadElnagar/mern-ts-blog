@@ -13,6 +13,6 @@ postRouter.get('/all', GetAllPosts);
 postRouter.get('/:slug', GetSinglePost);
 
 // Update post
-postRouter.put('/:id', UpdatePost);
+postRouter.put('/:id/update', UpdatePost);
 
 export default postRouter;
