@@ -83,3 +83,16 @@ export const UpdatePost: RequestHandler = async (req, res) => {
     });
   });
 }
+
+// Delete post
+export const DeletePost: RequestHandler = async (req, res) => {
+  Post.deleteOne({ _id: req.params.id }).then(_result => {
+    res.status(200).json({
+      message: "Post deleted successfully"
+    });
+  }).catch(error => {
+    res.status(401).json({
+      message: "Error" + error.message
+    });
+  });
+}

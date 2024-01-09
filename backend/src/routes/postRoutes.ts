@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { GetAllPosts, GetSinglePost, UpdatePost, newPost } from "../controllers/postControllers";
+import { DeletePost, GetAllPosts, GetSinglePost, UpdatePost, newPost } from "../controllers/postControllers";
 
 const postRouter = Router();
 
@@ -14,5 +14,8 @@ postRouter.get('/:slug', GetSinglePost);
 
 // Update post
 postRouter.put('/:id/update', UpdatePost);
+
+// Delete post
+postRouter.delete('/:id/delete', DeletePost);
 
 export default postRouter;
