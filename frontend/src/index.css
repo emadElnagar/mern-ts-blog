@@ -1,3 +1,7 @@
+:root {
+  --main-color: #e3b576;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -12,4 +16,26 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+.book-card {
+  width: 100%;
+  h2 {
+    text-transform: uppercase;
+    text-align: center;
+  }
+  p {
+    color: #aaa;
+  }
+  a {
+    color: var(--main-color);
+  }
 }
