@@ -1,14 +1,19 @@
 import React from 'react';
 import './App.css';
-import BookCard from './components/BookCard';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Home from './pages/HomePage';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-      </header>
-      <BookCard />
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <header className="App-header">
+        </header>
+      </div>
+      <Routes>
+      <Route path='/' element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
