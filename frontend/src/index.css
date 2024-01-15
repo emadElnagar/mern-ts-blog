@@ -9,8 +9,39 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+}
+
+::selection {
+  color: #fff;
+  background-color: #000;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+}
+
+.container {
+  margin: auto;
+  @media (min-width:1200px) {
+    width: 1140px;
+  }
+  @media (max-width:1199px) {
+    width: 960px;
+  }
+  @media (max-width:991px) {
+    width: 720px;
+  }
+  @media (max-width:767px) {
+    width: 540px;
+  }
+  @media (max-width:576px) {
+    max-width: 100%;
+  }  
 }
 
 code {
@@ -24,6 +55,8 @@ img {
 
 a {
   text-decoration: none;
+  color: var(--main-color);
+  transition: inherit;
 }
 
 .book-card {
@@ -37,5 +70,28 @@ a {
   }
   a {
     color: var(--main-color);
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: auto;
+  @media (max-width:767px) {
+    width: 100%;
+  }  
+  input {
+    padding: 15px 5px;
+    margin-bottom: 20px;
+    &:focus {
+      outline: none;
+      border: 1px solid #000;
+    }
+  }
+  input[type=submit] {
+    background: var(--main-color);
+    border: 1px solid var(--main-color);
+    cursor: pointer;
   }
 }
