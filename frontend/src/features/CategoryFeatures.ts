@@ -33,6 +33,16 @@ export const NewCategory: any = createAsyncThunk("categories/new", async (catego
   }
 });
 
+// Get all categories
+export const GetAllCategories: any = createAsyncThunk("categories/all", async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${url}/all`);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+})
+
 // CATEGORY SLICE
 const categorySlice = createSlice({
   name: 'category',
@@ -41,7 +51,7 @@ const categorySlice = createSlice({
   extraReducers: (builder) => {
     builder
     // Create a new category
-    .addCase(NewCategory.pending, (state, _action) =>{
+    .addCase(NewCategory.pending, (state) => {
       state.isLoading = true;
     })
     .addCase(NewCategory.fulfilled, (state, action) =>{
@@ -49,6 +59,18 @@ const categorySlice = createSlice({
       state.categories.push(action.payload);
     })
     .addCase(NewCategory.rejected, (state, action) =>{
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Get all categories
+    .addCase(GetAllCategories.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(GetAllCategories.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.categories = action.payload;
+    })
+    .addCase(GetAllCategories.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })
