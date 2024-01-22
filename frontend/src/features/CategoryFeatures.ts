@@ -55,6 +55,16 @@ export const UpdateCategory: any = createAsyncThunk("categories/single", async (
   }
 });
 
+// Delete category
+export const DeleteCategory: any = createAsyncThunk("category/delete", async (id: any, { rejectWithValue }) => {
+  try {
+    const response = await axios.delete(`${url}/${id}/delete`);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
 // CATEGORY SLICE
 const categorySlice = createSlice({
   name: 'category',
@@ -102,6 +112,23 @@ const categorySlice = createSlice({
       }
     })
     .addCase(UpdateCategory.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Delete category
+    .addCase(DeleteCategory.pending, (state, _) => {
+      state.isLoading = true;
+    })
+    .addCase(DeleteCategory.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const {
+        arg: { _id },
+      } = action.meta;
+      if (_id) {
+        state.categories = state.categories.filter((category) => category._id !== action.payload)
+      }
+    })
+    .addCase(DeleteCategory.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })
