@@ -44,12 +44,23 @@ export const NewPost: any = createAsyncThunk("posts/new", async (post: any, { re
   }
 });
 
+// Get all posts
+export const GetAllPosts: any = createAsyncThunk("posts/all", async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${url}/all`);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
 const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
+    // Add a new post
     .addCase(NewPost.pending, (state) => {
       state.isLoading = false;
     })
@@ -58,6 +69,18 @@ const postSlice = createSlice({
       state.posts.push(action.payload);
     })
     .addCase(NewPost.rejected, (state, action) => {
+      state.isLoading = true;
+      state.error = action.error;
+    })
+    // Get all posts
+    .addCase(GetAllPosts.pending, (state) => {
+      state.isLoading = false;
+    })
+    .addCase(GetAllPosts.fulfilled, (state, action) => {
+      state.isLoading = true;
+      state.posts = action.payload;
+    })
+    .addCase(GetAllPosts.rejected, (state, action) => {
       state.isLoading = true;
       state.error = action.error;
     })
