@@ -62,7 +62,21 @@ export const GetSinglePost: any = createAsyncThunk("posts/single", async (post: 
   } catch (error: any) {
     return rejectWithValue(error.message);
   }
-})
+});
+
+// Update post
+export const UpdatePost: any = createAsyncThunk("posts/update", async (post: any, { rejectWithValue }) => {
+  try {
+    const response = await axios.put(`${url}/${post._id}/update`, {
+      title: post.title,
+      description: post.description,
+      image: post.image
+    });
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
 
 const postSlice = createSlice({
   name: 'post',
@@ -103,6 +117,25 @@ const postSlice = createSlice({
       state.post = action.payload;
     })
     .addCase(GetSinglePost.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Update post
+    .addCase(UpdatePost.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(UpdatePost.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const {
+        arg: { _id }
+      } = action.meta;
+      if (_id) {
+        state.posts = state.posts.map((item) =>
+          item._id === _id ? action.payload : item
+        );
+      }
+    })
+    .addCase(UpdatePost.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })
