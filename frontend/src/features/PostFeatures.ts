@@ -78,6 +78,16 @@ export const UpdatePost: any = createAsyncThunk("posts/update", async (post: any
   }
 });
 
+// Delete post
+export const DeletePost: any = createAsyncThunk("posts/delete", async (post: any, { rejectWithValue }) => {
+  try {
+    const response = await axios.delete(`${url}/${post._id}/delete`);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
 const postSlice = createSlice({
   name: 'post',
   initialState,
@@ -136,6 +146,23 @@ const postSlice = createSlice({
       }
     })
     .addCase(UpdatePost.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Delete post
+    .addCase(DeletePost.panding, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(DeletePost.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const {
+        arg: { _id }
+      } = action.meta;
+      if(_id) {
+        state.posts = state.posts.filter((post) => post._id !== action.payload);
+      }
+    })
+    .addCase(DeletePost.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })
