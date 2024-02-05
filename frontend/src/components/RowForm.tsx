@@ -1,6 +1,6 @@
 import { Fragment } from "react"
 
-const NewContainerForm = () => {
+const RowForm = () => {
   return (
     <Fragment>
       <form>
@@ -10,3 +10,5 @@ const NewContainerForm = () => {
     </Fragment>
   )
 }
+
+export default RowForm;
