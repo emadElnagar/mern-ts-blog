@@ -30,3 +30,13 @@ export const userRegister: RequestHandler = async (req, res) => {
     });
   });
 }
+
+// Get all users
+export const getAllUsers: RequestHandler = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.send(users);
+  } catch (error) {
+    res.send(error);
+  }
+}
