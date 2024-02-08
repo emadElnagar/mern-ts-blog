@@ -40,3 +40,13 @@ export const getAllUsers: RequestHandler = async (req, res) => {
     res.send(error);
   }
 }
+
+// Get single user
+export const getSingleUser: RequestHandler = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.send(user);
+  } catch (error) {
+    res.send(error);
+  }
+}
