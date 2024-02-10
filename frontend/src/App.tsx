@@ -4,12 +4,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/HomePage';
 import LoginPage from './pages/users/Login';
 import RegisterPage from './pages/users/Register';
+import NavBar from './components/NavBar';
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
         <header className="App-header">
+          <NavBar />
         </header>
       </div>
       <Routes>
