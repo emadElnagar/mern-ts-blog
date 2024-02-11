@@ -50,3 +50,16 @@ export const getSingleUser: RequestHandler = async (req, res) => {
     res.send(error);
   }
 }
+
+// Delete user
+export const deleteUser: RequestHandler = async (req, res) => {
+  User.deleteOne({ _id: req.params.id }).then(_result => {
+    res.status(200).json({
+      message: "User Deleted Successfully"
+    });
+  }).catch(error => {
+    res.status(401).json({
+      message: "Error Deleting User" + error.message
+    });
+  });
+}
