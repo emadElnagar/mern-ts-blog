@@ -5,6 +5,7 @@ import Home from './pages/HomePage';
 import LoginPage from './pages/users/Login';
 import RegisterPage from './pages/users/Register';
 import NavBar from './components/NavBar';
+import NewPostPage from './pages/posts/NewPost';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/users/login' element={<LoginPage />} />
         <Route path='/users/register' element={<RegisterPage />} />
+        <Route path='/posts/new' element={<NewPostPage />} />
       </Routes>
     </BrowserRouter>
   );

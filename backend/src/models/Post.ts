@@ -4,7 +4,7 @@ interface Post {
   title: string;
   slug: string;
   author: object,
-  description: string;
+  content: string;
   image: string;
   likes: object[];
   likesCount: number;
@@ -15,7 +15,7 @@ const postSchema = new Schema<Post>({
   title: { type: String, required: true },
   slug: { type: String, required: true },
   author: { type: [Schema.Types.ObjectId], ref: 'User' },
-  description: { type: String, required: true },
+  content: { type: String, required: true },
   image: { type: String, required: true },
   likes: { type: [Schema.Types.ObjectId], ref: 'User' },
   likesCount: Number,
