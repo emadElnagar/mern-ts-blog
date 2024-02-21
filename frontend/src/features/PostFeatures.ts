@@ -79,9 +79,9 @@ export const UpdatePost: any = createAsyncThunk("posts/update", async (post: any
 });
 
 // Delete post
-export const DeletePost: any = createAsyncThunk("posts/delete", async (post: any, { rejectWithValue }) => {
+export const DeletePost: any = createAsyncThunk("posts/delete", async (id: any, { rejectWithValue }) => {
   try {
-    const response = await axios.delete(`${url}/${post._id}/delete`);
+    const response = await axios.delete(`${url}/${id}/delete`);
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.message);
@@ -150,7 +150,7 @@ const postSlice = createSlice({
       state.error = action.error;
     })
     // Delete post
-    .addCase(DeletePost.panding, (state) => {
+    .addCase(DeletePost.pending, (state) => {
       state.isLoading = true;
     })
     .addCase(DeletePost.fulfilled, (state, action) => {
