@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import User from '../models/User';
 import bcrypt from 'bcrypt';
+import { generateToken } from "../middlewares/auth";
 
 // Register user
 export const userRegister: RequestHandler = async (req, res) => {
@@ -29,6 +30,19 @@ export const userRegister: RequestHandler = async (req, res) => {
       message: error.message
     });
   });
+}
+
+// User login
+export const userLogin: RequestHandler = async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (user) {
+    if(bcrypt.compareSync(req.body.password, user.password)){
+      const token = generateToken(user);
+      res.status(200).json({
+        token
+      });
+    }
+  }
 }
 
 // Get all users
