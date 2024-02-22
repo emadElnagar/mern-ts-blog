@@ -1,9 +1,11 @@
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { UserRegister } from "../../features/UserFeatures";
 import { useState } from "react";
 
 const RegisterPage = () => {
+  const { user } = useSelector((state: any) => state.user);
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -13,6 +15,9 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(UserRegister({ firstName, lastName, email, password }));
+  }
+  if (user) {
+    navigate('/');
   }
   return (
     <div className="container">
