@@ -21,9 +21,10 @@ export const userRegister: RequestHandler = async (req, res) => {
     email: req.body.email,
     password: await bcrypt.hash(req.body.password, 10),
   });
+  const token = generateToken(user);
   user.save().then(_user => {
     res.status(200).json({
-      message: 'User registered successfully'
+      token
     });
   }).catch(error => {
     res.status(401).json({
