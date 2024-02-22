@@ -30,9 +30,7 @@ const initialState: UserState = {
 // User register
 export const UserRegister: any = createAsyncThunk("useres/register", async (user: object, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${url}/register`, {
-      user
-    });
+    const response = await axios.post(`${url}/register`, user);
     return response.data;
   } catch (error: any) {
     rejectWithValue(error.message);
