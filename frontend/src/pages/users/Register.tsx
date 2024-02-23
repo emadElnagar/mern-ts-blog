@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { UserRegister } from "../../features/UserFeatures";
 import { useState } from "react";
+import ErrorAlert from "../../components/ErrorAlert";
 
 const RegisterPage = () => {
   const { user } = useSelector((state: any) => state.user);
@@ -14,7 +15,15 @@ const RegisterPage = () => {
   const dispatch = useDispatch();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(UserRegister({ firstName, lastName, email, password }));
+    if (! isNaN(Number(firstName)) || ! isNaN(Number(lastName))) {
+      ErrorAlert('Oops', `name can't be number`);
+    } else if (password.length < 8) {
+      ErrorAlert('Oops', 'password must be at least 8 characters');
+    } else if (password !== passwordConfirm) {
+      ErrorAlert('Oops', `password and confirm password doesn't match`);
+    } else {
+      dispatch(UserRegister({ firstName, lastName, email, password }));
+    }
   }
   if (user) {
     navigate('/');
