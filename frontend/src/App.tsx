@@ -6,6 +6,7 @@ import LoginPage from './pages/users/Login';
 import RegisterPage from './pages/users/Register';
 import NavBar from './components/NavBar';
 import NewPostPage from './pages/posts/NewPost';
+import NotFoundPage from './pages/NotFound';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path='/users/login' element={<LoginPage />} />
         <Route path='/users/register' element={<RegisterPage />} />
         <Route path='/posts/new' element={<NewPostPage />} />
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
