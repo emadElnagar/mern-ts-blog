@@ -1,10 +1,13 @@
 import { IoIosSearch } from "react-icons/io";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useState } from "react";
+import { Logout } from "../features/UserFeatures";
 
 const NavBar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
   const { user } = useSelector((state: any) => state.user);
   const handleDropDown = () => {
@@ -13,6 +16,10 @@ const NavBar = () => {
     } else {
       setIsActive(false);
     }
+  }
+  const handleLogout = () => {
+    dispatch(Logout());
+    navigate('/');
   }
   return (
     <nav>
@@ -39,7 +46,9 @@ const NavBar = () => {
               </button>
               <ul className={`${isActive === false ? 'dropdown-content d-none' : 'dropdown-content'}`}>
                 <li className="dropdown-item">profile</li>
-                <li className="dropdown-item">logout</li>
+                <li className="dropdown-item">
+                  <button className="dropdown-button" onClick={handleLogout}>logout</button>
+                </li>
               </ul>
             </div>
           )
