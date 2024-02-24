@@ -1,5 +1,6 @@
 :root {
   --main-color: #e3b576;
+  --secondary-color: #333333;
 }
 
 * {
@@ -47,7 +48,7 @@ body {
 nav {
   display: flex;
   height: 50px;
-  background: #333;
+  background: var(--secondary-color);
   color: #fff;
   position: relative;
   div {
@@ -106,6 +107,10 @@ a {
   transition: inherit;
 }
 
+li {
+  list-style-type: none;
+}
+
 .book-card {
   width: 100%;
   h2 {
@@ -122,6 +127,10 @@ a {
 
 .text-center {
   text-align: center;
+}
+
+.d-none {
+  display: none;
 }
 
 .heading {
@@ -174,4 +183,30 @@ form {
     border: 1px solid currentColor;
     padding: 10px 25px;
   }
+}
+
+.dropdown {
+  position: relative;
+  .dropdown-button {
+    color: #fff;
+    background: transparent;
+    cursor: pointer;
+    text-transform: capitalize;
+    border: none;
+  }
+  .dropdown-content {
+    position: absolute;
+    background: var(--secondary-color);
+    margin-inline-start: 30px;
+    margin-block-start: 100px;
+    padding: 10px 20px;
+    .dropdown-item {
+      color: #fff;
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.rotate {
+  transform: rotate(180deg);
 }
