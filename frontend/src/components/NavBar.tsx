@@ -19,6 +19,7 @@ const NavBar = () => {
   }
   const handleLogout = () => {
     dispatch(Logout());
+    setIsActive(false);
     navigate('/');
   }
   return (
