@@ -23,11 +23,11 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/users/login' element={<LoginPage />} />
         <Route path='/users/register' element={<RegisterPage />} />
-        <Route path='/categories/new' element={<NewCategoryPage />} />
         {
           user !== null && user.role !== 'user' &&
           <Fragment>
             <Route path='/posts/new' element={<NewPostPage />} />
+            <Route path='/categories/new' element={<NewCategoryPage />} />
           </Fragment>
         }
         <Route path='*' element={<NotFoundPage />} />
