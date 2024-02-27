@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/HomePage';
@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import NewPostPage from './pages/posts/NewPost';
 import NotFoundPage from './pages/NotFound';
 import { useSelector } from 'react-redux';
+import NewCategoryPage from './pages/categories/NewCategory';
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -22,6 +23,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/users/login' element={<LoginPage />} />
         <Route path='/users/register' element={<RegisterPage />} />
+        <Route path='/categories/new' element={<NewCategoryPage />} />
         {
           user !== null && user.role !== 'user' &&
           <Fragment>
