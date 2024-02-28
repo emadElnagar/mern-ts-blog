@@ -2,7 +2,7 @@ import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Logout } from "../features/UserFeatures";
 
 const NavBar = () => {
@@ -29,31 +29,36 @@ const NavBar = () => {
           <Link to='/'>magala</Link>
         </h1>
       </div>
-      <div className="form">
+      <div className="search-form">
         <form>
           <input type="text" placeholder="Search" />
           <button><IoIosSearch /></button>
         </form>
       </div>
       <div className="account">
-        {
-          user === null ? (
-            <Link to="/users/login">login</Link>
-          ) : (
-            <div className="dropdown">
-              <button className="dropdown-button" onClick={handleDropDown}>
-                <IoMdArrowDropdown className={`${isActive === false ? '' : 'rotate'}`} />
-                { user.firstName }
-              </button>
-              <ul className={`${isActive === false ? 'dropdown-content d-none' : 'dropdown-content'}`}>
-                <li className="dropdown-item">profile</li>
-                <li className="dropdown-item">
-                  <button className="dropdown-button" onClick={handleLogout}>logout</button>
-                </li>
-              </ul>
-            </div>
-          )
-        }
+        <div className="buttons">
+          {
+            user === null ? (
+              <Fragment>
+                <Link to="/users/login">Login</Link>
+                <Link to="/users/register">Register</Link>
+              </Fragment>
+            ) : (
+              <div className="dropdown">
+                <button className="dropdown-button" onClick={handleDropDown}>
+                  <IoMdArrowDropdown className={`${isActive === false ? '' : 'rotate'}`} />
+                  { user.firstName }
+                </button>
+                <ul className={`${isActive === false ? 'dropdown-content d-none' : 'dropdown-content'}`}>
+                  <li className="dropdown-item">profile</li>
+                  <li className="dropdown-item">
+                    <button className="dropdown-button" onClick={handleLogout}>logout</button>
+                  </li>
+                </ul>
+              </div>
+            )
+          }
+        </div>
       </div>
     </nav>
   )

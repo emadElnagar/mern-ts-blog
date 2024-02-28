@@ -7,7 +7,7 @@ const NewPostPage = () => {
   return (
     <div className="container">
       <h1 className="text-center text-capitalize heading">new post</h1>
-      <form>
+      <form className="colum-form">
         <input type="text" placeholder="title" />
         <ReactQuill theme="snow" value={value} onChange={setValue} />;
         <input type="file" accept="*/images" />

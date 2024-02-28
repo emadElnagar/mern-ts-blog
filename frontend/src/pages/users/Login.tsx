@@ -18,7 +18,7 @@ const LoginPage = () => {
   }
   return (
     <div className="container">
-      <form onSubmit={handleLogin}>
+      <form className="colum-form" onSubmit={handleLogin}>
         <input type="email" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
         <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
         <input type="submit" value="login" />

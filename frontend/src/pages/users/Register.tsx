@@ -30,7 +30,7 @@ const RegisterPage = () => {
   }
   return (
     <div className="container">
-      <form method="POST" onSubmit={ handleSubmit }>
+      <form className="colum-form" method="POST" onSubmit={ handleSubmit }>
         <input type="text" placeholder="first name" onChange={(e) => setFirstName(e.target.value)} />
         <input type="text" placeholder="last name" onChange={(e) => setLastName(e.target.value)} />
         <input type="email" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
