@@ -8,7 +8,7 @@ import NavBar from './components/NavBar';
 import NewPostPage from './pages/posts/NewPost';
 import NotFoundPage from './pages/NotFound';
 import { useSelector } from 'react-redux';
-import NewCategoryPage from './pages/categories/NewCategory';
+import Categories from './pages/categories/Categories';
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -27,7 +27,7 @@ function App() {
           user !== null && user.role !== 'user' &&
           <Fragment>
             <Route path='/posts/new' element={<NewPostPage />} />
-            <Route path='/categories/new' element={<NewCategoryPage />} />
+            <Route path='/categories/new' element={<Categories />} />
           </Fragment>
         }
         <Route path='*' element={<NotFoundPage />} />

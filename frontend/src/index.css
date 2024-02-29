@@ -175,6 +175,13 @@ li {
   }
 }
 
+.row-form {
+  display: flex;
+  button {
+    padding: 10px 15px;
+  }
+}
+
 .not-found {
   h1 {
     font-size: 8rem;
