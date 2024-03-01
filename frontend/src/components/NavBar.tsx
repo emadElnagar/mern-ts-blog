@@ -9,18 +9,34 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
+  const [isOpened, setIsOpened] = useState(false);
   const { user } = useSelector((state: any) => state.user);
   const handleDropDown = () => {
+    setIsOpened(false);
     if (isActive === false) {
       setIsActive(true);
     } else {
       setIsActive(false);
     }
   }
+  const handleOpen = () => {
+    setIsActive(false);
+    if (isOpened === true) {
+      setIsOpened(false);
+    } else {
+      setIsOpened(true);
+    }
+  }
   const handleLogout = () => {
     dispatch(Logout());
     setIsActive(false);
     navigate('/');
+  }
+  const handleNewPost = () => {
+    setIsOpened(false);
+  }
+  const handleNewCategory = () => {
+    setIsOpened(false);
   }
   return (
     <nav>
@@ -44,18 +60,43 @@ const NavBar = () => {
                 <Link to="/users/register">Register</Link>
               </Fragment>
             ) : (
-              <div className="dropdown">
-                <button className="dropdown-button" onClick={handleDropDown}>
-                  <IoMdArrowDropdown className={`${isActive === false ? '' : 'rotate'}`} />
-                  { user.firstName }
-                </button>
-                <ul className={`${isActive === false ? 'dropdown-content d-none' : 'dropdown-content'}`}>
-                  <li className="dropdown-item">profile</li>
-                  <li className="dropdown-item">
-                    <button className="dropdown-button" onClick={handleLogout}>logout</button>
-                  </li>
-                </ul>
-              </div>
+              <Fragment>
+                {
+                  user.role === 'admin' || user.role === 'moderator' ?
+                  (
+                    <div className="dropdown">
+                      <button className="dropdown-button" onClick={handleOpen}>
+                        <IoMdArrowDropdown className={`${isOpened === false ? '' : 'rotate'}`} /> new
+                      </button>
+                      <ul className={`${isOpened === false ? 'dropdown-content d-none' : 'dropdown-content'}`}>
+                        <li className="dropdown-item">
+                          <button className="dropdown-button" onClick={handleNewPost}>
+                            <Link to="/posts/new">post</Link>
+                          </button>
+                        </li>
+                        <li className="dropdown-item">
+                        <button className="dropdown-button" onClick={handleNewCategory}>
+                          <Link to="/categories/new">category</Link>
+                        </button>
+                        </li>
+                      </ul>
+                    </div>
+                  )
+                  : <></>
+                }
+                <div className="dropdown">
+                  <button className="dropdown-button" onClick={handleDropDown}>
+                    <IoMdArrowDropdown className={`${isActive === false ? '' : 'rotate'}`} />
+                    { user.firstName }
+                  </button>
+                  <ul className={`${isActive === false ? 'dropdown-content d-none' : 'dropdown-content'}`}>
+                    <li className="dropdown-item">profile</li>
+                    <li className="dropdown-item">
+                      <button className="dropdown-button" onClick={handleLogout}>logout</button>
+                    </li>
+                  </ul>
+                </div>
+              </Fragment>
             )
           }
         </div>

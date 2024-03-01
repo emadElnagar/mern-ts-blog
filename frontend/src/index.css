@@ -82,7 +82,7 @@ nav {
   }
   .account {
     padding-inline-end: 2rem;
-    width: 10%;
+    width: 20%;
     .buttons {
       flex-direction: row;
       height: 50%;
@@ -214,6 +214,9 @@ li {
     .dropdown-item {
       color: #fff;
       margin-bottom: 5px;
+      a {
+        color: inherit;
+      }
     }
   }
 }
