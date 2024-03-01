@@ -12,7 +12,7 @@ export const newCategory: RequestHandler = async (req, res) => {
     author: object
   }
   const category = new Category<categoryType>({
-    title: req.body.tilte,
+    title: req.body.title,
     author: req.body.author
   });
   category.save().then(_category => {

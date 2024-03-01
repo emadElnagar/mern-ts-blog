@@ -6,8 +6,8 @@ interface Category {
 }
 
 const CategorySchema = new Schema<Category>({
-  title: String,
-  author: { type: [Schema.Types.ObjectId], ref: 'User' }
+  title: { type: String, required: true },
+  author: { type: [Schema.Types.ObjectId], required: true, ref: 'User' }
 }, {
   timestamps: true
 });

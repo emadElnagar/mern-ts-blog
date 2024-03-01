@@ -6,17 +6,21 @@ const RowForm = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: any) => state.user);
   const [title, setTitle] = useState('');
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e: {
+    target: any; preventDefault: () => void; 
+  }) => {
     e.preventDefault();
     dispatch(NewCategory({
-      _id: user._id,
       title,
-    }))
+      author: user._id
+    }));
+    e.target.reset();
+    setTitle('');
   }
   return (
     <Fragment>
       <form className="row-form" onSubmit={ handleSubmit }>
-        <input type="text" placeholder="category title" onChange={(e) => setTitle(e.target.value)} />
+        <input type="text" placeholder="category title" required onChange={(e) => setTitle(e.target.value)} />
         <button>+</button>
       </form>
     </Fragment>
