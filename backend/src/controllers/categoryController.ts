@@ -15,9 +15,9 @@ export const newCategory: RequestHandler = async (req, res) => {
     title: req.body.title,
     author: req.body.author
   });
-  category.save().then(_category => {
+  category.save().then(category => {
     res.status(200).json({
-      message: "Category created successfully"
+      category
     });
   }).catch(err => {
     res.status(401).json({

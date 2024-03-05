@@ -232,3 +232,8 @@ li {
 .rotate {
   transform: rotate(180deg);
 }
+
+select {
+  margin-block: 10px;
+  padding-block: 10px;
+}
