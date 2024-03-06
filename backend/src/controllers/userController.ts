@@ -66,7 +66,29 @@ export const getSingleUser: RequestHandler = async (req, res) => {
   }
 }
 
-// Delete user
+// Delete my user (for user)
+export const deleteProfile: RequestHandler = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    const validate = await bcrypt.compare(req.body.password, user.password);
+    if (!validate) {
+      res.status(401).json({
+        message: 'Password is not correct'
+      });
+    }
+    User.deleteOne({ _id: req.params.id }).then(_result => {
+      res.status(200).json({
+        message: "User Deleted Successfully"
+      });
+    }).catch(error => {
+      res.status(401).json({
+        message: "Error Deleting User" + error.message
+      });
+    });
+  }
+}
+
+// Delete user (for admin)
 export const deleteUser: RequestHandler = async (req, res) => {
   User.deleteOne({ _id: req.params.id }).then(_result => {
     res.status(200).json({

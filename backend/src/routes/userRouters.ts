@@ -22,6 +22,9 @@ userRouter.get('/all', getAllUsers);
 // Get single user
 userRouter.get('/profile/:id', getSingleUser);
 
+// Delete user account
+userRouter.post('/:id/account/delete')
+
 // Delete user
 userRouter.delete('/:id/delete', deleteUser);
 
