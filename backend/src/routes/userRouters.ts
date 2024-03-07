@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { 
   changePassword,
+  changeUserEmail,
   deleteUser, 
   getAllUsers, 
   getSingleUser, 
@@ -29,6 +30,9 @@ userRouter.post('/:id/account/delete')
 userRouter.delete('/:id/delete', deleteUser);
 
 // Change user password
-userRouter.post('/:id/change-password', changePassword);
+userRouter.patch('/:id/change-password', changePassword);
+
+// Change user email
+userRouter.patch('/:id/change-email', changeUserEmail);
 
 export default userRouter;
