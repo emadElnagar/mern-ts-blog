@@ -34,9 +34,11 @@ const NavBar = () => {
   }
   const handleNewPost = () => {
     setIsOpened(false);
+    navigate('/posts/new');
   }
   const handleNewCategory = () => {
     setIsOpened(false);
+    navigate('/categories/new');
   }
   return (
     <nav>
@@ -71,12 +73,12 @@ const NavBar = () => {
                       <ul className={`${isOpened === false ? 'dropdown-content d-none' : 'dropdown-content'}`}>
                         <li className="dropdown-item">
                           <button className="dropdown-button" onClick={handleNewPost}>
-                            <Link to="/posts/new">post</Link>
+                            post
                           </button>
                         </li>
                         <li className="dropdown-item">
                         <button className="dropdown-button" onClick={handleNewCategory}>
-                          <Link to="/categories/new">category</Link>
+                          category
                         </button>
                         </li>
                       </ul>

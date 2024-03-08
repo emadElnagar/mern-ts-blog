@@ -12,7 +12,7 @@ interface Post {
 }
 
 const postSchema = new Schema<Post>({
-  title: { type: String, required: true },
+  title: { type: String, required: true, unique: true },
   slug: { type: String, required: true },
   author: { type: [Schema.Types.ObjectId], ref: 'User' },
   content: { type: String, required: true },
