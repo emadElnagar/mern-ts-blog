@@ -139,3 +139,20 @@ export const changeUserEmail: RequestHandler = async (req, res) => {
     });
   });
 }
+
+// Change user first and last name
+export const updateUserName: RequestHandler = async (req, res) => {
+  const newUser = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName
+  }
+  User.updateOne({ _id: req.params.id }, { $set: newUser }).then(_result => {
+    res.status(200).json({
+      message: "user email updated successfully"
+    });
+  }).catch(error => {
+    res.status(401).json({
+      message: "Error" + error.message
+    });
+  });
+}

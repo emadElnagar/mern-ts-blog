@@ -5,6 +5,7 @@ import {
   deleteUser, 
   getAllUsers, 
   getSingleUser, 
+  updateUserName, 
   userLogin, 
   userRegister 
 } from "../controllers/userController";
@@ -34,5 +35,8 @@ userRouter.patch('/:id/change-password', changePassword);
 
 // Change user email
 userRouter.patch('/:id/change-email', changeUserEmail);
+
+// Change user first and last name
+userRouter.patch('/:id/update/name', updateUserName);
 
 export default userRouter;
