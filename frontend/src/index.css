@@ -215,9 +215,9 @@ li {
   }
   .dropdown-content {
     position: absolute;
+    top: 30px;
+    left: 0;
     background: var(--secondary-color);
-    margin-inline-start: 0;
-    margin-block-start: 100px;
     padding: 10px 20px;
     .dropdown-item {
       color: #fff;

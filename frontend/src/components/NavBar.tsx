@@ -40,6 +40,10 @@ const NavBar = () => {
     setIsOpened(false);
     navigate('/categories/new');
   }
+  const openAdminPanel = () => {
+    setIsActive(false);
+    navigate('/admin');
+  }
   return (
     <nav>
       <div className="logo">
@@ -77,9 +81,9 @@ const NavBar = () => {
                           </button>
                         </li>
                         <li className="dropdown-item">
-                        <button className="dropdown-button" onClick={handleNewCategory}>
-                          category
-                        </button>
+                          <button className="dropdown-button" onClick={handleNewCategory}>
+                            category
+                          </button>
                         </li>
                       </ul>
                     </div>
@@ -93,6 +97,14 @@ const NavBar = () => {
                   </button>
                   <ul className={`${isActive === false ? 'dropdown-content d-none' : 'dropdown-content'}`}>
                     <li className="dropdown-item">profile</li>
+                    {
+                      user.role === 'admin' &&
+                      <li className="dropdown-item">
+                        <button className="dropdown-button" onClick={openAdminPanel}>
+                          admin
+                        </button>
+                      </li>
+                    }
                     <li className="dropdown-item">
                       <button className="dropdown-button" onClick={handleLogout}>logout</button>
                     </li>
