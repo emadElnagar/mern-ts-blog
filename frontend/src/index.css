@@ -47,6 +47,7 @@ body {
 
 button {
   border: none;
+  cursor: pointer;
 }
 
 nav {
@@ -242,4 +243,25 @@ select {
   display: "block";
   margin: "0 auto";
   max-width: 100%;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 0 10px 20px;
+  border-bottom: 2px solid #000;
+  span {
+    font-weight: bold;
+    text-transform: capitalize;
+    a {
+      color: #000;
+    }
+  }
+  button {
+    background: none;
+    color: var(--main-color);
+    border: 1px solid currentColor;
+    padding: 5px 15px;
+  }
 }
