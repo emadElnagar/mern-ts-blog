@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import Categories from './pages/categories/Categories';
 import Dashboard from './pages/admin';
 import CategoryNew from './pages/admin/categories/NewCategory';
+import AllCategories from './pages/admin/categories/AllCategories';
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -36,6 +37,7 @@ function App() {
           user !== null && user.role === 'admin' &&
           <Fragment>
             <Route path='/admin' element={<Dashboard />} />
+            <Route path='/admin/categories' element={<AllCategories />} />
             <Route path='/admin/categories/new' element={<CategoryNew />} />
           </Fragment>
         }

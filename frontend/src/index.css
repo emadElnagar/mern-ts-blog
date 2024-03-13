@@ -265,3 +265,9 @@ select {
     padding: 5px 15px;
   }
 }
+
+.control {
+  button:first-of-type {
+    margin-inline: 10px;
+  }
+}
