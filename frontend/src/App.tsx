@@ -10,6 +10,7 @@ import NotFoundPage from './pages/NotFound';
 import { useSelector } from 'react-redux';
 import Categories from './pages/categories/Categories';
 import Dashboard from './pages/admin';
+import CategoryNew from './pages/admin/categories/NewCategory';
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -35,6 +36,7 @@ function App() {
           user !== null && user.role === 'admin' &&
           <Fragment>
             <Route path='/admin' element={<Dashboard />} />
+            <Route path='/admin/categories/new' element={<CategoryNew />} />
           </Fragment>
         }
         <Route path='*' element={<NotFoundPage />} />
