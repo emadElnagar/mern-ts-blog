@@ -14,19 +14,19 @@ const AllCategories = () => {
   return (
     <div className="container">
       <h1 className="heading text-center">all categories</h1>
-        {
-          categories.map((category: { _id: Key, title: string }) => (
-            <ul key={ category._id }>
-              <li className="row">
-                <span>{ category.title }</span>
-                <div className="control">
-                  <button><MdDelete /> delete</button>
-                  <button><IoPencil /> update</button>
-                </div>
-              </li>
-            </ul>
-          ))
-        }
+      {
+        categories.map((category: { _id: Key, title: string }) => (
+          <ul key={ category._id }>
+            <li className="row">
+              <span>{ category.title }</span>
+              <div className="control">
+                <button><MdDelete /> delete</button>
+                <button><IoPencil /> update</button>
+              </div>
+            </li>
+          </ul>
+        ))
+      }
     </div>
   )
 }
