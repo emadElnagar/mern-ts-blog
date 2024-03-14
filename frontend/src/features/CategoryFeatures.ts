@@ -44,7 +44,7 @@ export const GetAllCategories: any = createAsyncThunk("categories/all", async (_
 });
 
 // Update category
-export const UpdateCategory: any = createAsyncThunk("categories/single", async (category: any, { rejectWithValue }) => {
+export const UpdateCategory: any = createAsyncThunk("category/update", async (category: any, { rejectWithValue }) => {
   try {
     const response = await axios.put(`${url}/${category._id}/update`, {
       title: category.title

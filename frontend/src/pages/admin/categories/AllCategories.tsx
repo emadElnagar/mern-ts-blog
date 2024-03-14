@@ -2,9 +2,15 @@ import { Key, useEffect } from "react";
 import { IoPencil } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteCategory, GetAllCategories } from "../../../features/CategoryFeatures";
+import { DeleteCategory, GetAllCategories, UpdateCategory } from "../../../features/CategoryFeatures";
 import Swal from "sweetalert2";
 
+
+type categoryType = {
+  title: string
+}
+
+let categoryTitle: HTMLInputElement
 
 const AllCategories = () => {
   const dispatch = useDispatch();
@@ -34,6 +40,35 @@ const AllCategories = () => {
       }
     });
   }
+  // Handle update category
+  const handleUpdate = (_id: Key) => {
+    Swal.fire<categoryType>({
+      title: 'Update category',
+      html: `
+        <input type="text" id="title" class="swal2-input" placeholder="Category title">
+      `,
+      confirmButtonText: 'Update',
+      focusConfirm: false,
+      didOpen: () => {
+        const popup = Swal.getPopup()!
+        categoryTitle = popup.querySelector('#title') as HTMLInputElement
+        categoryTitle.onkeyup = (event) => event.key === 'Enter' && Swal.clickConfirm()
+      },
+      preConfirm: () => {
+        const title = categoryTitle.value
+        if (!title) {
+          Swal.showValidationMessage(`Please enter category title`);
+        }
+        return { title }
+      },
+    }).then((result) => {
+      const  title  = result.value?.title;
+      if (result.isConfirmed) {
+        dispatch(UpdateCategory({ _id, title }));
+        dispatch(GetAllCategories());
+      }
+    });
+  }
   return (
     <div className="container">
       <h1 className="heading text-center">all categories</h1>
@@ -43,8 +78,8 @@ const AllCategories = () => {
             <li className="row">
               <span>{ category.title }</span>
               <div className="control">
+                <button onClick={() => handleUpdate(category._id)}><IoPencil /> update</button>
                 <button onClick={() => handleDelete(category._id)}><MdDelete /> delete</button>
-                <button><IoPencil /> update</button>
               </div>
             </li>
           </ul>
