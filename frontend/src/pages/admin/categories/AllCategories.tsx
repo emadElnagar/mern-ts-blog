@@ -2,7 +2,8 @@ import { Key, useEffect } from "react";
 import { IoPencil } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { GetAllCategories } from "../../../features/CategoryFeatures";
+import { DeleteCategory, GetAllCategories } from "../../../features/CategoryFeatures";
+import Swal from "sweetalert2";
 
 
 const AllCategories = () => {
@@ -11,6 +12,28 @@ const AllCategories = () => {
   useEffect(() => {
     dispatch(GetAllCategories());
   }, [dispatch]);
+  // Handle delete
+  const handleDelete = (id: Key) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(DeleteCategory(id));
+        dispatch(GetAllCategories());
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
+      }
+    });
+  }
   return (
     <div className="container">
       <h1 className="heading text-center">all categories</h1>
@@ -20,7 +43,7 @@ const AllCategories = () => {
             <li className="row">
               <span>{ category.title }</span>
               <div className="control">
-                <button><MdDelete /> delete</button>
+                <button onClick={() => handleDelete(category._id)}><MdDelete /> delete</button>
                 <button><IoPencil /> update</button>
               </div>
             </li>
