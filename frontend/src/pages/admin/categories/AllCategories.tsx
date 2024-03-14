@@ -79,7 +79,7 @@ const AllCategories = () => {
               <span>{ category.title }</span>
               <div className="control">
                 <button onClick={() => handleUpdate(category._id)}><IoPencil /> update</button>
-                <button onClick={() => handleDelete(category._id)}><MdDelete /> delete</button>
+                <button onClick={() => handleDelete(category._id)} className="delete"><MdDelete /> delete</button>
               </div>
             </li>
           </ul>

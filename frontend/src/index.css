@@ -270,4 +270,7 @@ select {
   button:first-of-type {
     margin-inline: 10px;
   }
+  .delete {
+    color: #B00020;
+  }
 }

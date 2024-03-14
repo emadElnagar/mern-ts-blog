@@ -61,6 +61,16 @@ export const Logout: any = createAsyncThunk("users/logout", async (_, { rejectWi
   }
 });
 
+// Get all users
+export const GetAllUsers: any = createAsyncThunk("users/all", async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${url}/all`);
+    return response.data;
+  } catch (error: any) {
+    rejectWithValue(error.message);
+  }
+})
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -101,6 +111,18 @@ const userSlice = createSlice({
       state.user = null;
     })
     .addCase(Logout.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Get all users
+    .addCase(GetAllUsers.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(GetAllUsers.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.users = action.payload;
+    })
+    .addCase(GetAllUsers.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })
