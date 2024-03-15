@@ -12,6 +12,7 @@ import Categories from './pages/categories/Categories';
 import Dashboard from './pages/admin';
 import CategoryNew from './pages/admin/categories/NewCategory';
 import AllCategories from './pages/admin/categories/AllCategories';
+import UsersList from './pages/admin/users/UsersList';
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -39,6 +40,7 @@ function App() {
             <Route path='/admin' element={<Dashboard />} />
             <Route path='/admin/categories' element={<AllCategories />} />
             <Route path='/admin/categories/new' element={<CategoryNew />} />
+            <Route path='/admin/users' element={<UsersList />} />
           </Fragment>
         }
         <Route path='*' element={<NotFoundPage />} />
