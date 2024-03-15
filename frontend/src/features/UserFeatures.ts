@@ -69,7 +69,17 @@ export const GetAllUsers: any = createAsyncThunk("users/all", async (_, { reject
   } catch (error: any) {
     rejectWithValue(error.message);
   }
-})
+});
+
+// Delete user
+export const DeleteUser: any = createAsyncThunk("user/delete", async (id, { rejectWithValue }) => {
+  try {
+    const response = await axios.delete(`${url}/${id}/delete`);
+    return response.data;
+  } catch (error: any) {
+    rejectWithValue(error.message);
+  }
+});
 
 const userSlice = createSlice({
   name: 'user',
@@ -123,6 +133,23 @@ const userSlice = createSlice({
       state.users = action.payload;
     })
     .addCase(GetAllUsers.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Delete user ( By Admin )
+    .addCase(DeleteUser.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(DeleteUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const {
+        arg: { _id }
+      } = action.meta;
+      if (_id) {
+        state.users = state.users.filter((user) => user._id !== action.payload);
+      }
+    })
+    .addCase(DeleteUser.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })
