@@ -17,6 +17,7 @@ export interface User {
 interface UserState {
   users: User[],
   user: User | null,
+  profile: User | null,
   isLoading: boolean,
   error: object | null
 }
@@ -24,6 +25,7 @@ interface UserState {
 const initialState: UserState = {
   users: [],
   user: null,
+  profile: null,
   isLoading: false,
   error: null
 }
@@ -65,6 +67,16 @@ export const Logout: any = createAsyncThunk("users/logout", async (_, { rejectWi
 export const GetAllUsers: any = createAsyncThunk("users/all", async (_, { rejectWithValue }) => {
   try {
     const response = await axios.get(`${url}/all`);
+    return response.data;
+  } catch (error: any) {
+    rejectWithValue(error.message);
+  }
+});
+
+// Get single user
+export const GetSingleUser: any = createAsyncThunk("users/profile", async (id, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${url}/profile/${id}`);
     return response.data;
   } catch (error: any) {
     rejectWithValue(error.message);
@@ -131,6 +143,18 @@ const userSlice = createSlice({
     .addCase(GetAllUsers.fulfilled, (state, action) => {
       state.isLoading = false;
       state.users = action.payload;
+    })
+    .addCase(GetAllUsers.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Get single user
+    .addCase(GetSingleUser.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(GetAllUsers.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.profile = action.payload;
     })
     .addCase(GetAllUsers.rejected, (state, action) => {
       state.isLoading = false;
