@@ -152,11 +152,11 @@ const userSlice = createSlice({
     .addCase(GetSingleUser.pending, (state) => {
       state.isLoading = true;
     })
-    .addCase(GetAllUsers.fulfilled, (state, action) => {
+    .addCase(GetSingleUser.fulfilled, (state, action) => {
       state.isLoading = false;
       state.profile = action.payload;
     })
-    .addCase(GetAllUsers.rejected, (state, action) => {
+    .addCase(GetSingleUser.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })
