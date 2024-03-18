@@ -83,6 +83,16 @@ export const GetSingleUser: any = createAsyncThunk("users/profile", async (id, {
   }
 });
 
+// Change user role
+export const ChangeUserRole: any = createAsyncThunk("user/role", async (id, { rejectWithValue }) => {
+  try {
+    const response = await axios.patch(`${url}/${id}/update/role`);
+    return response.data;
+  } catch (error: any) {
+    rejectWithValue(error.message);
+  }
+});
+
 // Delete user
 export const DeleteUser: any = createAsyncThunk("user/delete", async (id, { rejectWithValue }) => {
   try {
@@ -157,6 +167,25 @@ const userSlice = createSlice({
       state.profile = action.payload;
     })
     .addCase(GetSingleUser.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Change user role
+    .addCase(ChangeUserRole.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(ChangeUserRole.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const {
+        arg: { _id }
+      } = action.meta;
+      if (_id) {
+        state.users = state.users.map((user) =>
+        user._id === _id ? action.payload : user
+        );
+      }
+    })
+    .addCase(ChangeUserRole.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })
