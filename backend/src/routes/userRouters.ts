@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { 
+  ChangeUserRole,
   changePassword,
   changeUserEmail,
   deleteUser, 
@@ -38,5 +39,8 @@ userRouter.patch('/:id/change-email', changeUserEmail);
 
 // Change user first and last name
 userRouter.patch('/:id/update/name', updateUserName);
+
+// Change user role
+userRouter.patch('/:id/update/role', ChangeUserRole);
 
 export default userRouter;
