@@ -148,11 +148,27 @@ export const updateUserName: RequestHandler = async (req, res) => {
   }
   User.updateOne({ _id: req.params.id }, { $set: newUser }).then(_result => {
     res.status(200).json({
-      message: "user email updated successfully"
+      message: "user updated successfully"
     });
   }).catch(error => {
     res.status(401).json({
       message: "Error" + error.message
+    });
+  });
+}
+
+// Change user role
+export const ChangeUserRole: RequestHandler = async (req, res) => {
+  const newUser = {
+    role: req.body.role
+  }
+  User.updateOne({ _kd: req.params.id }, { $set: newUser }).then(_result => {
+    res.status(200).json({
+      message: "user role updated successfully"
+    });
+  }).catch(error => {
+    res.status(401).json({
+      message: error.message
     });
   });
 }
