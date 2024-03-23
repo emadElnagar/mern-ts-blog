@@ -103,6 +103,18 @@ export const DeleteUser: any = createAsyncThunk("user/delete", async (id, { reje
   }
 });
 
+// Change user email
+export const changeEmail: any = createAsyncThunk("users/emailchange", async (user: any, { rejectWithValue }) => {
+  try {
+    const response = await axios.patch(`${url}/${user._id}/change-email`, {
+      email: user.email
+    });
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -203,6 +215,25 @@ const userSlice = createSlice({
       }
     })
     .addCase(DeleteUser.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Change user email
+    .addCase(changeEmail.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(changeEmail.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const {
+        arg: { _id },
+      } = action.meta;
+      if (_id) {
+        state.users = state.users.map((user) =>
+        user._id === _id ? action.payload : user
+      );
+      }
+    })
+    .addCase(changeEmail.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })
