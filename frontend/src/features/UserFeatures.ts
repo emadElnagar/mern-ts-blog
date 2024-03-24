@@ -115,6 +115,19 @@ export const changeEmail: any = createAsyncThunk("users/emailchange", async (use
   }
 });
 
+// Change User Password
+export const ChangePassword: any = createAsyncThunk("users/password/change", async (user: any, { rejectWithValue }) => {
+  try {
+    const response = await axios.patch(`${url}/${user._id}/change-password`, {
+      currentPassword: user.currentPassword,
+      newPassword: user.newPassword
+    });
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -234,6 +247,25 @@ const userSlice = createSlice({
       }
     })
     .addCase(changeEmail.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Change user password
+    .addCase(ChangePassword.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(ChangePassword.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const {
+        arg: { _id },
+      } = action.meta;
+      if (_id) {
+        state.users = state.users.map((user) =>
+        user._id === _id ? action.payload : user
+        );
+      }
+    })
+    .addCase(ChangePassword.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })
