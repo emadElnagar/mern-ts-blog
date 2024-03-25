@@ -84,9 +84,9 @@ export const GetSingleUser: any = createAsyncThunk("users/profile", async (id, {
 });
 
 // Change user role
-export const ChangeUserRole: any = createAsyncThunk("user/role", async (id, { rejectWithValue }) => {
+export const ChangeUserRole: any = createAsyncThunk("user/role", async (user: any, { rejectWithValue }) => {
   try {
-    const response = await axios.patch(`${url}/${id}/update/role`);
+    const response = await axios.patch(`${url}/${user._id}/update/role`, user.newRole);
     return response.data;
   } catch (error: any) {
     rejectWithValue(error.message);
