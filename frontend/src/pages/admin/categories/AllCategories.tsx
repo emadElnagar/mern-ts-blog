@@ -1,9 +1,10 @@
-import { Key, useEffect } from "react";
+import { Fragment, Key, useEffect } from "react";
 import { IoPencil } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteCategory, GetAllCategories, UpdateCategory } from "../../../features/CategoryFeatures";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet";
 
 
 type categoryType = {
@@ -70,22 +71,27 @@ const AllCategories = () => {
     });
   }
   return (
-    <div className="container">
-      <h1 className="heading text-center">all categories</h1>
-      {
-        categories.map((category: { _id: Key, title: string }) => (
-          <ul key={ category._id }>
-            <li className="row">
-              <span>{ category.title }</span>
-              <div className="control">
-                <button onClick={() => handleUpdate(category._id)}><IoPencil /> update</button>
-                <button onClick={() => handleDelete(category._id)} className="delete"><MdDelete /> delete</button>
-              </div>
-            </li>
-          </ul>
-        ))
-      }
-    </div>
+    <Fragment>
+      <Helmet>
+        <title>Magala-login</title>
+      </Helmet>
+      <div className="container">
+        <h1 className="heading text-center">all categories</h1>
+        {
+          categories.map((category: { _id: Key, title: string }) => (
+            <ul key={ category._id }>
+              <li className="row">
+                <span>{ category.title }</span>
+                <div className="control">
+                  <button onClick={() => handleUpdate(category._id)}><IoPencil /> update</button>
+                  <button onClick={() => handleDelete(category._id)} className="delete"><MdDelete /> delete</button>
+                </div>
+              </li>
+            </ul>
+          ))
+        }
+      </div>
+    </Fragment>
   )
 }
 

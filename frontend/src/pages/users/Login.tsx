@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Login } from "../../features/UserFeatures";
+import { Helmet } from "react-helmet";
 
 const LoginPage = () => {
   const { user } = useSelector((state: any) => state.user);
@@ -17,14 +18,19 @@ const LoginPage = () => {
     navigate('/');
   }
   return (
-    <div className="container">
-      <form className="colum-form" onSubmit={handleLogin}>
-        <input type="email" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
-        <input type="submit" value="login" />
-      </form>
-      <p className="text-center">don't have an account? <Link to="/users/register">register</Link></p>
-    </div>
+    <Fragment>
+      <Helmet>
+        <title>Magala-login</title>
+      </Helmet>
+      <div className="container">
+        <form className="colum-form" onSubmit={handleLogin}>
+          <input type="email" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+          <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+          <input type="submit" value="login" />
+        </form>
+        <p className="text-center">don't have an account? <Link to="/users/register">register</Link></p>
+      </div>
+    </Fragment>
   )
 }
 

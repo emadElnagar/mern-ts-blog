@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { UserRegister } from "../../features/UserFeatures";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import ErrorAlert from "../../components/ErrorAlert";
+import { Helmet } from "react-helmet";
 
 const RegisterPage = () => {
   const { user } = useSelector((state: any) => state.user);
@@ -29,17 +30,22 @@ const RegisterPage = () => {
     navigate('/');
   }
   return (
-    <div className="container">
-      <form className="colum-form" method="POST" onSubmit={ handleSubmit }>
-        <input type="text" placeholder="first name" onChange={(e) => setFirstName(e.target.value)} />
-        <input type="text" placeholder="last name" onChange={(e) => setLastName(e.target.value)} />
-        <input type="email" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
-        <input type="password" placeholder="re enter password" onChange={(e) => setPasswordConfirm(e.target.value)} />
-        <input type="submit" value="register" />
-      </form>
-      <p className="text-center">have an account? <Link to="/users/login">login</Link></p>
-    </div>
+    <Fragment>
+      <Helmet>
+        <title>Magala-register</title>
+      </Helmet>
+      <div className="container">
+        <form className="colum-form" method="POST" onSubmit={ handleSubmit }>
+          <input type="text" placeholder="first name" onChange={(e) => setFirstName(e.target.value)} />
+          <input type="text" placeholder="last name" onChange={(e) => setLastName(e.target.value)} />
+          <input type="email" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+          <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+          <input type="password" placeholder="re enter password" onChange={(e) => setPasswordConfirm(e.target.value)} />
+          <input type="submit" value="register" />
+        </form>
+        <p className="text-center">have an account? <Link to="/users/login">login</Link></p>
+      </div>
+    </Fragment>
   )
 }
 

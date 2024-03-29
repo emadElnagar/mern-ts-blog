@@ -1,10 +1,17 @@
+import { Fragment } from "react";
 import RowForm from "../../../components/RowForm";
+import { Helmet } from "react-helmet";
 
 const CategoryNew = () => {
   return (
-    <div className="container">
-      <RowForm />
-    </div>
+    <Fragment>
+      <Helmet>
+        <title>Magala-admin</title>
+      </Helmet>
+      <div className="container">
+        <RowForm />
+      </div>
+    </Fragment>
   )
 }
 
