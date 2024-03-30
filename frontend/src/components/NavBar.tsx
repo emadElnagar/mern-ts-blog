@@ -44,6 +44,10 @@ const NavBar = () => {
     setIsActive(false);
     navigate('/admin');
   }
+  const openProfile = () => {
+    setIsActive(false);
+    navigate(`/profile/${user._id}`);
+  }
   return (
     <nav>
       <div className="logo">
@@ -96,7 +100,11 @@ const NavBar = () => {
                     { user.firstName }
                   </button>
                   <ul className={`${isActive === false ? 'dropdown-content d-none' : 'dropdown-content'}`}>
-                    <li className="dropdown-item">profile</li>
+                    <li className="dropdown-item">
+                    <button className="dropdown-button" onClick={openProfile}>
+                      profile
+                    </button>
+                    </li>
                     {
                       user.role === 'admin' &&
                       <li className="dropdown-item">

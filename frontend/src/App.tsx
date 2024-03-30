@@ -27,6 +27,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/users/login' element={<LoginPage />} />
         <Route path='/users/register' element={<RegisterPage />} />
+        <Route path='/users/:id' element={<RegisterPage />} />
         {
           user !== null && user.role !== 'user' &&
           <Fragment>
