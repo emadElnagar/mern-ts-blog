@@ -274,3 +274,10 @@ select {
     color: #B00020;
   }
 }
+
+.img-container {
+  max-width: 250px;
+  h1 {
+    margin: 15px 0;
+  }
+}

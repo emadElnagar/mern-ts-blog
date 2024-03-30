@@ -13,6 +13,7 @@ import Dashboard from './pages/admin';
 import CategoryNew from './pages/admin/categories/NewCategory';
 import AllCategories from './pages/admin/categories/AllCategories';
 import UsersList from './pages/admin/users/UsersList';
+import UserProfile from './pages/users/Profile';
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -27,7 +28,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/users/login' element={<LoginPage />} />
         <Route path='/users/register' element={<RegisterPage />} />
-        <Route path='/users/:id' element={<RegisterPage />} />
+        <Route path='/users/profile/:id' element={<UserProfile />} />
         {
           user !== null && user.role !== 'user' &&
           <Fragment>

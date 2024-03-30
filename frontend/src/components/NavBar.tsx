@@ -46,7 +46,7 @@ const NavBar = () => {
   }
   const openProfile = () => {
     setIsActive(false);
-    navigate(`/profile/${user._id}`);
+    navigate(`/users/profile/${user._id}`);
   }
   return (
     <nav>
