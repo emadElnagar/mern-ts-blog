@@ -12,7 +12,7 @@ export const newPost: RequestHandler = async (req, res) => {
     title: string;
     slug: string;
     author: object,
-    description: string;
+    content: string;
     image: string;
     likesCount: number;
   }
@@ -24,7 +24,7 @@ export const newPost: RequestHandler = async (req, res) => {
       strict: true,
     }),
     author: req.body.author,
-    description: req.body.description,
+    content: req.body.content,
     image: req.body.image,
     likesCount: 0
   });
