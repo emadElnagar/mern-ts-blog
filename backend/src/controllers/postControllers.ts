@@ -12,9 +12,9 @@ export const newPost: RequestHandler = async (req, res) => {
     title: string;
     slug: string;
     author: object,
+    category: object,
     content: string;
     image: string;
-    likesCount: number;
   }
   const post = new Post<postType>({
     title: req.body.title,
@@ -24,9 +24,9 @@ export const newPost: RequestHandler = async (req, res) => {
       strict: true,
     }),
     author: req.body.author,
+    category: req.body.category,
     content: req.body.content,
-    image: req.body.image,
-    likesCount: 0
+    image: req.body.image
   });
   post.save().then(post => {
     res.status(200).json({
