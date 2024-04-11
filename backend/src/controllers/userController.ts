@@ -172,3 +172,17 @@ export const ChangeUserRole: RequestHandler = async (req, res) => {
     });
   });
 }
+
+// Change user image
+export const ChangeUserImage: RequestHandler = async (req, res) => {
+  const newUser = { image: req.file?.filename }
+  User.updateOne({ _id: req.params.id }, { $set: newUser }).then(_result => {
+    res.status(200).json({
+      message: "user image uploaded successfully"
+    });
+  }).catch(error => {
+    res.status(401).json({
+      message: error.message
+    });
+  });
+}

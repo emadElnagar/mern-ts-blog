@@ -19,6 +19,7 @@ const UserProfile = () => {
       </Helmet>
       {
         isloading === true ? <LoadingScreen /> :
+        profile &&
         <div className="container">
           <div className="img-container">
             <div className="image">
@@ -31,7 +32,6 @@ const UserProfile = () => {
           </div>
         </div>
       }
-      
     </Fragment>
   )
 }

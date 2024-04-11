@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { 
+  ChangeUserImage,
   ChangeUserRole,
   changePassword,
   changeUserEmail,
@@ -10,6 +11,7 @@ import {
   userLogin, 
   userRegister 
 } from "../controllers/userController";
+import upload from "../middlewares/Multer";
 
 const userRouter = Router();
 
@@ -42,5 +44,8 @@ userRouter.patch('/:id/update/name', updateUserName);
 
 // Change user role
 userRouter.patch('/:id/update/role', ChangeUserRole);
+
+// Change user image
+userRouter.patch('/:id/update/image', upload.single('profile'),ChangeUserImage);
 
 export default userRouter;
