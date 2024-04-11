@@ -10,6 +10,7 @@ const PostForm = () => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState<File | undefined>();
   const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
   const { categories } = useSelector((state: any) => state.category);
   const { user } = useSelector((state: any) => state.user);
   useEffect(() => {
@@ -28,19 +29,18 @@ const PostForm = () => {
     formData.append('image', image);
     formData.append('title', title);
     formData.append('content', content);
+    formData.append('category', category);
     formData.append('author', user._id);
-    dispatch(NewPost({
-      formData
-    }));
+    dispatch(NewPost(formData));
   }
   return (
     <form className="colum-form" onSubmit={handleSubmit}>
         <input type="text" placeholder="title" onChange={(e) => setTitle(e.target.value)} />
         <ReactQuill theme="snow" value={content} onChange={setContent} />
-        <select>
+        <select onChange={(e) => setCategory(e.target.value)}>
           {
             categories.map((category: { _id: Key; title: string; }) => (
-              <option key={ category._id } value={`${ category.title }`}>
+              <option key={ category._id } value={`${ category._id }`}>
                 { category.title }
               </option>
             ))

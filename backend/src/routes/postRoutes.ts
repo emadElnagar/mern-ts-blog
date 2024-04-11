@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { DeletePost, GetAllPosts, GetSinglePost, UpdatePost, newPost } from "../controllers/postControllers";
+import upload from "../middlewares/Multer";
 
 const postRouter = Router();
 
 // Create a new post route
-postRouter.post('/new', newPost);
+postRouter.post('/new', upload.single('image'), newPost);
 
 // Get all posts
 postRouter.get('/all', GetAllPosts);

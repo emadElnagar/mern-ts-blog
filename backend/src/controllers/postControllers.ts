@@ -14,7 +14,7 @@ export const newPost: RequestHandler = async (req, res) => {
     author: object,
     category: object,
     content: string;
-    image: string;
+    image: string | undefined;
   }
   const post = new Post<postType>({
     title: req.body.title,
@@ -26,9 +26,9 @@ export const newPost: RequestHandler = async (req, res) => {
     author: req.body.author,
     category: req.body.category,
     content: req.body.content,
-    image: req.body.image
+    image: req.file?.filename
   });
-  post.save().then(post => {
+  post.save().then(_result => {
     res.status(200).json({
       message: "Post created successfully"
     });

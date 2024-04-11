@@ -30,14 +30,9 @@ const initialState: PostState = {
 }
 
 // Create a new 
-export const NewPost: any = createAsyncThunk("posts/new", async (post: any, { rejectWithValue }) => {
+export const NewPost: any = createAsyncThunk("posts/new", async (data: any, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${url}/new`, {
-      title: post.title,
-      author: post.author,
-      description: post.description,
-      image: post.image,
-    });
+    const response = await axios.post(`${url}/new`, data);
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.message);
