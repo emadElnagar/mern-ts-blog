@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GetAllCategories } from '../features/CategoryFeatures';
 import { NewPost } from '../features/PostFeatures';
 import { useNavigate } from 'react-router-dom';
+import { MdCloudUpload } from "react-icons/md";
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -57,8 +58,9 @@ const PostForm = () => {
           ))
         }
       </select>
-      <input type="file" accept="*/images" onChange={handleImage} />
-      <input type="submit" value="submit" />
+      <input type="file" id="image-upload" accept="*/images" onChange={handleImage} />
+      <label htmlFor="image-upload" className="upload-label"><MdCloudUpload /> upload image</label>
+      <input type="submit" value="Post" />
     </form>
   )
 }
