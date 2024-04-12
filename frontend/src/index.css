@@ -277,6 +277,34 @@ select {
 
 .img-container {
   max-width: 250px;
+  .image {
+    position: relative;
+    form {
+      .buttons {
+        text-align: center;
+        button {
+          outline: none;
+          border: none;
+          background: #fff;
+          /* margin-inline: 10px; */
+          border: 1px solid transparent;
+          font-size: 20px;
+          padding: 10px 20px;
+          &:hover {
+            border: 1px solid var(--main-color);
+          }
+        }
+      }
+      .icon {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+      }
+    }
+  }
   h1 {
     margin: 15px 0;
   }
