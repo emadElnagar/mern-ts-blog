@@ -128,6 +128,16 @@ export const ChangePassword: any = createAsyncThunk("users/password/change", asy
   }
 });
 
+// Change user image
+export const ChagneImage: any = createAsyncThunk("users/image/change", async (data: any, { rejectWithValue }) => {
+  try {
+    const response = await axios.patch(`${url}/${data.id}/update/image`, data.formData);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -266,6 +276,25 @@ const userSlice = createSlice({
       }
     })
     .addCase(ChangePassword.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Change user image
+    .addCase(ChagneImage.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(ChagneImage.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const {
+        arg: { _id },
+      } = action.meta;
+      if (_id) {
+        state.users = state.users.map((user) =>
+        user._id === _id ? action.payload : user
+        );
+      }
+    })
+    .addCase(ChagneImage.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })

@@ -46,6 +46,6 @@ userRouter.patch('/:id/update/name', updateUserName);
 userRouter.patch('/:id/update/role', ChangeUserRole);
 
 // Change user image
-userRouter.patch('/:id/update/image', upload.single('profile'),ChangeUserImage);
+userRouter.patch('/:id/update/image', upload.single('profile'), ChangeUserImage);
 
 export default userRouter;
