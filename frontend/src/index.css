@@ -119,17 +119,41 @@ li {
   list-style-type: none;
 }
 
-.book-card {
+.posts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 40px;
+}
+
+.item-card {
   width: 100%;
-  h2 {
+  position: relative;
+  box-shadow: 0 2px 15px rgb(0 0 0 / 10%);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  .category {
+    color: #000;
+    font-size: smaller;
+    font-weight: 500;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--main-color);
+    padding: 2px 15px;
+  }
+  h3 {
+    padding: 25px 10px;
+    color: #000;
     text-transform: uppercase;
     text-align: center;
   }
   p {
     color: #aaa;
   }
-  a {
-    color: var(--main-color);
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 2px 15px rgb(0 0 0 / 20%);
   }
 }
 

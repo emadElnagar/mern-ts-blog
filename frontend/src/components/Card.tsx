@@ -1,21 +1,25 @@
-const Card = () => {
+import { Key } from "react";
+
+type itemProps = {
+  _id: Key;
+  title: string;
+  category: string;
+  image: string;
+}
+
+const Card = (item: itemProps) => {
   return (
-    <div className="book-card">
+    <div className="item-card">
       <div>
         <img 
           alt="It's a problem loading images" 
-          src="" 
+          src={`http://localhost:5000/${item.image}`} 
           className="post-img" 
         />
       </div>
-      <div>
-        <h2>Post header</h2>
-        <p>
-          Lorem ipsum dosectetur adipisicing elit, sed do.Lorem ipsum dolor sit amet, 
-          consectetur Nulla fringilla purus at leo dignissim congue. Mauris elementum accumsan leo vel tempor.
-          Sit amet cursus nisl aliquam. …
-        </p>
-        <a href="#">read more</a>
+      <div className="card-body">
+        <span className="category">{item.category}</span>
+        <h3>{item.title}</h3>
       </div>
     </div>
   )

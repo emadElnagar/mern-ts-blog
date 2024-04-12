@@ -42,7 +42,7 @@ export const newPost: RequestHandler = async (req, res) => {
 // Get all post
 export const GetAllPosts: RequestHandler = async (_req, res) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().populate("category");
     res.send(posts);
   } catch (error) {
     res.send(error);
