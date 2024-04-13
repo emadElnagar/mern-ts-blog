@@ -1,10 +1,12 @@
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Login } from "../../features/UserFeatures";
 import { Helmet } from "react-helmet";
 
 const LoginPage = () => {
+  const search = useLocation().search;
+  const next = new URLSearchParams(search).get('next');
   const { user } = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ const LoginPage = () => {
     dispatch(Login({ email, password }));
   }
   if (user) {
-    navigate('/');
+    next ? navigate(`${next}`) : navigate('/')
   }
   return (
     <Fragment>
@@ -28,7 +30,7 @@ const LoginPage = () => {
           <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
           <input type="submit" value="login" />
         </form>
-        <p className="text-center">don't have an account? <Link to="/users/register">register</Link></p>
+        <p className="text-center">don't have an account? <Link to={`${next ? '/users/register?next=' + next : '/users/register'}`}>register</Link></p>
       </div>
     </Fragment>
   )

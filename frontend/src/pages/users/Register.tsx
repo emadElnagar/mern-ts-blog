@@ -1,11 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UserRegister } from "../../features/UserFeatures";
 import { Fragment, useState } from "react";
 import ErrorAlert from "../../components/ErrorAlert";
 import { Helmet } from "react-helmet";
 
 const RegisterPage = () => {
+  const search = useLocation().search;
+  const next = new URLSearchParams(search).get('next');
   const { user } = useSelector((state: any) => state.user);
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
@@ -27,7 +29,7 @@ const RegisterPage = () => {
     }
   }
   if (user) {
-    navigate('/');
+    next ? navigate(`${next}`) : navigate('/')
   }
   return (
     <Fragment>

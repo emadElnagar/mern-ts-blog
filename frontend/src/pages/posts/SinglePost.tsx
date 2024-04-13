@@ -15,7 +15,11 @@ const SinglePost = () => {
   return (
     <Fragment>
       <Helmet>
-        <title>Megala-{ post && post.slug }</title>
+        {
+          post ?
+          <title>Megala-{ post.slug }</title> :
+          <title>Megala</title>
+        }
       </Helmet>
       {
         isLoading ? <LoadingScreen /> : 
