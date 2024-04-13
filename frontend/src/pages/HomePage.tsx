@@ -20,6 +20,7 @@ const Home = () => {
       <div className="container">
         {
           isLoading === true ? <LoadingScreen /> :
+          posts &&
           <div className="posts-container">
           {
             posts.map((post: any) => (

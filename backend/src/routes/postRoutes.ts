@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { DeletePost, GetAllPosts, GetSinglePost, UpdatePost, newPost } from "../controllers/postControllers";
+import { DeletePost, GetAllPosts, GetSimilarPosts, GetSinglePost, UpdatePost, newPost } from "../controllers/postControllers";
 import upload from "../middlewares/Multer";
 
 const postRouter = Router();
@@ -12,6 +12,9 @@ postRouter.get('/all', GetAllPosts);
 
 // Get single post
 postRouter.get('/:slug', GetSinglePost);
+
+// Get similar posts
+postRouter.get('/:slug/similar', GetSimilarPosts);
 
 // Update post
 postRouter.put('/:id/update', UpdatePost);

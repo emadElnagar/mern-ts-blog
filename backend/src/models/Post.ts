@@ -8,7 +8,6 @@ interface Post {
   content: string;
   image: string;
   likes: object[];
-  comments: string[];
 }
 
 const postSchema = new Schema<Post>({
@@ -19,7 +18,6 @@ const postSchema = new Schema<Post>({
   content: { type: String, required: true },
   image: { type: String, required: true },
   likes: { type: [Schema.Types.ObjectId], ref: 'User' },
-  comments: [String]
 }, {
   timestamps: true
 });
