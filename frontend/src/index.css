@@ -348,3 +348,14 @@ input[type="file"] {
   padding: 10px 0;
   cursor: pointer;
 }
+
+.single-post {
+  padding-block: 40px;
+  h1 {
+    text-align: center;
+    text-transform: uppercase;
+  }
+  img {
+    margin-block: 40px;
+  }
+}

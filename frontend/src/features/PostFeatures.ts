@@ -50,9 +50,9 @@ export const GetAllPosts: any = createAsyncThunk("posts/all", async (_, { reject
 });
 
 // Get single post
-export const GetSinglePost: any = createAsyncThunk("posts/single", async (post: any, { rejectWithValue }) => {
+export const GetSinglePost: any = createAsyncThunk("posts/single", async (slug: any, { rejectWithValue }) => {
   try {
-    const response = await axios.get(`${url}/${post.sulg}`);
+    const response = await axios.get(`${url}/${slug}`);
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.message);

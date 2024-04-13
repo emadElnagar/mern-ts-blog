@@ -14,6 +14,7 @@ import CategoryNew from './pages/admin/categories/NewCategory';
 import AllCategories from './pages/admin/categories/AllCategories';
 import UsersList from './pages/admin/users/UsersList';
 import UserProfile from './pages/users/Profile';
+import SinglePost from './pages/posts/SinglePost';
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -29,6 +30,7 @@ function App() {
         <Route path='/users/login' element={<LoginPage />} />
         <Route path='/users/register' element={<RegisterPage />} />
         <Route path='/users/profile/:id' element={<UserProfile />} />
+        <Route path='/posts/:slug' element={<SinglePost />} />
         {
           user !== null && user.role !== 'user' &&
           <Fragment>
