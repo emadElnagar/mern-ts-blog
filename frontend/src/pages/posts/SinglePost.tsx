@@ -1,9 +1,10 @@
 import { Fragment, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { GetSinglePost } from "../../features/PostFeatures";
 import LoadingScreen from "../../components/LoadingScreen";
+import { IoIosSend } from "react-icons/io";
 
 const SinglePost = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const SinglePost = () => {
     dispatch(GetSinglePost(slug));
   }, [dispatch, slug]);
   const { post, isLoading } = useSelector((state: any) => state.post);
+  const { user } = useSelector((state: any) => state.user);
   return (
     <Fragment>
       <Helmet>
@@ -29,6 +31,29 @@ const SinglePost = () => {
             <h1>{ post.title }</h1>
             <img src={`http://localhost:5000/${ post.image }`} alt="It's problem showing images" />
             <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+          </div>
+          <div className="comments">
+            {
+              user ? (
+                <form>
+                  <input type="text" placeholder="Leave a comment" />
+                  <button type="submit"><IoIosSend /></button>
+                </form>
+              ) : (
+                <>
+                  <Link to={`/users/login?next=/posts/${ post.slug }`}>
+                    <input className="comment-input" type="text" placeholder="login to leave a comment" />
+                  </Link>
+                </>
+              )
+            }
+            <div className="comment">
+              <div className="user">
+                <img src={`${process.env.PUBLIC_URL + '/images/user-avatar.png'}`} alt="avatar" />
+                John Doe
+              </div>
+              <div><p>This is a great article</p></div>
+            </div>
           </div>
         </div>
       }

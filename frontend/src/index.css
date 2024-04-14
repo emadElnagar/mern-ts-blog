@@ -359,3 +359,42 @@ input[type="file"] {
     margin-block: 40px;
   }
 }
+
+.comments {
+  form {
+    width: 100%;
+    display: flex;
+    input {
+      width: 100%;
+      padding: 0 5px;
+      &:focus {
+        outline: none;
+      }
+    }
+    button {
+      background: var(--main-color);
+      padding: 10px 20px;
+    }
+  }
+  input {
+    width: 100%;
+    padding: 5px;
+  }
+}
+
+.comment {
+  padding-block: 20px;
+  .user {
+    display: flex;
+    align-items: center;
+    img {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-inline-end: 10px;
+    }
+  }
+  p {
+    margin-inline-start: 30px;
+  }
+}
