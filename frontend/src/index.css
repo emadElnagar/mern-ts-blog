@@ -125,6 +125,20 @@ li {
   gap: 40px;
 }
 
+.similar-posts {
+  padding-block: 40px;
+  h2 {
+    margin-bottom: 40px;
+  }
+  .item-card {
+    /* RESET TO NO EFFECTS WHEN HOVER */
+    &:hover {
+      transform: none;
+      box-shadow: 0 2px 15px rgb(0 0 0 / 10%);
+    }
+  }
+}
+
 .item-card {
   width: 100%;
   position: relative;

@@ -2,10 +2,11 @@ import { Fragment, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { GetSinglePost } from "../../features/PostFeatures";
+import { GetSimilarPosts, GetSinglePost } from "../../features/PostFeatures";
 import LoadingScreen from "../../components/LoadingScreen";
 import { IoIosSend } from "react-icons/io";
 import moment from "moment";
+import Card from "../../components/Card";
 
 const SinglePost = () => {
   const dispatch = useDispatch();
@@ -13,7 +14,10 @@ const SinglePost = () => {
   useEffect(() => {
     dispatch(GetSinglePost(slug));
   }, [dispatch, slug]);
-  const { post, isLoading } = useSelector((state: any) => state.post);
+  useEffect(() => {
+    dispatch(GetSimilarPosts(slug));
+  }, [dispatch, slug]);
+  const { post, similarPosts, isLoading } = useSelector((state: any) => state.post);
   const { user } = useSelector((state: any) => state.user);
   return (
     <Fragment>
@@ -59,6 +63,24 @@ const SinglePost = () => {
               <div><p>This is a great article</p></div>
             </div>
           </div>
+          {
+            similarPosts.length > 0 &&
+            <div className="similar-posts">
+              <h2 className="text-center">You may also like</h2>
+              <div className="posts-container">
+                {similarPosts.map((post: any) => (
+                  <Link to={`/posts/${post.slug}`}>
+                    <Card
+                      key={ post._id }
+                      _id={ post._id }
+                      title={ post.title }
+                      category={ null }
+                      image={ post.image } />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          }
         </div>
       }
     </Fragment>

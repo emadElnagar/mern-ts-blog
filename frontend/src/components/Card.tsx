@@ -3,7 +3,7 @@ import { Key } from "react";
 type itemProps = {
   _id: Key;
   title: string;
-  category: string;
+  category: string | null;
   image: string;
 }
 
@@ -18,7 +18,10 @@ const Card = (item: itemProps) => {
         />
       </div>
       <div className="card-body">
-        <span className="category">{item.category}</span>
+        {
+          item.category &&
+          <span className="category">{item.category}</span>
+        }
         <h3>{item.title}</h3>
       </div>
     </div>
