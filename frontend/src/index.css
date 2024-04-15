@@ -355,9 +355,13 @@ input[type="file"] {
     text-align: center;
     text-transform: uppercase;
   }
-  img {
+  .post-img-container {
     margin-block: 40px;
   }
+}
+
+.date {
+  opacity: 40%;
 }
 
 .comments {
@@ -387,6 +391,9 @@ input[type="file"] {
   .user {
     display: flex;
     align-items: center;
+    .name {
+      margin-inline-end: 5px;
+    }
     img {
       width: 20px;
       height: 20px;

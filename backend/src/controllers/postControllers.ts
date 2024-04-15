@@ -42,7 +42,7 @@ export const newPost: RequestHandler = async (req, res) => {
 // Get all post
 export const GetAllPosts: RequestHandler = async (_req, res) => {
   try {
-    const posts = await Post.find().populate("category");
+    const posts = await Post.find().populate("category").sort({ createdAt: -1 });
     res.send(posts);
   } catch (error) {
     res.send(error);
@@ -64,7 +64,8 @@ export const GetSinglePost: RequestHandler = async (req, res) => {
 // Get similar posts
 export const GetSimilarPosts: RequestHandler = async (req, res) => {
   const post = await Post.findOne({ slug: req.params.slug });
-  const similarPosts = (await Post.find({ category: post?.category })).filter((item) => item.slug !== post?.slug );
+  const similarPosts = (await Post.find({ category: post?.category }).sort({ createdAt: -1 }).limit(4))
+  .filter((item) => item.slug !== post?.slug );
   if (! similarPosts) return;
   res.send(similarPosts);
 }

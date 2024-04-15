@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { GetSinglePost } from "../../features/PostFeatures";
 import LoadingScreen from "../../components/LoadingScreen";
 import { IoIosSend } from "react-icons/io";
+import moment from "moment";
 
 const SinglePost = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,10 @@ const SinglePost = () => {
         <div className="container">
           <div className="single-post">
             <h1>{ post.title }</h1>
-            <img src={`http://localhost:5000/${ post.image }`} alt="It's problem showing images" />
+            <div className="post-img-container">
+              <img src={`http://localhost:5000/${ post.image }`} alt="It's problem showing images" />
+              <span className="date">Created at { moment(post.createdAt).format('MMMM Do YYYY') }</span>
+            </div>
             <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
           </div>
           <div className="comments">
@@ -50,7 +54,7 @@ const SinglePost = () => {
             <div className="comment">
               <div className="user">
                 <img src={`${process.env.PUBLIC_URL + '/images/user-avatar.png'}`} alt="avatar" />
-                John Doe
+                <span className="name">John Doe</span> <span className="date">13 hours ago</span>
               </div>
               <div><p>This is a great article</p></div>
             </div>
