@@ -18,6 +18,7 @@ export interface Post {
 interface PostState {
   posts: Post[],
   post: Post | null,
+  similarPosts: Post[],
   isLoading: boolean,
   error: object | null
 }
@@ -25,6 +26,7 @@ interface PostState {
 const initialState: PostState = {
   posts: [],
   post: null,
+  similarPosts: [],
   isLoading: false,
   error: null
 }
@@ -53,6 +55,16 @@ export const GetAllPosts: any = createAsyncThunk("posts/all", async (_, { reject
 export const GetSinglePost: any = createAsyncThunk("posts/single", async (slug: any, { rejectWithValue }) => {
   try {
     const response = await axios.get(`${url}/${slug}`);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
+// Get similar posts
+export const GetSimilarPosts: any = createAsyncThunk("posts/similar", async (slug: any, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${url}/${slug}/similar`);
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.message);
@@ -122,6 +134,18 @@ const postSlice = createSlice({
       state.post = action.payload;
     })
     .addCase(GetSinglePost.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    })
+    // Get similar posts
+    .addCase(GetSimilarPosts.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(GetSimilarPosts.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.similarPosts = action.payload;
+    })
+    .addCase(GetSimilarPosts.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     })
