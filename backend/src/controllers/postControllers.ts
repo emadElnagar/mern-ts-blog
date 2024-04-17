@@ -64,7 +64,7 @@ export const GetSinglePost: RequestHandler = async (req, res) => {
 // Get similar posts
 export const GetSimilarPosts: RequestHandler = async (req, res) => {
   const post = await Post.findOne({ slug: req.params.slug });
-  const similarPosts = (await Post.find({ category: post?.category }).sort({ createdAt: -1 }).limit(4))
+  const similarPosts = (await Post.find({ category: post?.category }).sort({ createdAt: -1 }).limit(3))
   .filter((item) => item.slug !== post?.slug );
   if (! similarPosts) return;
   res.send(similarPosts);
