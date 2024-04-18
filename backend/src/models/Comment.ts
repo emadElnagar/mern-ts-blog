@@ -20,7 +20,7 @@ const commentSchema = new Schema<Comment>({
   replies: [
     {
       author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-      createdAt: new Date().getTime(),
+      createdAt:{ type: Date, default: new Date().getTime() },
       body: { type: String, required: true }
     }
   ]

@@ -11,8 +11,6 @@ export interface Post {
   description: string;
   image: string;
   likes?: object[];
-  likesCount?: number;
-  comments?: string[];
 }
 
 interface PostState {

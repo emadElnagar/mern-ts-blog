@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import userRouter from './routes/userRouters';
 import postRouter from './routes/postRoutes';
 import categoryRouter from './routes/categoryRoutes';
+import commentRouter from './routes/commentRoutes';
 require('dotenv').config();
 
 const app = express();
@@ -19,5 +20,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/blog');
 app.use('/api/users', userRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/categories', categoryRouter);
+app.use('/api/comments', commentRouter);
 
 app.listen(port);
