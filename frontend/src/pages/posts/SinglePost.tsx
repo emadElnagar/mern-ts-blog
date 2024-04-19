@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
@@ -7,18 +7,31 @@ import LoadingScreen from "../../components/LoadingScreen";
 import { IoIosSend } from "react-icons/io";
 import moment from "moment";
 import Card from "../../components/Card";
+import { NewComment } from "../../features/CommentFeature";
 
 const SinglePost = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
+  const [body, setBody] = useState('');
+  // Get single post
   useEffect(() => {
     dispatch(GetSinglePost(slug));
   }, [dispatch, slug]);
+  // Get similar posts
   useEffect(() => {
     dispatch(GetSimilarPosts(slug));
   }, [dispatch, slug]);
   const { post, similarPosts, isLoading } = useSelector((state: any) => state.post);
   const { user } = useSelector((state: any) => state.user);
+  // Create a new comment
+  const handleNewComment = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    dispatch(NewComment({
+      post: post._id,
+      author: user._id,
+      body,
+    }));
+  }
   return (
     <Fragment>
       <Helmet>
@@ -43,8 +56,8 @@ const SinglePost = () => {
           <div className="comments">
             {
               user ? (
-                <form>
-                  <input type="text" placeholder="Leave a comment" />
+                <form onSubmit={handleNewComment}>
+                  <input type="text" placeholder="Leave a comment" onChange={(e) => setBody(e.target.value)} />
                   <button type="submit"><IoIosSend /></button>
                 </form>
               ) : (

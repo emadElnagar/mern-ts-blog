@@ -4,6 +4,6 @@ import { newComment } from "../controllers/commentController";
 const commentRouter = Router();
 
 // create a new comment
-commentRouter.post('/:id/comments/new', newComment);
+commentRouter.post('/new', newComment);
 
 export default commentRouter;

@@ -8,7 +8,7 @@ export const newComment: RequestHandler = async (req, res) => {
     body: string;
   }
   const comment = new Comment<commentType>({
-    post: req.params.id,
+    post: req.body.post,
     author: req.body.author,
     body: req.body.body
   })

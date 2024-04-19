@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const url = 'http://localhost:5000/api/posts';
+const url = 'http://localhost:5000/api/comments';
 
 export interface Comment {
   _id?: object;
@@ -25,7 +25,8 @@ const initialState: PostState = {
 // create a new comment
 export const NewComment: any = createAsyncThunk("comments/new", async (data: any, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${url}/${data.id}/comments/new`, {
+    const response = await axios.post(`${url}/new`, {
+      post: data.post,
       author: data.author,
       body: data.body
     });
