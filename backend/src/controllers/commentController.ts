@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import Comment from "../models/Comment";
 
+// Create a new comment
 export const newComment: RequestHandler = async (req, res) => {
   interface commentType {
     post: string;
@@ -21,4 +22,15 @@ export const newComment: RequestHandler = async (req, res) => {
       message: err.message
     });
   });
+}
+
+// Get post comments
+export const GetPostComments: RequestHandler = async (req, res) => {
+  try {
+    const comments = await Comment.find({ post: req.params.id });
+    if (! comments) return;
+    res.status(200).json(comments);
+  } catch (error: any) {
+    res.status(401).json({ message: error.message });
+  }
 }
