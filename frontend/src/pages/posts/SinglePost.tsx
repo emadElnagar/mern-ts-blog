@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { GetSimilarPosts, GetSinglePost } from "../../features/PostFeatures";
 import LoadingScreen from "../../components/LoadingScreen";
-import { IoIosSend } from "react-icons/io";
 import moment from "moment";
 import Card from "../../components/Card";
 import { NewComment } from "../../features/CommentFeature";
@@ -24,13 +23,17 @@ const SinglePost = () => {
   const { post, similarPosts, isLoading } = useSelector((state: any) => state.post);
   const { user } = useSelector((state: any) => state.user);
   // Create a new comment
-  const handleNewComment = (e: { preventDefault: () => void; }) => {
+  const handleNewComment = (e: {
+    target: any; preventDefault: () => void; 
+  }) => {
     e.preventDefault();
     dispatch(NewComment({
       post: post._id,
       author: user._id,
       body,
     }));
+    e.target.reset();
+    setBody('');
   }
   return (
     <Fragment>
@@ -58,7 +61,7 @@ const SinglePost = () => {
               user ? (
                 <form onSubmit={handleNewComment}>
                   <input type="text" placeholder="Leave a comment" onChange={(e) => setBody(e.target.value)} />
-                  <button type="submit"><IoIosSend /></button>
+                  <button type="submit"></button>
                 </form>
               ) : (
                 <>
@@ -74,6 +77,20 @@ const SinglePost = () => {
                 <span className="name">John Doe</span> <span className="date">13 hours ago</span>
               </div>
               <div><p>This is a great article</p></div>
+              <div className="comment reply">
+                <div className="user">
+                  <img src={`${process.env.PUBLIC_URL + '/images/user-avatar.png'}`} alt="avatar" />
+                  <span className="name">John Doe</span> <span className="date">13 hours ago</span>
+                </div>
+                <div><p>This is a great article</p></div>
+              </div>
+              <div className="comment reply">
+                <div className="user">
+                  <img src={`${process.env.PUBLIC_URL + '/images/user-avatar.png'}`} alt="avatar" />
+                  <span className="name">John Doe</span> <span className="date">13 hours ago</span>
+                </div>
+                <div><p>This is a great article</p></div>
+              </div>
             </div>
           </div>
           {
