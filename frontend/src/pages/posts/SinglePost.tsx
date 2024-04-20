@@ -6,7 +6,7 @@ import { GetSimilarPosts, GetSinglePost } from "../../features/PostFeatures";
 import LoadingScreen from "../../components/LoadingScreen";
 import moment from "moment";
 import Card from "../../components/Card";
-import { NewComment } from "../../features/CommentFeature";
+import { GetComments, NewComment } from "../../features/CommentFeature";
 
 const SinglePost = () => {
   const dispatch = useDispatch();
@@ -22,6 +22,13 @@ const SinglePost = () => {
   }, [dispatch, slug]);
   const { post, similarPosts, isLoading } = useSelector((state: any) => state.post);
   const { user } = useSelector((state: any) => state.user);
+  // Get post comments
+  useEffect(() => {
+    if (! post) return;
+    const id = post._id;
+    dispatch(GetComments(id));
+  }, [dispatch, post]);
+  const { comments } = useSelector((state: any) => state.comment);
   // Create a new comment
   const handleNewComment = (e: {
     target: any; preventDefault: () => void; 
@@ -64,34 +71,38 @@ const SinglePost = () => {
                   <button type="submit"></button>
                 </form>
               ) : (
-                <>
-                  <Link to={`/users/login?next=/posts/${ post.slug }`}>
+                <Link to={`/users/login?next=/posts/${ post.slug }`}>
+                  <form>
                     <input className="comment-input" type="text" placeholder="login to leave a comment" />
-                  </Link>
-                </>
+                  </form>
+                </Link>
               )
             }
-            <div className="comment">
-              <div className="user">
-                <img src={`${process.env.PUBLIC_URL + '/images/user-avatar.png'}`} alt="avatar" />
-                <span className="name">John Doe</span> <span className="date">13 hours ago</span>
-              </div>
-              <div><p>This is a great article</p></div>
-              <div className="comment reply">
-                <div className="user">
-                  <img src={`${process.env.PUBLIC_URL + '/images/user-avatar.png'}`} alt="avatar" />
-                  <span className="name">John Doe</span> <span className="date">13 hours ago</span>
+            {
+              comments.length > 0 &&
+              comments.map(
+                (comment: 
+                  { createdAt: Date; author: { image: string; firstName: string, lastName: string }; body: string }
+                ) => (
+                <div className="comment">
+                  <div className="user">
+                    <img 
+                      src={`${comment.author.image ? `http://localhost:5000/${ comment.author.image }` : process.env.PUBLIC_URL + '/images/user-avatar.png'}`} 
+                      alt="avatar" 
+                    />
+                    <span className="name">{ comment.author.firstName } { comment.author.lastName }</span> <span className="date">{ moment(comment.createdAt).fromNow() }</span>
+                  </div>
+                  <div><p>{ comment.body }</p></div>
+                  <div className="comment reply">
+                    <div className="user">
+                      <img src={`${process.env.PUBLIC_URL + '/images/user-avatar.png'}`} alt="avatar" />
+                      <span className="name">John Doe</span> <span className="date">13 hours ago</span>
+                    </div>
+                    <div><p>This is a great article</p></div>
+                  </div>
                 </div>
-                <div><p>This is a great article</p></div>
-              </div>
-              <div className="comment reply">
-                <div className="user">
-                  <img src={`${process.env.PUBLIC_URL + '/images/user-avatar.png'}`} alt="avatar" />
-                  <span className="name">John Doe</span> <span className="date">13 hours ago</span>
-                </div>
-                <div><p>This is a great article</p></div>
-              </div>
-            </div>
+              ))
+            }
           </div>
           {
             similarPosts.length > 0 &&

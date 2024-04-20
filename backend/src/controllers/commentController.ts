@@ -27,7 +27,7 @@ export const newComment: RequestHandler = async (req, res) => {
 // Get post comments
 export const GetPostComments: RequestHandler = async (req, res) => {
   try {
-    const comments = await Comment.find({ post: req.params.id });
+    const comments = await Comment.find({ post: req.params.id }).populate("author");
     if (! comments) return;
     res.status(200).json(comments);
   } catch (error: any) {

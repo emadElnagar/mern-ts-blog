@@ -36,6 +36,15 @@ export const NewComment: any = createAsyncThunk("comments/new", async (data: any
   }
 });
 
+// Get post comments
+export const GetComments: any = createAsyncThunk("comments/all", async(id: any, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${url}/${id}`);
+    return response.data;
+  } catch (error: any) {
+    rejectWithValue(error.message);
+  }
+});
 
 const commentSlice = createSlice({
   name: 'post',
@@ -54,6 +63,18 @@ const commentSlice = createSlice({
     .addCase(NewComment.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
+    })
+    // Get post comments
+    .addCase(GetComments.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(GetComments.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.comments = action.payload;
+    })
+    .addCase(GetComments.rejected, (state, action) => {
+      state.isLoading = false;
+      state.comments = action.error;
     })
   }
 });
