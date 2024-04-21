@@ -47,8 +47,8 @@ const SinglePost = () => {
       <Helmet>
         {
           post ?
-          <title>Megala-{ post.slug }</title> :
-          <title>Megala</title>
+          <title>Magala-{ post.slug }</title> :
+          <title>Magala</title>
         }
       </Helmet>
       {

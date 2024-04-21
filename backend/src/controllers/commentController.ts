@@ -34,3 +34,16 @@ export const GetPostComments: RequestHandler = async (req, res) => {
     res.status(401).json({ message: error.message });
   }
 }
+
+// Delete comment
+export const DeleteComment: RequestHandler = async (req, res) => {
+  Comment.deleteOne({ _id: req.params.id }).then(_result => {
+    res.status(200).json({
+      message: "comment deleted successfully"
+    });
+  }).catch(error => {
+    res.status(401).json({
+      message: "Error" + error.message
+    });
+  });
+}

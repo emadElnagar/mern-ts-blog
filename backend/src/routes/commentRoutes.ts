@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { GetPostComments, newComment } from "../controllers/commentController";
+import { DeleteComment, GetPostComments, newComment } from "../controllers/commentController";
 
 const commentRouter = Router();
 
@@ -8,5 +8,8 @@ commentRouter.post('/new', newComment);
 
 // Get post comments
 commentRouter.get('/:id', GetPostComments);
+
+// Delete comment
+commentRouter.delete('/:id', DeleteComment);
 
 export default commentRouter;
