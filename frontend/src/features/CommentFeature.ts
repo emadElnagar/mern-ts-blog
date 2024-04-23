@@ -37,9 +37,19 @@ export const NewComment: any = createAsyncThunk("comments/new", async (data: any
 });
 
 // Get post comments
-export const GetComments: any = createAsyncThunk("comments/all", async(id: any, { rejectWithValue }) => {
+export const GetComments: any = createAsyncThunk("comments/all", async (id: any, { rejectWithValue }) => {
   try {
     const response = await axios.get(`${url}/${id}`);
+    return response.data;
+  } catch (error: any) {
+    rejectWithValue(error.message);
+  }
+});
+
+// Delete comment
+export const DeleteComment: any = createAsyncThunk("comments/delete", async (id: any, { rejectWithValue }) => {
+  try {
+    const response = await axios.delete(`${url}/${id}`);
     return response.data;
   } catch (error: any) {
     rejectWithValue(error.message);
@@ -75,6 +85,23 @@ const commentSlice = createSlice({
     .addCase(GetComments.rejected, (state, action) => {
       state.isLoading = false;
       state.comments = action.error;
+    })
+    // Delete comment
+    .addCase(DeleteComment.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(DeleteComment.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const {
+        arg: { _id }
+      } = action.meta;
+      if (_id) {
+        state.comments = state.comments.filter((comment) => comment._id !== action.payload);
+      }
+    })
+    .addCase(DeleteComment.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
     })
   }
 });

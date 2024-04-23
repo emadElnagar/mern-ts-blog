@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, Key, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
@@ -82,9 +82,11 @@ const SinglePost = () => {
               comments.length > 0 &&
               comments.map(
                 (comment: 
-                  { createdAt: Date; author: { image: string; firstName: string, lastName: string }; body: string }
+                  {
+                    _id: Key; createdAt: Date; author: { image: string; firstName: string, lastName: string }; body: string 
+                  }
                 ) => (
-                <div className="comment">
+                <div className="comment" key={ comment._id }>
                   <div className="user">
                     <img 
                       src={`${comment.author.image ? `http://localhost:5000/${ comment.author.image }` : process.env.PUBLIC_URL + '/images/user-avatar.png'}`} 
