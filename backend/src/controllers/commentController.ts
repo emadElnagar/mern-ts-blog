@@ -35,6 +35,22 @@ export const GetPostComments: RequestHandler = async (req, res) => {
   }
 }
 
+// Update comment
+export const UpdateComment: RequestHandler = async (req, res) => {
+  const newComment = {
+    body: req.body.body
+  }
+  Comment.updateOne({ _id: req.params.id }, { $set: newComment }).then(_result => {
+    res.status(200).json({
+      message: 'Post updated successfully'
+    });
+  }).catch(error => {
+    res.status(401).json({
+      message: "Error" + error.message
+    });
+  });
+}
+
 // Delete comment
 export const DeleteComment: RequestHandler = async (req, res) => {
   Comment.deleteOne({ _id: req.params.id }).then(_result => {
