@@ -44,6 +44,7 @@ function App() {
             <Route path='/admin' element={<Dashboard />} />
             <Route path='/admin/categories' element={<AllCategories />} />
             <Route path='/admin/categories/new' element={<CategoryNew />} />
+            <Route path='/admin/posts/new' element={<NewPostPage />} />
             <Route path='/admin/users' element={<UsersList />} />
           </Fragment>
         }
