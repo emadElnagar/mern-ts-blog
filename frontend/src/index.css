@@ -425,3 +425,15 @@ input[type="file"] {
   margin-inline-start: 30px;
   margin-block-end: 0;
 }
+
+.comment-control .icon {
+  cursor: pointer;
+}
+
+.comment-control .icon:first-of-type {
+  margin-inline-start: 30px;
+}
+
+.comment-control .icon:not(:first-of-type) {
+  margin-inline-start: 10px;
+}
