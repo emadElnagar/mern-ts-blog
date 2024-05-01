@@ -68,9 +68,11 @@ export const DeleteComment: any = createAsyncThunk(
 // Update comment
 export const UpdateComment: any = createAsyncThunk(
   "comments/update",
-  async (id: any, { rejectWithValue }) => {
+  async (comment: any, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(`${url}/${id}`);
+      const response = await axios.patch(`${url}/${comment._id}`, {
+        body: comment.body,
+      });
       return response.data;
     } catch (error: any) {
       rejectWithValue(error.message);
