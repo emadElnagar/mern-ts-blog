@@ -72,3 +72,20 @@ export const DeleteComment: RequestHandler = async (req, res) => {
       });
     });
 };
+
+//Add comment reply
+export const AddReply: RequestHandler = async (req, res) => {
+  const newReply = {
+    author: req.body.author,
+    body: req.body.body,
+  };
+  Comment.updateOne({ _id: req.params.id }, { $push: { replies: newReply } })
+    .then((_result) => {
+      res.status(200).json({
+        message: "Reply added successfully",
+      });
+    })
+    .catch((error) => {
+      res.status(401).json({ message: error.message });
+    });
+};
