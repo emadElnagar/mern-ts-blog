@@ -10,10 +10,15 @@ import {
   DeleteComment,
   GetComments,
   NewComment,
+  UpdateComment,
 } from "../../features/CommentFeature";
 import { MdDelete } from "react-icons/md";
 import { IoPencil } from "react-icons/io5";
 import Swal from "sweetalert2";
+
+type UpdateCommentType = {
+  body: string;
+};
 
 const SinglePost = () => {
   const dispatch = useDispatch();
@@ -69,6 +74,41 @@ const SinglePost = () => {
           text: "Comment has been deleted.",
           icon: "success",
         });
+      }
+    });
+  };
+  // Update comment
+  let bodyInput: HTMLInputElement;
+  const handleUpdate = (id: Key) => {
+    Swal.fire<UpdateCommentType>({
+      title: "Update comment",
+      html: `
+        <input type="text" id="body" class="swal2-input" placeholder="body">
+      `,
+      confirmButtonText: "Update",
+      focusConfirm: false,
+      didOpen: () => {
+        const popup = Swal.getPopup()!;
+        bodyInput = popup.querySelector("#body") as HTMLInputElement;
+        bodyInput.onkeyup = (event) =>
+          event.key === "Enter" && Swal.clickConfirm();
+      },
+      preConfirm: () => {
+        const body = bodyInput.value;
+        if (!body) {
+          Swal.showValidationMessage(`Please enter the new comment`);
+        }
+        return { body };
+      },
+    }).then((result) => {
+      const body = result.value?.body;
+      if (result.isConfirmed) {
+        dispatch(
+          UpdateComment({
+            id,
+            body,
+          })
+        );
       }
     });
   };
@@ -157,7 +197,10 @@ const SinglePost = () => {
                             className="icon"
                             onClick={() => handleDelete(comment._id)}
                           />
-                          <IoPencil className="icon" />
+                          <IoPencil
+                            className="icon"
+                            onClick={() => handleUpdate(comment._id)}
+                          />
                         </div>
                       )}
                       {user &&
