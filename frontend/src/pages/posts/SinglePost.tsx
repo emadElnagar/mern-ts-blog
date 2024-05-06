@@ -76,6 +76,7 @@ const SinglePost = () => {
         });
       }
     });
+    dispatch(GetComments(post._id));
   };
   // Update comment
   let bodyInput: HTMLInputElement;
@@ -111,6 +112,7 @@ const SinglePost = () => {
         );
       }
     });
+    dispatch(GetComments(post._id));
   };
   return (
     <Fragment>
