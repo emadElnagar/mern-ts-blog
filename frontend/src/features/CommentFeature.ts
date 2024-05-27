@@ -92,6 +92,7 @@ const commentSlice = createSlice({
       })
       .addCase(NewComment.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.error = null;
         state.comments.push(action.payload);
       })
       .addCase(NewComment.rejected, (state, action) => {
@@ -104,6 +105,7 @@ const commentSlice = createSlice({
       })
       .addCase(GetComments.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.error = null;
         state.comments = action.payload;
       })
       .addCase(GetComments.rejected, (state, action) => {
@@ -116,6 +118,7 @@ const commentSlice = createSlice({
       })
       .addCase(DeleteComment.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.error = null;
         const {
           arg: { _id },
         } = action.meta;
@@ -135,6 +138,7 @@ const commentSlice = createSlice({
       })
       .addCase(UpdateComment.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.error = null;
         const {
           arg: { _id },
         } = action.meta;
