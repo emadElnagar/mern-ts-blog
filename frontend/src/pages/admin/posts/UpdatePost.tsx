@@ -1,9 +1,11 @@
-import { Fragment } from "react";
+import { Fragment, Key } from "react";
 import { Helmet } from "react-helmet";
 import { MdCloudUpload } from "react-icons/md";
 import ReactQuill from "react-quill";
+import { useSelector } from "react-redux";
 
 const UpdatePost = () => {
+  const { categories } = useSelector((state: any) => state.category);
   return (
     <Fragment>
       <Helmet>
@@ -15,7 +17,11 @@ const UpdatePost = () => {
           <input type="text" placeholder="title" />
           <ReactQuill theme="snow" />
           <select>
-            <option>category</option>
+            {categories.map((category: { _id: Key; title: string }) => (
+              <option key={category._id} value={`${category._id}`}>
+                {category.title}
+              </option>
+            ))}
           </select>
           <input type="file" id="image-upload" accept="*/images" />
           <label htmlFor="image-upload" className="upload-label">
