@@ -1,11 +1,18 @@
-import { Fragment, Key } from "react";
+import { Fragment, Key, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { MdCloudUpload } from "react-icons/md";
 import ReactQuill from "react-quill";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { GetSinglePost } from "../../../features/PostFeatures";
 
 const UpdatePost = () => {
   const { categories } = useSelector((state: any) => state.category);
+  const { slug } = useParams();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(GetSinglePost(slug));
+  }, [dispatch, slug]);
   return (
     <Fragment>
       <Helmet>
