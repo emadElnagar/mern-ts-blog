@@ -9,6 +9,7 @@ import { GetSinglePost } from "../../../features/PostFeatures";
 const UpdatePost = () => {
   const { categories } = useSelector((state: any) => state.category);
   const { slug } = useParams();
+  const { post } = useSelector((state: any) => state.post);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetSinglePost(slug));
