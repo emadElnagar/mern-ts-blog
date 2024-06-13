@@ -16,6 +16,7 @@ import UsersList from "./pages/admin/users/UsersList";
 import UserProfile from "./pages/users/Profile";
 import SinglePost from "./pages/posts/SinglePost";
 import AllPosts from "./pages/admin/posts/AllPosts";
+import { UpdatePost } from "./features/PostFeatures";
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -45,7 +46,7 @@ function App() {
             <Route path="/admin/categories/new" element={<CategoryNew />} />
             <Route path="/admin/posts" element={<AllPosts />} />
             <Route path="/admin/posts/new" element={<NewPostPage />} />
-            <Route path="/admin/posts/:slug/update" element={<NewPostPage />} />
+            <Route path="/admin/posts/:slug/update" element={<UpdatePost />} />
             <Route path="/admin/users" element={<UsersList />} />
           </Fragment>
         )}
