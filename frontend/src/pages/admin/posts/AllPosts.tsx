@@ -50,7 +50,9 @@ const AllPosts = () => {
               </span>
               <div className="control">
                 <button>
-                  <IoPencil /> update
+                  <Link to={`/admin/posts/${post.slug}/update`}>
+                    <IoPencil /> update
+                  </Link>
                 </button>
                 <button
                   className="delete"

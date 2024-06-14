@@ -20,7 +20,7 @@ const UpdatePost = () => {
         <title>Magagla-post-update</title>
       </Helmet>
       <div className="container">
-        <h1 className="heading">update post</h1>
+        <h1 className="text-center heading">update post</h1>
         <form className="colum-form">
           <input type="text" placeholder="title" />
           <ReactQuill theme="snow" />

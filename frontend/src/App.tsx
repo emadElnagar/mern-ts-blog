@@ -16,7 +16,7 @@ import UsersList from "./pages/admin/users/UsersList";
 import UserProfile from "./pages/users/Profile";
 import SinglePost from "./pages/posts/SinglePost";
 import AllPosts from "./pages/admin/posts/AllPosts";
-import { UpdatePost } from "./features/PostFeatures";
+import UpdatePost from "./pages/admin/posts/UpdatePost";
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
