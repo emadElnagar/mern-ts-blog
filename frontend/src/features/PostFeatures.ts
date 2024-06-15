@@ -84,13 +84,9 @@ export const GetSimilarPosts: any = createAsyncThunk(
 // Update post
 export const UpdatePost: any = createAsyncThunk(
   "posts/update",
-  async (post: any, { rejectWithValue }) => {
+  async (data: any, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`${url}/${post._id}/update`, {
-        title: post.title,
-        description: post.description,
-        image: post.image,
-      });
+      const response = await axios.put(`${url}/${data._id}/update`, data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message);
