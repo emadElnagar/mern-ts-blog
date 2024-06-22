@@ -1,7 +1,6 @@
-import { Fragment } from "react";
+import { Fragment, lazy, Suspense } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/HomePage";
 import LoginPage from "./pages/users/Login";
 import RegisterPage from "./pages/users/Register";
 import NavBar from "./components/NavBar";
@@ -17,6 +16,9 @@ import UserProfile from "./pages/users/Profile";
 import SinglePost from "./pages/posts/SinglePost";
 import AllPosts from "./pages/admin/posts/AllPosts";
 import UpdatePostPage from "./pages/admin/posts/UpdatePost";
+import LoadingScreen from "./components/LoadingScreen";
+
+const HoemScreen = lazy(() => import("./pages/HomePage"));
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -28,7 +30,14 @@ function App() {
         </header>
       </div>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<LoadingScreen />}>
+              <HoemScreen />
+            </Suspense>
+          }
+        />
         <Route path="/users/login" element={<LoginPage />} />
         <Route path="/users/register" element={<RegisterPage />} />
         <Route path="/users/profile/:id" element={<UserProfile />} />
