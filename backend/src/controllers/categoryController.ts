@@ -5,26 +5,31 @@ import Category from "../models/Category";
 export const newCategory: RequestHandler = async (req, res) => {
   const foundCategoryTitle = await Category.findOne({ title: req.body.title });
   if (foundCategoryTitle) {
-    res.json({ message: 'This title already exists, Try another name' });
+    return res
+      .status(401)
+      .json({ message: "This title already exists, Try another name" });
   }
   interface categoryType {
-    title: string,
-    author: object
+    title: string;
+    author: object;
   }
   const category = new Category<categoryType>({
     title: req.body.title,
-    author: req.body.author
+    author: req.body.author,
   });
-  category.save().then(category => {
-    res.status(200).json({
-      category
+  category
+    .save()
+    .then((category) => {
+      res.status(200).json({
+        category,
+      });
+    })
+    .catch((err) => {
+      res.status(401).json({
+        message: err.message,
+      });
     });
-  }).catch(err => {
-    res.status(401).json({
-      message: err.message
-    });
-  });
-}
+};
 
 // Get all categories
 export const getAllCategories: RequestHandler = async (_req, res) => {
@@ -34,33 +39,37 @@ export const getAllCategories: RequestHandler = async (_req, res) => {
   } catch (error) {
     res.send(error);
   }
-}
+};
 
 // Update category
 export const updateCategory: RequestHandler = async (req, res) => {
   const newCategory = {
     title: req.body.title,
-  }
-  Category.updateOne({ _id: req.params.id }, { $set: newCategory }).then(_result => {
-    res.status(200).json({
-      message: 'Category updated successfully'
+  };
+  Category.updateOne({ _id: req.params.id }, { $set: newCategory })
+    .then((_result) => {
+      res.status(200).json({
+        message: "Category updated successfully",
+      });
+    })
+    .catch((error) => {
+      res.status(401).json({
+        message: "Error" + error.message,
+      });
     });
-  }).catch(error => {
-    res.status(401).json({
-      message: "Error" + error.message
-    });
-  });
-}
+};
 
 // Delete category
 export const deleteCategory: RequestHandler = (req, res) => {
-  Category.deleteOne({ _id: req.params.id }).then(_result => {
-    res.status(200).json({
-      message: "Category deleted successfully"
+  Category.deleteOne({ _id: req.params.id })
+    .then((_result) => {
+      res.status(200).json({
+        message: "Category deleted successfully",
+      });
+    })
+    .catch((error) => {
+      res.status(401).json({
+        message: "Error" + error.message,
+      });
     });
-  }).catch(error => {
-    res.status(401).json({
-      message: "Error" + error.message
-    });
-  });
 };
