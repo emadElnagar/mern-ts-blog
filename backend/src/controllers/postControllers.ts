@@ -6,7 +6,9 @@ import slugify from "slugify";
 export const newPost: RequestHandler = async (req, res) => {
   const foundPostTitle = await Post.findOne({ title: req.body.title });
   if (foundPostTitle) {
-    res.json({ message: "This title already exists, Try another name" });
+    return res
+      .status(401)
+      .json({ message: "This title already exists, Try another name" });
   }
   interface postType {
     title: string;
