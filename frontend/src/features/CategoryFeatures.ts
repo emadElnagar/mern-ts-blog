@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const url = "http://localhost:5000/api/categories";
+const url = process.env.REACT_APP_CATEGORY_URL;
 
 export interface Category {
   _id?: object;
