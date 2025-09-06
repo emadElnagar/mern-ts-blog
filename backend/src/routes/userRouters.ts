@@ -1,51 +1,77 @@
-import { Router } from "express";
-import { 
+import { RequestHandler, Router } from "express";
+import {
   ChangeUserImage,
   ChangeUserRole,
   changePassword,
   changeUserEmail,
-  deleteUser, 
-  getAllUsers, 
-  getSingleUser, 
-  updateUserName, 
-  userLogin, 
-  userRegister 
+  deleteProfile,
+  deleteUser,
+  getAllUsers,
+  getSingleUser,
+  updateUserName,
+  userLogin,
+  userRegister,
 } from "../controllers/userController";
 import upload from "../middlewares/Multer";
+import { isAdmin, isAuth } from "../middlewares/auth";
+import { AuthenticatedRequest } from "../types/authTypes";
 
 const userRouter = Router();
 
 // User register
-userRouter.post('/register', userRegister);
+userRouter.post("/register", userRegister);
 
 // User login
-userRouter.post('/login', userLogin);
+userRouter.post("/login", userLogin);
 
 // Get all users
-userRouter.get('/all', getAllUsers);
+userRouter.get("/all", getAllUsers);
 
 // Get single user
-userRouter.get('/profile/:id', getSingleUser);
+userRouter.get("/profile/:id", getSingleUser);
 
 // Delete user account
-userRouter.post('/:id/account/delete')
+userRouter.post("/account/delete", isAuth as RequestHandler, (req, res) =>
+  deleteProfile(req as AuthenticatedRequest, res)
+);
 
 // Delete user
-userRouter.delete('/:id/delete', deleteUser);
+userRouter.delete(
+  "/:id/delete",
+  isAuth as RequestHandler,
+  isAdmin as RequestHandler,
+  (req, res) => deleteUser(req as AuthenticatedRequest, res)
+);
 
 // Change user password
-userRouter.patch('/:id/change-password', changePassword);
+userRouter.patch("/change-password", isAuth as RequestHandler, (req, res) =>
+  changePassword(req as AuthenticatedRequest, res)
+);
 
 // Change user email
-userRouter.patch('/:id/change-email', changeUserEmail);
+userRouter.patch("/change-email", isAuth as RequestHandler, (req, res) =>
+  changeUserEmail(req as AuthenticatedRequest, res)
+);
 
 // Change user first and last name
-userRouter.patch('/:id/update/name', updateUserName);
+userRouter.patch("/update/name", isAuth as RequestHandler, (req, res) =>
+  updateUserName(req as AuthenticatedRequest, res)
+);
 
 // Change user role
-userRouter.patch('/:id/update/role', ChangeUserRole);
+userRouter.patch(
+  "/:id/update/role",
+  isAuth as RequestHandler,
+  isAdmin as RequestHandler,
+  (req, res) => ChangeUserRole(req as AuthenticatedRequest, res)
+);
 
 // Change user image
-userRouter.patch('/:id/update/image', upload.single('profile'), ChangeUserImage);
+userRouter.patch(
+  "/update/image",
+  upload.single("profile"),
+  isAuth as RequestHandler,
+  (req, res) => ChangeUserImage(req as AuthenticatedRequest, res)
+);
 
 export default userRouter;

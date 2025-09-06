@@ -66,6 +66,7 @@ export const generateToken = (user: {
   lastName: string;
   email: string;
   role: string;
+  image: string;
 }) => {
   return JWT.sign(
     {
