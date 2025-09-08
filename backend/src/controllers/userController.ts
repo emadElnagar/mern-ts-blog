@@ -264,7 +264,7 @@ export const ChangeUserRole = async (
   }
 };
 
-// // Change user image
+// Change user image
 export const ChangeUserImage = async (
   req: AuthenticatedRequest,
   res: Response
