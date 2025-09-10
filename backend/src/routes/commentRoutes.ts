@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { RequestHandler, Router } from "express";
 import {
   AddReply,
   DeleteComment,
@@ -6,22 +6,35 @@ import {
   UpdateComment,
   newComment,
 } from "../controllers/commentController";
+import { isAdmin, isAuth } from "../middlewares/auth";
+import { AuthenticatedRequest } from "../types/authTypes";
 
 const commentRouter = Router();
 
 // create a new comment
-commentRouter.post("/new", newComment);
+commentRouter.post(
+  "/new",
+  isAuth as RequestHandler,
+  isAdmin as RequestHandler,
+  (req, res) => newComment(req as AuthenticatedRequest, res)
+);
 
 // Get post comments
 commentRouter.get("/:id", GetPostComments);
 
 // Update comment
-commentRouter.patch("/:id", UpdateComment);
+commentRouter.patch("/:id", isAuth as RequestHandler, (req, res) =>
+  UpdateComment(req as AuthenticatedRequest, res)
+);
 
 // Delete comment
-commentRouter.delete("/:id", DeleteComment);
+commentRouter.delete("/:id", isAuth as RequestHandler, (req, res) =>
+  DeleteComment(req as AuthenticatedRequest, res)
+);
 
 // Add new reply
-commentRouter.put("/:id", AddReply);
+commentRouter.put("/:id", isAuth as RequestHandler, (req, res) =>
+  AddReply(req as AuthenticatedRequest, res)
+);
 
 export default commentRouter;
