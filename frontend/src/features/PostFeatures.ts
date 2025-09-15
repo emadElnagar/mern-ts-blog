@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const url = "http://localhost:5000/api/posts";
+const url = process.env.REACT_APP_POST_URL;
 
 export interface Post {
   _id?: object;
