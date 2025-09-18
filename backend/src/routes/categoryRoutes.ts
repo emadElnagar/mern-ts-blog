@@ -13,18 +13,18 @@ const categoryRouter = Router();
 
 // New category
 categoryRouter.post(
-  "/new",
+  "/",
   isAuth as RequestHandler,
   isAdmin as RequestHandler,
   (req, res) => newCategory(req as AuthenticatedRequest, res)
 );
 
 // Get all categories
-categoryRouter.get("/all", getAllCategories);
+categoryRouter.get("/", getAllCategories);
 
 // Update category
 categoryRouter.put(
-  "/:id/update",
+  "/:id",
   isAuth as RequestHandler,
   isAdmin as RequestHandler,
   (req, res) => updateCategory(req as AuthenticatedRequest, res)
@@ -32,7 +32,7 @@ categoryRouter.put(
 
 // Delete category
 categoryRouter.delete(
-  "/:id/delete",
+  "/:id",
   isAuth as RequestHandler,
   isAdmin as RequestHandler,
   (req, res) => deleteCategory(req as AuthenticatedRequest, res)
