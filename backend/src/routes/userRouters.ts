@@ -25,19 +25,19 @@ userRouter.post("/register", userRegister);
 userRouter.post("/login", userLogin);
 
 // Get all users
-userRouter.get("/all", getAllUsers);
+userRouter.get("/", getAllUsers);
 
 // Get single user
-userRouter.get("/profile/:id", getSingleUser);
+userRouter.get("/:id", getSingleUser);
 
 // Delete user account
-userRouter.post("/account/delete", isAuth as RequestHandler, (req, res) =>
+userRouter.post("/delete", isAuth as RequestHandler, (req, res) =>
   deleteProfile(req as AuthenticatedRequest, res)
 );
 
 // Delete user
 userRouter.delete(
-  "/:id/delete",
+  "/:id",
   isAuth as RequestHandler,
   isAdmin as RequestHandler,
   (req, res) => deleteUser(req as AuthenticatedRequest, res)
