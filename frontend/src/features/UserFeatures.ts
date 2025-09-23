@@ -77,7 +77,7 @@ export const GetAllUsers: any = createAsyncThunk(
   "users/all",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${url}/all`);
+      const response = await axios.get(`${url}`);
       return response.data;
     } catch (error: any) {
       rejectWithValue(error.message);
@@ -90,7 +90,7 @@ export const GetSingleUser: any = createAsyncThunk(
   "users/profile",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${url}/profile/${id}`);
+      const response = await axios.get(`${url}/${id}`);
       return response.data;
     } catch (error: any) {
       rejectWithValue(error.message);
