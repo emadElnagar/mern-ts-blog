@@ -1,32 +1,52 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, Document, Types } from "mongoose";
 
-interface Comment {
-  post: object;
-  author: object;
-  body: string;
-  replies: [
-    {
-      author: object,
-      createdAt: Date,
-      body: string
-    }
-  ]
+export interface IComment extends Document {
+  post: Types.ObjectId;
+  author: Types.ObjectId;
+  content: string;
+  parentComment?: Types.ObjectId | null;
+  likes: Types.ObjectId[];
 }
 
-const commentSchema = new Schema<Comment>({
-  post: { type: Schema.Types.ObjectId, ref: 'Post', required: true },
-  author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  body: { type: String, required: true },
-  replies: [
-    {
-      author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-      createdAt:{ type: Date, default: new Date().getTime() },
-      body: { type: String, required: true }
-    }
-  ]
-}, {
-  timestamps: true
-});
+const CommentSchema = new Schema<IComment>(
+  {
+    post: {
+      type: Schema.Types.ObjectId,
+      ref: "Post",
+      required: true,
+      index: true,
+    },
 
-const Comment = model("Comment", commentSchema);
-export default Comment;
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    content: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 2000,
+    },
+
+    // For replies (nested comments)
+    parentComment: {
+      type: Schema.Types.ObjectId,
+      ref: "Comment",
+      default: null,
+    },
+
+    likes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  },
+);
+
+export default mongoose.model<IComment>("Comment", CommentSchema);
