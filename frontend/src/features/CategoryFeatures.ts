@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_CATEGORY_URL } from "../Api";
 
-const url = process.env.REACT_APP_CATEGORY_URL;
+const url = API_CATEGORY_URL;
 
 export interface Category {
   _id?: object;
@@ -44,7 +45,7 @@ export const NewCategory: any = createAsyncThunk(
         "Something went wrong";
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 // Get all categories
@@ -61,7 +62,7 @@ export const GetAllCategories: any = createAsyncThunk(
         "Something went wrong";
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 // Update category
@@ -81,7 +82,7 @@ export const UpdateCategory: any = createAsyncThunk(
         {
           title: category.title,
         },
-        config
+        config,
       );
       return response.data;
     } catch (error: any) {
@@ -91,7 +92,7 @@ export const UpdateCategory: any = createAsyncThunk(
         "Something went wrong";
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 // Delete category
@@ -114,7 +115,7 @@ export const DeleteCategory: any = createAsyncThunk(
         "Something went wrong";
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 // CATEGORY SLICE
@@ -165,7 +166,7 @@ const categorySlice = createSlice({
         } = action.meta;
         if (_id) {
           state.categories = state.categories.map((item) =>
-            item._id === _id ? action.payload : item
+            item._id === _id ? action.payload : item,
           );
         }
       })
@@ -186,7 +187,7 @@ const categorySlice = createSlice({
         } = action.meta;
         if (_id) {
           state.categories = state.categories.filter(
-            (category) => category._id !== action.payload
+            (category) => category._id !== action.payload,
           );
         }
       })

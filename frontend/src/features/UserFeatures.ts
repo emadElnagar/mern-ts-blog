@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { JwtPayload, jwtDecode } from "jwt-decode";
+import { API_USER_URL } from "../Api";
 
-const url = process.env.REACT_APP_AUTH_URL;
+const url = API_USER_URL;
 
 export interface User {
   _id?: object;
@@ -42,7 +43,7 @@ export const UserRegister: any = createAsyncThunk(
     } catch (error: any) {
       rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // User login
@@ -57,7 +58,7 @@ export const Login: any = createAsyncThunk(
     } catch (error: any) {
       rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // User logout
@@ -69,7 +70,7 @@ export const Logout: any = createAsyncThunk(
     } catch (error: any) {
       rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Get all users
@@ -82,7 +83,7 @@ export const GetAllUsers: any = createAsyncThunk(
     } catch (error: any) {
       rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Get single user
@@ -95,7 +96,7 @@ export const GetSingleUser: any = createAsyncThunk(
     } catch (error: any) {
       rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Change user role
@@ -105,13 +106,13 @@ export const ChangeUserRole: any = createAsyncThunk(
     try {
       const response = await axios.patch(
         `${url}/${user._id}/update/role`,
-        user.newRole
+        user.newRole,
       );
       return response.data;
     } catch (error: any) {
       rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Delete user
@@ -124,7 +125,7 @@ export const DeleteUser: any = createAsyncThunk(
     } catch (error: any) {
       rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Change user email
@@ -139,7 +140,7 @@ export const changeEmail: any = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Change User Password
@@ -155,7 +156,7 @@ export const ChangePassword: any = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Change user image
@@ -165,13 +166,13 @@ export const ChagneImage: any = createAsyncThunk(
     try {
       const response = await axios.patch(
         `${url}/${data.id}/update/image`,
-        data.formData
+        data.formData,
       );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 const userSlice = createSlice({
@@ -258,7 +259,7 @@ const userSlice = createSlice({
         } = action.meta;
         if (_id) {
           state.users = state.users.map((user) =>
-            user._id === _id ? action.payload : user
+            user._id === _id ? action.payload : user,
           );
         }
       })
@@ -278,7 +279,7 @@ const userSlice = createSlice({
         } = action.meta;
         if (_id) {
           state.users = state.users.filter(
-            (user) => user._id !== action.payload
+            (user) => user._id !== action.payload,
           );
         }
       })
@@ -298,7 +299,7 @@ const userSlice = createSlice({
         } = action.meta;
         if (_id) {
           state.users = state.users.map((user) =>
-            user._id === _id ? action.payload : user
+            user._id === _id ? action.payload : user,
           );
         }
       })
@@ -318,7 +319,7 @@ const userSlice = createSlice({
         } = action.meta;
         if (_id) {
           state.users = state.users.map((user) =>
-            user._id === _id ? action.payload : user
+            user._id === _id ? action.payload : user,
           );
         }
       })
@@ -338,7 +339,7 @@ const userSlice = createSlice({
         } = action.meta;
         if (_id) {
           state.users = state.users.map((user) =>
-            user._id === _id ? action.payload : user
+            user._id === _id ? action.payload : user,
           );
         }
       })

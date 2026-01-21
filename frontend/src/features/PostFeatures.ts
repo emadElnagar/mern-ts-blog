@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_POST_URL } from "../Api";
 
-const url = process.env.REACT_APP_POST_URL;
+const url = API_POST_URL;
 
 export interface Post {
   _id?: object;
@@ -39,7 +40,7 @@ export const NewPost: any = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Get all posts
@@ -52,7 +53,7 @@ export const GetAllPosts: any = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Get single post
@@ -65,7 +66,7 @@ export const GetSinglePost: any = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Get similar posts
@@ -78,7 +79,7 @@ export const GetSimilarPosts: any = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Update post
@@ -91,7 +92,7 @@ export const UpdatePost: any = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Delete post
@@ -104,7 +105,7 @@ export const DeletePost: any = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 const postSlice = createSlice({
@@ -177,7 +178,7 @@ const postSlice = createSlice({
         } = action.meta;
         if (_id) {
           state.posts = state.posts.map((item) =>
-            item._id === _id ? action.payload : item
+            item._id === _id ? action.payload : item,
           );
         }
       })
@@ -197,7 +198,7 @@ const postSlice = createSlice({
         } = action.meta;
         if (_id) {
           state.posts = state.posts.filter(
-            (post) => post._id !== action.payload
+            (post) => post._id !== action.payload,
           );
         }
       })

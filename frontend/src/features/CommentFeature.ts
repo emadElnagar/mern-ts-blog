@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_COMMENT_URL } from "../Api";
 
-const url = process.env.REACT_APP_COMMENT_URL;
+const url = API_COMMENT_URL;
 
 export interface Comment {
   _id?: object;
@@ -36,7 +37,7 @@ export const NewComment: any = createAsyncThunk(
     } catch (error: any) {
       rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Get post comments
@@ -49,7 +50,7 @@ export const GetComments: any = createAsyncThunk(
     } catch (error: any) {
       rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Delete comment
@@ -62,7 +63,7 @@ export const DeleteComment: any = createAsyncThunk(
     } catch (error: any) {
       rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Update comment
@@ -77,7 +78,7 @@ export const UpdateComment: any = createAsyncThunk(
     } catch (error: any) {
       rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 const commentSlice = createSlice({
@@ -124,7 +125,7 @@ const commentSlice = createSlice({
         } = action.meta;
         if (_id) {
           state.comments = state.comments.filter(
-            (comment) => comment._id !== action.payload
+            (comment) => comment._id !== action.payload,
           );
         }
       })
@@ -144,7 +145,7 @@ const commentSlice = createSlice({
         } = action.meta;
         if (_id) {
           state.comments = state.comments.map((comment) =>
-            comment._id === _id ? action.payload : comment
+            comment._id === _id ? action.payload : comment,
           );
         }
       })
