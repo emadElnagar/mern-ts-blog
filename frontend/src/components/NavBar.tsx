@@ -1,9 +1,8 @@
-import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { IoMdArrowDropdown } from "react-icons/io";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { Logout } from "../features/UserFeatures";
+import { IoIosMoon } from "react-icons/io";
 
 const NavBar = () => {
   const dispatch = useDispatch();
@@ -18,7 +17,7 @@ const NavBar = () => {
     } else {
       setIsActive(false);
     }
-  }
+  };
   const handleOpen = () => {
     setIsActive(false);
     if (isOpened === true) {
@@ -26,105 +25,61 @@ const NavBar = () => {
     } else {
       setIsOpened(true);
     }
-  }
+  };
   const handleLogout = () => {
     dispatch(Logout());
     setIsActive(false);
-    navigate('/');
-  }
+    navigate("/");
+  };
   const handleNewPost = () => {
     setIsOpened(false);
-    navigate('/posts/new');
-  }
+    navigate("/posts/new");
+  };
   const handleNewCategory = () => {
     setIsOpened(false);
-    navigate('/categories/new');
-  }
+    navigate("/categories/new");
+  };
   const openAdminPanel = () => {
     setIsActive(false);
-    navigate('/admin');
-  }
+    navigate("/admin");
+  };
   const openProfile = () => {
     setIsActive(false);
     navigate(`/users/profile/${user._id}`);
-  }
+  };
   return (
-    <nav>
-      <div className="logo">
-        <h1>
-          <Link to='/'>magala</Link>
-        </h1>
+    <nav className="navbar">
+      {/* Left */}
+      <div className="navbar-left">
+        <Link to="/">
+          <img src="/images/logo.png" alt="Magala logo" className="logo" />
+          <span className="brand">Magala</span>
+        </Link>
       </div>
-      <div className="search-form">
-        <form>
-          <input type="text" placeholder="Search" />
-          <button><IoIosSearch /></button>
-        </form>
+
+      {/* Center */}
+      <div className="navbar-center">
+        <input
+          type="text"
+          placeholder="Search articles..."
+          className="search-input"
+        />
       </div>
-      <div className="account">
-        <div className="buttons">
-          {
-            user === null ? (
-              <Fragment>
-                <Link to="/users/login">Login</Link>
-                <Link to="/users/register">Register</Link>
-              </Fragment>
-            ) : (
-              <Fragment>
-                {
-                  user.role === 'admin' || user.role === 'moderator' ?
-                  (
-                    <div className="dropdown">
-                      <button className="dropdown-button" onClick={handleOpen}>
-                        <IoMdArrowDropdown className={`${isOpened === false ? '' : 'rotate'}`} /> new
-                      </button>
-                      <ul className={`${isOpened === false ? 'dropdown-content d-none' : 'dropdown-content'}`}>
-                        <li className="dropdown-item">
-                          <button className="dropdown-button" onClick={handleNewPost}>
-                            post
-                          </button>
-                        </li>
-                        <li className="dropdown-item">
-                          <button className="dropdown-button" onClick={handleNewCategory}>
-                            category
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  )
-                  : <></>
-                }
-                <div className="dropdown">
-                  <button className="dropdown-button" onClick={handleDropDown}>
-                    <IoMdArrowDropdown className={`${isActive === false ? '' : 'rotate'}`} />
-                    { user.firstName }
-                  </button>
-                  <ul className={`${isActive === false ? 'dropdown-content d-none' : 'dropdown-content'}`}>
-                    <li className="dropdown-item">
-                    <button className="dropdown-button" onClick={openProfile}>
-                      profile
-                    </button>
-                    </li>
-                    {
-                      user.role === 'admin' &&
-                      <li className="dropdown-item">
-                        <button className="dropdown-button" onClick={openAdminPanel}>
-                          admin
-                        </button>
-                      </li>
-                    }
-                    <li className="dropdown-item">
-                      <button className="dropdown-button" onClick={handleLogout}>logout</button>
-                    </li>
-                  </ul>
-                </div>
-              </Fragment>
-            )
-          }
-        </div>
+
+      {/* Right */}
+      <div className="navbar-right">
+        <button className="icon-btn" aria-label="Toggle theme">
+          <IoIosMoon />
+        </button>
+
+        <img
+          src="https://placehold.co/40"
+          alt="Profile"
+          className="profile-avatar"
+        />
       </div>
     </nav>
-  )
-}
+  );
+};
 
 export default NavBar;
