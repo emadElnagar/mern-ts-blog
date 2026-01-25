@@ -73,6 +73,31 @@ body {
   min-height: 100vh;
 }
 
+/* ===== Global Styles ===== */
+code {
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-primary);
+  transition: inherit;
+}
+
+li {
+  list-style-type: none;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
 .container {
   margin: auto;
   @media (min-width: 1200px) {
@@ -90,11 +115,6 @@ body {
   @media (max-width: 576px) {
     max-width: 100%;
   }
-}
-
-button {
-  border: none;
-  cursor: pointer;
 }
 
 .navbar {
@@ -201,23 +221,48 @@ button {
   border-color: var(--color-primary);
 }
 
-code {
-  font-family:
-    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
-img {
-  max-width: 100%;
-}
-
-a {
-  text-decoration: none;
-  color: var(--color-primary);
-  transition: inherit;
-}
-
-li {
-  list-style-type: none;
+/* ===== Dropdown ===== */
+.dropdown {
+  position: relative;
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: var(--color-bg-surface);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    min-width: 100px;
+    &.show {
+      display: block;
+    }
+    a {
+      color: inherit;
+    }
+    .dropdown-item {
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--color-text-main);
+      cursor: pointer;
+      transition: 0.3s ease;
+      &:last-child {
+        border-top: 1px solid var(--color-border);
+      }
+      &:hover {
+        background: var(--color-primary);
+      }
+      button {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        color: inherit;
+      }
+    }
+  }
 }
 
 .posts-container {
@@ -344,31 +389,6 @@ li {
   a {
     border: 1px solid currentColor;
     padding: 10px 25px;
-  }
-}
-
-.dropdown {
-  position: relative;
-  .dropdown-button {
-    color: #fff;
-    background: transparent;
-    cursor: pointer;
-    text-transform: capitalize;
-    border: none;
-  }
-  .dropdown-content {
-    position: absolute;
-    top: 30px;
-    left: 0;
-    background: var(--color-secondary);
-    padding: 10px 20px;
-    .dropdown-item {
-      color: #fff;
-      margin-bottom: 5px;
-      a {
-        color: inherit;
-      }
-    }
   }
 }
 

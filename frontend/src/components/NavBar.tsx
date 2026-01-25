@@ -1,52 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Logout } from "../features/UserFeatures";
-import { IoIosMoon } from "react-icons/io";
+import { IoIosMoon, IoMdSearch } from "react-icons/io";
+import { FaUserAlt } from "react-icons/fa";
+import { LuLogOut } from "react-icons/lu";
 
 const NavBar = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [isActive, setIsActive] = useState(false);
-  const [isOpened, setIsOpened] = useState(false);
   const { user } = useSelector((state: any) => state.user);
-  const handleDropDown = () => {
-    setIsOpened(false);
-    if (isActive === false) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  };
-  const handleOpen = () => {
-    setIsActive(false);
-    if (isOpened === true) {
-      setIsOpened(false);
-    } else {
-      setIsOpened(true);
-    }
-  };
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const handleLogout = () => {
     dispatch(Logout());
-    setIsActive(false);
-    navigate("/");
   };
-  const handleNewPost = () => {
-    setIsOpened(false);
-    navigate("/posts/new");
-  };
-  const handleNewCategory = () => {
-    setIsOpened(false);
-    navigate("/categories/new");
-  };
-  const openAdminPanel = () => {
-    setIsActive(false);
-    navigate("/admin");
-  };
-  const openProfile = () => {
-    setIsActive(false);
-    navigate(`/users/profile/${user._id}`);
-  };
+  useEffect(() => {
+    setDropdownOpen(false);
+  }, [location]);
   return (
     <nav className="navbar">
       {/* Left */}
@@ -72,11 +42,45 @@ const NavBar = () => {
           <IoIosMoon />
         </button>
 
-        <img
-          src="https://placehold.co/40"
-          alt="Profile"
-          className="profile-avatar"
-        />
+        {user ? (
+          <div
+            className="dropdown"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          >
+            <img
+              src="https://placehold.co/40"
+              alt="Profile"
+              className="profile-avatar"
+            />
+            <div className={`dropdown-content ${dropdownOpen ? "show" : ""}`}>
+              <ul className="dropdown-menu">
+                <Link to={`/users/profile/${user._id}`}>
+                  <li className="dropdown-item">
+                    <button>Profile</button>
+                    <small>
+                      <FaUserAlt />
+                    </small>
+                  </li>
+                </Link>
+                <li className="dropdown-item" onClick={handleLogout}>
+                  Logout
+                  <small>
+                    <LuLogOut />
+                  </small>
+                </li>
+              </ul>
+            </div>
+          </div>
+        ) : (
+          <>
+            <Link to="/users/login" className="login-btn">
+              Login
+            </Link>
+            <Link to="/users/register" className="register-btn">
+              Register
+            </Link>
+          </>
+        )}
       </div>
     </nav>
   );
