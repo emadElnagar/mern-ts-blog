@@ -2,14 +2,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Logout } from "../features/UserFeatures";
-import { IoIosMoon, IoMdSearch } from "react-icons/io";
+import { IoIosMoon, IoIosSunny } from "react-icons/io";
 import { FaUserAlt } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
+import { changeTheme } from "../features/ThemeFeatures";
+import { AppDispatch } from "../store";
 
 const NavBar = () => {
   const location = useLocation();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: any) => state.user);
+  const { theme } = useSelector((state: any) => state.theme);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const handleLogout = () => {
     dispatch(Logout());
@@ -38,8 +41,14 @@ const NavBar = () => {
 
       {/* Right */}
       <div className="navbar-right">
-        <button className="icon-btn" aria-label="Toggle theme">
-          <IoIosMoon />
+        <button
+          className="icon-btn"
+          aria-label="Toggle theme"
+          onClick={() =>
+            dispatch(changeTheme(theme === "dark" ? "light" : "dark"))
+          }
+        >
+          {theme === "dark" ? <IoIosSunny /> : <IoIosMoon />}
         </button>
 
         {user ? (

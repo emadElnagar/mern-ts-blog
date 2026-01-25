@@ -1,4 +1,4 @@
-import { Fragment, lazy, Suspense } from "react";
+import { Fragment, lazy, Suspense, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/users/Login";
@@ -6,7 +6,8 @@ import RegisterPage from "./pages/users/Register";
 import NavBar from "./components/NavBar";
 import NewPostPage from "./pages/posts/NewPost";
 import NotFoundPage from "./pages/NotFound";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch } from "./store";
 import Categories from "./pages/categories/Categories";
 import Dashboard from "./pages/admin";
 import CategoryNew from "./pages/admin/categories/NewCategory";
@@ -17,11 +18,19 @@ import SinglePost from "./pages/posts/SinglePost";
 import AllPosts from "./pages/admin/posts/AllPosts";
 import UpdatePostPage from "./pages/admin/posts/UpdatePost";
 import LoadingScreen from "./components/LoadingScreen";
+import { changeTheme } from "./features/ThemeFeatures";
 
 const HoemScreen = lazy(() => import("./pages/HomePage"));
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+
+    dispatch(changeTheme(savedTheme));
+  }, [dispatch]);
   return (
     <BrowserRouter>
       <div className="App">

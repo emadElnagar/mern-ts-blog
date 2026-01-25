@@ -192,6 +192,7 @@ button {
 }
 
 .icon-btn {
+  color: var(--color-text-main);
   background: var(--color-bg-muted);
   border: 1px solid var(--color-border);
   border-radius: 50%;
@@ -202,10 +203,6 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.icon-btn:hover {
-  border-color: var(--color-primary);
 }
 
 .profile-avatar {
