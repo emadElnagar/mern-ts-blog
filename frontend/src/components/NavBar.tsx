@@ -2,13 +2,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Logout } from "../features/UserFeatures";
-import { IoIosMoon, IoIosSunny } from "react-icons/io";
+import { IoIosMoon, IoIosSunny, IoMdLock } from "react-icons/io";
 import { FaUserAlt } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
 import { changeTheme } from "../features/ThemeFeatures";
 import { AppDispatch } from "../store";
+import { BASE_URL } from "../Api";
 
 const NavBar = () => {
+  const url = BASE_URL;
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: any) => state.user);
@@ -57,7 +59,11 @@ const NavBar = () => {
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
             <img
-              src="https://placehold.co/40"
+              src={
+                user && user.image
+                  ? `${url}/${user.image}`
+                  : "/images/user-avatar.png"
+              }
               alt="Profile"
               className="profile-avatar"
             />
@@ -71,6 +77,16 @@ const NavBar = () => {
                     </small>
                   </li>
                 </Link>
+                {user && user.role === "admin" && (
+                  <Link to="/admin">
+                    <li className="dropdown-item">
+                      <button>Admin</button>
+                      <small>
+                        <IoMdLock />
+                      </small>
+                    </li>
+                  </Link>
+                )}
                 <li className="dropdown-item" onClick={handleLogout}>
                   Logout
                   <small>
