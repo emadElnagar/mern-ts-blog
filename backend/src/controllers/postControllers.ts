@@ -2,6 +2,7 @@ import { RequestHandler, Response } from "express";
 import Post from "../models/Post";
 import slugify from "slugify";
 import { AuthenticatedRequest } from "../types/authTypes";
+import { Types } from "mongoose";
 
 // Create a new post
 export const newPost = async (req: AuthenticatedRequest, res: Response) => {
@@ -9,14 +10,14 @@ export const newPost = async (req: AuthenticatedRequest, res: Response) => {
     const foundPostTitle = await Post.findOne({ title: req.body.title });
     if (foundPostTitle) {
       return res
-        .status(401)
+        .status(409)
         .json({ message: "This title already exists, Try another name" });
     }
     interface postType {
       title: string;
       slug: string;
       author: string;
-      category: object;
+      category: Types.ObjectId;
       content: string;
       image: string | undefined;
     }

@@ -16,10 +16,10 @@ const postRouter = Router();
 // Create a new post route
 postRouter.post(
   "/",
-  upload.single("image"),
   isAuth as RequestHandler,
   isAdmin as RequestHandler,
-  (req, res) => newPost(req as AuthenticatedRequest, res)
+  upload.single("image"),
+  (req, res) => newPost(req as AuthenticatedRequest, res),
 );
 
 // Get all posts
@@ -36,7 +36,7 @@ postRouter.put(
   "/:id",
   isAuth as RequestHandler,
   isAdmin as RequestHandler,
-  (req, res) => UpdatePost(req as AuthenticatedRequest, res)
+  (req, res) => UpdatePost(req as AuthenticatedRequest, res),
 );
 
 // Delete post
@@ -44,7 +44,7 @@ postRouter.delete(
   "/:id",
   isAuth as RequestHandler,
   isAdmin as RequestHandler,
-  (req, res) => DeletePost(req as AuthenticatedRequest, res)
+  (req, res) => DeletePost(req as AuthenticatedRequest, res),
 );
 
 export default postRouter;
