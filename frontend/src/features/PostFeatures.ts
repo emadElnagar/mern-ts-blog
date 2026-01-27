@@ -35,7 +35,13 @@ export const NewPost: any = createAsyncThunk(
   "posts/new",
   async (data: any, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${url}/new`, data);
+      const token = sessionStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.post(`${url}`, data, config);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -48,7 +54,7 @@ export const GetAllPosts: any = createAsyncThunk(
   "posts/all",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${url}/all`);
+      const response = await axios.get(`${url}`);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -87,7 +93,13 @@ export const UpdatePost: any = createAsyncThunk(
   "posts/update",
   async (data: any, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`${url}/${data._id}/update`, data);
+      const token = sessionStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.put(`${url}/${data._id}`, data, config);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -100,7 +112,13 @@ export const DeletePost: any = createAsyncThunk(
   "posts/delete",
   async (id: any, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`${url}/${id}/delete`);
+      const token = sessionStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.delete(`${url}/${id}`, config);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message);

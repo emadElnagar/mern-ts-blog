@@ -51,13 +51,13 @@ function App() {
         <Route path="/users/register" element={<RegisterPage />} />
         <Route path="/users/profile/:id" element={<UserProfile />} />
         <Route path="/posts/:slug" element={<SinglePost />} />
-        {user !== null && user.role !== "user" && (
+        {user && user.role !== "user" && (
           <Fragment>
             <Route path="/posts/new" element={<NewPostPage />} />
             <Route path="/categories/new" element={<Categories />} />
           </Fragment>
         )}
-        {user !== null && user.role === "admin" && (
+        {user && user.role === "admin" && (
           <Fragment>
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/admin/categories" element={<AllCategories />} />

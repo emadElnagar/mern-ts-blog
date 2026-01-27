@@ -18,28 +18,28 @@ const Home = () => {
         <title>Magala</title>
       </Helmet>
       <div className="container">
-        {
-          isLoading === true ? <LoadingScreen /> :
-          posts &&
-          <div className="posts-container">
-          {
-            posts.map((post: any) => (
-              <Link to={`/posts/${post.slug}`}>
-                <Card 
-                  key={post._id}
-                  _id={post._id} 
-                  title={post.title} 
-                  category={post.category.title} 
-                  image={post.image}
-                />
-              </Link>
-            ))
-          }
-          </div>
-        }
+        {isLoading === true ? (
+          <LoadingScreen />
+        ) : (
+          posts && (
+            <div className="posts-container">
+              {posts.map((post: any) => (
+                <Link to={`/posts/${post.slug}`}>
+                  <Card
+                    key={post._id}
+                    _id={post._id}
+                    title={post.title}
+                    category={post.category.title}
+                    image={post.image}
+                  />
+                </Link>
+              ))}
+            </div>
+          )
+        )}
       </div>
     </Fragment>
-  )
-}
+  );
+};
 
 export default Home;
