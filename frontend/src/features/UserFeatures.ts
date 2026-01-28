@@ -75,6 +75,19 @@ export const Logout: any = createAsyncThunk(
   },
 );
 
+// Get me
+export const GetMe: any = createAsyncThunk(
+  "users/me",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${url}/me`);
+      return response.data;
+    } catch (error: any) {
+      rejectWithValue(error.message);
+    }
+  },
+);
+
 // Get all users
 export const GetAllUsers: any = createAsyncThunk(
   "users/all",
@@ -220,6 +233,19 @@ const userSlice = createSlice({
         state.user = null;
       })
       .addCase(Logout.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error;
+      })
+      // Get me
+      .addCase(GetMe.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(GetMe.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.user = action.payload;
+      })
+      .addCase(GetMe.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error;
       })

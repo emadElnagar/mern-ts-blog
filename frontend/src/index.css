@@ -151,22 +151,8 @@ input {
 }
 
 .logo {
-  height: 36px;
+  height: 72px;
   width: auto;
-}
-
-.brand {
-  font-size: 1.25rem;
-  font-weight: 700;
-  background: linear-gradient(
-    90deg,
-    var(--color-primary),
-    #f1d28f,
-    var(--color-secondary)
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 /* ===== Center ===== */

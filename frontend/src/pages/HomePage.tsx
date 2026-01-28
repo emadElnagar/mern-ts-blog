@@ -29,7 +29,7 @@ const Home = () => {
                     key={post._id}
                     _id={post._id}
                     title={post.title}
-                    category={post.category.title}
+                    category={post.category?.title}
                     image={post.image}
                   />
                 </Link>

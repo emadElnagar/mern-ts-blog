@@ -22,13 +22,13 @@ const NavBar = () => {
   useEffect(() => {
     setDropdownOpen(false);
   }, [location]);
+  console.log(user);
   return (
     <nav className="navbar">
       {/* Left */}
       <div className="navbar-left">
         <Link to="/">
           <img src="/images/logo.png" alt="Magala logo" className="logo" />
-          <span className="brand">Magala</span>
         </Link>
       </div>
 
