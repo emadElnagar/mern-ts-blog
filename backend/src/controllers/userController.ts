@@ -29,11 +29,7 @@ export const userRegister: RequestHandler = async (req, res) => {
     });
     const token = generateToken({
       _id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
       role: user.role,
-      image: user.image ?? "",
     });
     await user.save();
     res.status(201).json({
@@ -56,15 +52,28 @@ export const userLogin: RequestHandler = async (req, res) => {
     }
     const token = generateToken({
       _id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
       role: user.role,
-      image: user.image ?? "",
     });
     res.status(200).json({
       token,
     });
+  } catch (error: any) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+// Get me (Current user)
+export const getMe = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: "Not authorized, user not found" });
+    }
+    res.status(200).json(user);
   } catch (error: any) {
     res.status(500).json({
       message: error.message,
@@ -105,7 +114,7 @@ export const getSingleUser: RequestHandler = async (req, res) => {
 // Delete my account (for user)
 export const deleteProfile = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ) => {
   try {
     const user = req.user;
@@ -120,7 +129,7 @@ export const deleteProfile = async (
       const oldImagePath = path.resolve(
         __dirname,
         "../../uploads/images",
-        user.image
+        user.image,
       );
       fs.promises.unlink(oldImagePath).catch((err) => {
         console.warn(`Failed to delete image (${user.image}):`, err.message);
@@ -150,7 +159,7 @@ export const deleteUser = async (req: AuthenticatedRequest, res: Response) => {
       const oldImagePath = path.resolve(
         __dirname,
         "../../uploads/images",
-        user.image
+        user.image,
       );
       fs.promises.unlink(oldImagePath).catch((err) => {
         console.warn(`Failed to delete image (${user.image}):`, err.message);
@@ -171,13 +180,13 @@ export const deleteUser = async (req: AuthenticatedRequest, res: Response) => {
 // CHANGE USER PASSWORD
 export const changePassword = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ) => {
   try {
     const user = req.user;
     const validate = await bcrypt.compare(
       req.body.currentPassword,
-      user.password
+      user.password,
     );
     if (!validate) {
       return res.status(401).json({
@@ -199,7 +208,7 @@ export const changePassword = async (
 // Change user email
 export const changeUserEmail = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ) => {
   try {
     const user = req.user;
@@ -223,7 +232,7 @@ export const changeUserEmail = async (
 // Change user first and last name
 export const updateUserName = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ) => {
   try {
     const user = req.user;
@@ -245,7 +254,7 @@ export const updateUserName = async (
 // Change user role
 export const ChangeUserRole = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ) => {
   try {
     const user = await User.findById(req.params.id);
@@ -267,7 +276,7 @@ export const ChangeUserRole = async (
 // Change user image
 export const ChangeUserImage = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ) => {
   try {
     const user = req.user;
@@ -281,12 +290,12 @@ export const ChangeUserImage = async (
       const oldImagePath = path.resolve(
         __dirname,
         "../../uploads/images",
-        user.image
+        user.image,
       );
       fs.promises.unlink(oldImagePath).catch((err) => {
         console.warn(
           `Failed to delete old image (${user.image}):`,
-          err.message
+          err.message,
         );
       });
     }

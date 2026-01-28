@@ -7,6 +7,7 @@ import {
   deleteProfile,
   deleteUser,
   getAllUsers,
+  getMe,
   getSingleUser,
   updateUserName,
   userLogin,
@@ -24,6 +25,11 @@ userRouter.post("/register", userRegister);
 // User login
 userRouter.post("/login", userLogin);
 
+// Get me
+userRouter.get("/me", isAuth as RequestHandler, (req, res) =>
+  getMe(req as AuthenticatedRequest, res),
+);
+
 // Get all users
 userRouter.get("/", getAllUsers);
 
@@ -32,7 +38,7 @@ userRouter.get("/:id", getSingleUser);
 
 // Delete user account
 userRouter.post("/delete", isAuth as RequestHandler, (req, res) =>
-  deleteProfile(req as AuthenticatedRequest, res)
+  deleteProfile(req as AuthenticatedRequest, res),
 );
 
 // Delete user
@@ -40,22 +46,22 @@ userRouter.delete(
   "/:id",
   isAuth as RequestHandler,
   isAdmin as RequestHandler,
-  (req, res) => deleteUser(req as AuthenticatedRequest, res)
+  (req, res) => deleteUser(req as AuthenticatedRequest, res),
 );
 
 // Change user password
 userRouter.patch("/change-password", isAuth as RequestHandler, (req, res) =>
-  changePassword(req as AuthenticatedRequest, res)
+  changePassword(req as AuthenticatedRequest, res),
 );
 
 // Change user email
 userRouter.patch("/change-email", isAuth as RequestHandler, (req, res) =>
-  changeUserEmail(req as AuthenticatedRequest, res)
+  changeUserEmail(req as AuthenticatedRequest, res),
 );
 
 // Change user first and last name
 userRouter.patch("/update/name", isAuth as RequestHandler, (req, res) =>
-  updateUserName(req as AuthenticatedRequest, res)
+  updateUserName(req as AuthenticatedRequest, res),
 );
 
 // Change user role
@@ -63,7 +69,7 @@ userRouter.patch(
   "/:id/update/role",
   isAuth as RequestHandler,
   isAdmin as RequestHandler,
-  (req, res) => ChangeUserRole(req as AuthenticatedRequest, res)
+  (req, res) => ChangeUserRole(req as AuthenticatedRequest, res),
 );
 
 // Change user image
@@ -71,7 +77,7 @@ userRouter.patch(
   "/update/image",
   upload.single("profile"),
   isAuth as RequestHandler,
-  (req, res) => ChangeUserImage(req as AuthenticatedRequest, res)
+  (req, res) => ChangeUserImage(req as AuthenticatedRequest, res),
 );
 
 export default userRouter;

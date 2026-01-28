@@ -16,7 +16,7 @@ export interface AuthRequest extends Request {
 export const isAuth = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<any> => {
   const authHeader = req.headers.authorization;
 
@@ -26,7 +26,7 @@ export const isAuth = async (
     try {
       const decoded = JWT.verify(
         token,
-        process.env.JWT_SECRET!
+        process.env.JWT_SECRET!,
       ) as DecodedToken;
 
       const user = await User.findById(decoded._id).select("-password");
@@ -51,7 +51,7 @@ export const isAuth = async (
 export const isAdmin = (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): any => {
   if (req.user && req.user.role === "admin") {
     return next();
@@ -60,25 +60,15 @@ export const isAdmin = (
   }
 };
 
-export const generateToken = (user: {
-  _id: object;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-  image: string;
-}) => {
+export const generateToken = (user: { _id: object; role: string }) => {
   return JWT.sign(
     {
       _id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
       role: user.role,
     },
     process.env.JWT_SECRET!,
     {
       expiresIn: "1h",
-    }
+    },
   );
 };
