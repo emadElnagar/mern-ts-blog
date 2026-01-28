@@ -59,9 +59,70 @@ export const newPost = async (req: AuthenticatedRequest, res: Response) => {
 // Get all post
 export const GetAllPosts: RequestHandler = async (_req, res) => {
   try {
-    const posts = await Post.find()
-      .populate("category")
-      .sort({ createdAt: -1 });
+    const posts = await Post.aggregate([
+      // Sort newest first
+      {
+        $sort: { createdAt: -1 },
+      },
+
+      // Populate category
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: {
+          path: "$category",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+
+      // Populate author
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $unwind: {
+          path: "$author",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+
+      // Lookup comments
+      {
+        $lookup: {
+          from: "comments",
+          localField: "_id",
+          foreignField: "postId",
+          as: "comments",
+        },
+      },
+
+      // Add commentsCount
+      {
+        $addFields: {
+          commentsCount: { $size: "$comments" },
+        },
+      },
+
+      // Remove comments array from response
+      {
+        $project: {
+          comments: 0,
+          "author.password": 0,
+          "author.email": 0,
+        },
+      },
+    ]);
     if (!posts) {
       return res.status(404).json({ message: "No posts found" });
     }
