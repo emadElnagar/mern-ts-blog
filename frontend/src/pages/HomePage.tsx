@@ -29,8 +29,13 @@ const Home = () => {
                     key={post._id}
                     _id={post._id}
                     title={post.title}
+                    content={post.content}
                     category={post.category?.title}
                     image={post.image}
+                    author={`${post.author?.firstName} ${post.author?.lastName}`}
+                    authorImage={post.author?.image}
+                    commentsCount={post.commentsCount}
+                    date={new Date(post.createdAt).toLocaleDateString()}
                   />
                 </Link>
               ))}

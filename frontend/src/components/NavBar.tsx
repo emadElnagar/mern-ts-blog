@@ -22,7 +22,6 @@ const NavBar = () => {
   useEffect(() => {
     setDropdownOpen(false);
   }, [location]);
-  console.log(user);
   return (
     <nav className="navbar">
       {/* Left */}
