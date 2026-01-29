@@ -5,13 +5,14 @@ import { GetAllPosts } from "../features/PostFeatures";
 import LoadingScreen from "../components/LoadingScreen";
 import Card from "../components/Card";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Home = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetAllPosts());
   }, [dispatch]);
-  const { posts, isLoading } = useSelector((state: any) => state.post);
+  const { posts, isLoading, error } = useSelector((state: any) => state.post);
   return (
     <Fragment>
       <Helmet>
@@ -23,22 +24,28 @@ const Home = () => {
         ) : (
           posts && (
             <div className="posts-container">
-              {posts.map((post: any) => (
-                <Link to={`/posts/${post.slug}`}>
-                  <Card
-                    key={post._id}
-                    _id={post._id}
-                    title={post.title}
-                    content={post.content}
-                    category={post.category?.title}
-                    image={post.image}
-                    author={`${post.author?.firstName} ${post.author?.lastName}`}
-                    authorImage={post.author?.image}
-                    commentsCount={post.commentsCount}
-                    date={new Date(post.createdAt).toLocaleDateString()}
-                  />
-                </Link>
-              ))}
+              {isLoading ? (
+                <LoadingScreen />
+              ) : error ? (
+                (Swal.fire("Error", error, "error"), null)
+              ) : (
+                posts.map((post: any) => (
+                  <Link to={`/posts/${post.slug}`}>
+                    <Card
+                      key={post._id}
+                      _id={post._id}
+                      title={post.title}
+                      content={post.content}
+                      category={post.category?.title}
+                      image={post.image}
+                      author={`${post.author?.firstName} ${post.author?.lastName}`}
+                      authorImage={post.author?.image}
+                      commentsCount={post.commentsCount}
+                      date={new Date(post.createdAt).toLocaleDateString()}
+                    />
+                  </Link>
+                ))
+              )}
             </div>
           )
         )}

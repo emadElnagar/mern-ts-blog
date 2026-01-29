@@ -1,92 +1,93 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { JwtPayload, jwtDecode } from "jwt-decode";
 import { API_USER_URL } from "../Api";
 
 const url = API_USER_URL;
 
 export interface User {
-  _id?: object;
+  _id: string;
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
   role: string;
   image?: string;
+}
+
+interface AuthResponse {
+  token: string;
+  user: User;
 }
 
 interface UserState {
   users: User[];
   user: User | null;
   profile: User | null;
+  token: string | null;
   isLoading: boolean;
-  error: object | null;
+  error: string | null;
 }
 
 const initialState: UserState = {
   users: [],
   user: null,
   profile: null,
+  token: null,
   isLoading: false,
   error: null,
 };
 
-// User register
-export const UserRegister: any = createAsyncThunk(
-  "useres/register",
-  async (user: object, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(`${url}/register`, user);
-      const data = jwtDecode<JwtPayload>(response.data.token);
-      sessionStorage.setItem("userInfo", JSON.stringify(data));
-      sessionStorage.setItem("token", response.data.token);
-      return data;
-    } catch (error: any) {
-      rejectWithValue(error.message);
-    }
+// helper
+const authHeader = (token: string | null) => ({
+  headers: {
+    Authorization: `Bearer ${token}`,
   },
-);
+});
+
+// User register
+export const UserRegister = createAsyncThunk<
+  AuthResponse,
+  { firstName: string; lastName: string; email: string; password: string },
+  { rejectValue: string }
+>("user/register", async (userData, { rejectWithValue }) => {
+  try {
+    const res = await axios.post(`${url}/register`, userData);
+    return res.data;
+  } catch (err: any) {
+    return rejectWithValue(err.response?.data?.message || "Register failed");
+  }
+});
 
 // User login
-export const Login: any = createAsyncThunk(
-  "usres/login",
-  async (user: object, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(`${url}/login`, user);
-      const data = jwtDecode<JwtPayload>(response.data.token);
-      sessionStorage.setItem("userInfo", JSON.stringify(data));
-      sessionStorage.setItem("token", response.data.token);
-      return data;
-    } catch (error: any) {
-      rejectWithValue(error.message);
-    }
-  },
-);
-
-// User logout
-export const Logout: any = createAsyncThunk(
-  "users/logout",
-  async (_, { rejectWithValue }) => {
-    try {
-      sessionStorage.removeItem("userInfo");
-    } catch (error: any) {
-      rejectWithValue(error.message);
-    }
-  },
-);
+export const Login = createAsyncThunk<
+  AuthResponse,
+  { email: string; password: string },
+  { rejectValue: string }
+>("user/login", async (credentials, { rejectWithValue }) => {
+  try {
+    const res = await axios.post(`${url}/login`, credentials);
+    return res.data;
+  } catch (err: any) {
+    return rejectWithValue(err.response?.data?.message || "Login failed");
+  }
+});
 
 // Get me
-export const GetMe: any = createAsyncThunk(
-  "users/me",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${url}/me`);
-      return response.data;
-    } catch (error: any) {
-      rejectWithValue(error.message);
-    }
-  },
-);
+export const GetMe = createAsyncThunk<
+  User,
+  void,
+  { state: { user: UserState }; rejectValue: string }
+>("user/me", async (_, { getState, rejectWithValue }) => {
+  const token = getState().user.token;
+
+  if (!token) return rejectWithValue("No token");
+
+  try {
+    const res = await axios.get(`${url}/me`, authHeader(token));
+    return res.data;
+  } catch (err: any) {
+    return rejectWithValue(err.response?.data?.message || "Unauthorized");
+  }
+});
 
 // Get all users
 export const GetAllUsers: any = createAsyncThunk(
@@ -193,48 +194,43 @@ export const ChagneImage: any = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    Logout(state) {
+      state.user = null;
+      state.token = null;
+      state.error = null;
+      localStorage.removeItem("token");
+    },
+  },
   extraReducers: (builder) => {
     builder
       // User register
       .addCase(UserRegister.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(UserRegister.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.users.push(action.payload);
-        state.user = action.payload;
+        state.token = action.payload.token;
       })
       .addCase(UserRegister.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload!;
       })
       // User login
       .addCase(Login.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(Login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.user = action.payload;
+        state.token = action.payload.token;
       })
       .addCase(Login.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
-      })
-      // User logout
-      .addCase(Logout.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(Logout.fulfilled, (state) => {
-        state.isLoading = false;
-        state.error = null;
-        state.user = null;
-      })
-      .addCase(Logout.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload!;
       })
       // Get me
       .addCase(GetMe.pending, (state) => {
@@ -247,7 +243,7 @@ const userSlice = createSlice({
       })
       .addCase(GetMe.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload!;
       })
       // Get all users
       .addCase(GetAllUsers.pending, (state) => {
@@ -302,14 +298,8 @@ const userSlice = createSlice({
       .addCase(DeleteUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        const {
-          arg: { _id },
-        } = action.meta;
-        if (_id) {
-          state.users = state.users.filter(
-            (user) => user._id !== action.payload,
-          );
-        }
+        const id = action.meta.arg;
+        state.users = state.users.filter((user) => user._id !== id);
       })
       .addCase(DeleteUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -378,4 +368,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { Logout } = userSlice.actions;
 export default userSlice.reducer;
