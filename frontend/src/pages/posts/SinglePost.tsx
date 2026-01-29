@@ -33,7 +33,7 @@ const SinglePost = () => {
     dispatch(GetSimilarPosts(slug));
   }, [dispatch, slug]);
   const { post, similarPosts, isLoading } = useSelector(
-    (state: any) => state.post
+    (state: any) => state.post,
   );
   const { user } = useSelector((state: any) => state.user);
   // Get post comments
@@ -51,7 +51,7 @@ const SinglePost = () => {
         post: post._id,
         author: user._id,
         body,
-      })
+      }),
     );
     e.target.reset();
     setBody("");
@@ -108,7 +108,7 @@ const SinglePost = () => {
           UpdateComment({
             id,
             body,
-          })
+          }),
         );
       }
     });
@@ -125,7 +125,6 @@ const SinglePost = () => {
         post && (
           <div className="container">
             <div className="single-post">
-              <h1>{post.title}</h1>
               <div className="post-img-container">
                 <img
                   src={`http://localhost:5000/${post.image}`}
@@ -135,6 +134,7 @@ const SinglePost = () => {
                   Created at {moment(post.createdAt).format("MMMM Do YYYY")}
                 </span>
               </div>
+              <h1 className="post-title">{post.title}</h1>
               <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
             </div>
             <div className="comments">
@@ -231,7 +231,7 @@ const SinglePost = () => {
                         </div>
                       </div>
                     </div>
-                  )
+                  ),
                 )}
             </div>
             {similarPosts.length > 0 && (

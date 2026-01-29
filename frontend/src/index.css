@@ -65,8 +65,8 @@ body {
 }
 
 ::selection {
-  color: #fff;
-  background-color: #000;
+  color: var(--color-text-main);
+  background-color: var(--color-primary);
 }
 
 #root {
@@ -544,18 +544,28 @@ input[type="file"] {
 }
 
 .single-post {
-  padding-block: 40px;
-  h1 {
+  color: var(--color-text-secondary);
+  .date {
+    color: var(--color-text-muted);
+  }
+  h1,
+  h2 {
+    color: var(--color-text-main);
+    margin-block: 20px;
+  }
+  h1.post-title {
+    font-size: 32px;
+    line-height: 1.6;
     text-align: center;
-    text-transform: uppercase;
   }
-  .post-img-container {
-    margin-block: 40px;
+  h2 {
+    font-size: 24px;
+    line-height: 1.5;
   }
-}
-
-.date {
-  opacity: 40%;
+  li {
+    list-style-type: disc;
+    margin-inline-start: 20px;
+  }
 }
 
 .comments {
