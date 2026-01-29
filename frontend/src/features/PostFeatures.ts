@@ -44,7 +44,11 @@ export const NewPost: any = createAsyncThunk(
       const response = await axios.post(`${url}`, data, config);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -57,7 +61,11 @@ export const GetAllPosts: any = createAsyncThunk(
       const response = await axios.get(`${url}`);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -70,7 +78,11 @@ export const GetSinglePost: any = createAsyncThunk(
       const response = await axios.get(`${url}/${slug}`);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -83,7 +95,11 @@ export const GetSimilarPosts: any = createAsyncThunk(
       const response = await axios.get(`${url}/${slug}/similar`);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -102,7 +118,11 @@ export const UpdatePost: any = createAsyncThunk(
       const response = await axios.put(`${url}/${data._id}`, data, config);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -121,7 +141,11 @@ export const DeletePost: any = createAsyncThunk(
       const response = await axios.delete(`${url}/${id}`, config);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -135,6 +159,7 @@ const postSlice = createSlice({
       // Add a new post
       .addCase(NewPost.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(NewPost.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -143,11 +168,12 @@ const postSlice = createSlice({
       })
       .addCase(NewPost.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload;
       })
       // Get all posts
       .addCase(GetAllPosts.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(GetAllPosts.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -156,11 +182,12 @@ const postSlice = createSlice({
       })
       .addCase(GetAllPosts.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload;
       })
       // Get single post
       .addCase(GetSinglePost.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(GetSinglePost.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -169,11 +196,12 @@ const postSlice = createSlice({
       })
       .addCase(GetSinglePost.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload;
       })
       // Get similar posts
       .addCase(GetSimilarPosts.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(GetSimilarPosts.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -182,11 +210,12 @@ const postSlice = createSlice({
       })
       .addCase(GetSimilarPosts.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload;
       })
       // Update post
       .addCase(UpdatePost.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(UpdatePost.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -202,11 +231,12 @@ const postSlice = createSlice({
       })
       .addCase(UpdatePost.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload;
       })
       // Delete post
       .addCase(DeletePost.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(DeletePost.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -222,7 +252,7 @@ const postSlice = createSlice({
       })
       .addCase(DeletePost.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload;
       });
   },
 });

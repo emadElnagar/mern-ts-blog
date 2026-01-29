@@ -35,7 +35,11 @@ export const NewComment: any = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -48,7 +52,11 @@ export const GetComments: any = createAsyncThunk(
       const response = await axios.get(`${url}/${id}`);
       return response.data;
     } catch (error: any) {
-      rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -61,7 +69,11 @@ export const DeleteComment: any = createAsyncThunk(
       const response = await axios.delete(`${url}/${id}`);
       return response.data;
     } catch (error: any) {
-      rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -76,7 +88,11 @@ export const UpdateComment: any = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -90,6 +106,7 @@ const commentSlice = createSlice({
       // create a new comment
       .addCase(NewComment.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(NewComment.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -98,11 +115,12 @@ const commentSlice = createSlice({
       })
       .addCase(NewComment.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload;
       })
       // Get post comments
       .addCase(GetComments.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(GetComments.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -111,11 +129,12 @@ const commentSlice = createSlice({
       })
       .addCase(GetComments.rejected, (state, action) => {
         state.isLoading = false;
-        state.comments = action.error;
+        state.error = action.payload;
       })
       // Delete comment
       .addCase(DeleteComment.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(DeleteComment.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -131,11 +150,12 @@ const commentSlice = createSlice({
       })
       .addCase(DeleteComment.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload;
       })
       // Update comment
       .addCase(UpdateComment.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(UpdateComment.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -151,7 +171,7 @@ const commentSlice = createSlice({
       })
       .addCase(UpdateComment.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload;
       });
   },
 });

@@ -52,8 +52,10 @@ export const UserRegister = createAsyncThunk<
   try {
     const res = await axios.post(`${url}/register`, userData);
     return res.data;
-  } catch (err: any) {
-    return rejectWithValue(err.response?.data?.message || "Register failed");
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
   }
 });
 
@@ -66,8 +68,10 @@ export const Login = createAsyncThunk<
   try {
     const res = await axios.post(`${url}/login`, credentials);
     return res.data;
-  } catch (err: any) {
-    return rejectWithValue(err.response?.data?.message || "Login failed");
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
   }
 });
 
@@ -84,8 +88,10 @@ export const GetMe = createAsyncThunk<
   try {
     const res = await axios.get(`${url}/me`, authHeader(token));
     return res.data;
-  } catch (err: any) {
-    return rejectWithValue(err.response?.data?.message || "Unauthorized");
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
   }
 });
 
@@ -97,7 +103,11 @@ export const GetAllUsers: any = createAsyncThunk(
       const response = await axios.get(`${url}`);
       return response.data;
     } catch (error: any) {
-      rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -110,7 +120,11 @@ export const GetSingleUser: any = createAsyncThunk(
       const response = await axios.get(`${url}/${id}`);
       return response.data;
     } catch (error: any) {
-      rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -126,7 +140,11 @@ export const ChangeUserRole: any = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -139,7 +157,11 @@ export const DeleteUser: any = createAsyncThunk(
       const response = await axios.delete(`${url}/${id}/delete`);
       return response.data;
     } catch (error: any) {
-      rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -154,7 +176,11 @@ export const changeEmail: any = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -170,7 +196,11 @@ export const ChangePassword: any = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -186,7 +216,11 @@ export const ChagneImage: any = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   },
 );
@@ -216,7 +250,7 @@ const userSlice = createSlice({
       })
       .addCase(UserRegister.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload!;
+        state.error = action.payload as any;
       })
       // User login
       .addCase(Login.pending, (state) => {
@@ -230,11 +264,12 @@ const userSlice = createSlice({
       })
       .addCase(Login.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload!;
+        state.error = action.payload as any;
       })
       // Get me
       .addCase(GetMe.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(GetMe.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -243,11 +278,12 @@ const userSlice = createSlice({
       })
       .addCase(GetMe.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload!;
+        state.error = action.payload as any;
       })
       // Get all users
       .addCase(GetAllUsers.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(GetAllUsers.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -256,11 +292,12 @@ const userSlice = createSlice({
       })
       .addCase(GetAllUsers.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload as any;
       })
       // Get single user
       .addCase(GetSingleUser.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(GetSingleUser.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -269,11 +306,12 @@ const userSlice = createSlice({
       })
       .addCase(GetSingleUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload as any;
       })
       // Change user role
       .addCase(ChangeUserRole.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(ChangeUserRole.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -289,11 +327,12 @@ const userSlice = createSlice({
       })
       .addCase(ChangeUserRole.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload as any;
       })
       // Delete user ( By Admin )
       .addCase(DeleteUser.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(DeleteUser.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -303,11 +342,12 @@ const userSlice = createSlice({
       })
       .addCase(DeleteUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload as any;
       })
       // Change user email
       .addCase(changeEmail.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(changeEmail.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -323,11 +363,12 @@ const userSlice = createSlice({
       })
       .addCase(changeEmail.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload as any;
       })
       // Change user password
       .addCase(ChangePassword.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(ChangePassword.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -343,11 +384,12 @@ const userSlice = createSlice({
       })
       .addCase(ChangePassword.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload as any;
       })
       // Change user image
       .addCase(ChagneImage.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(ChagneImage.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -363,7 +405,7 @@ const userSlice = createSlice({
       })
       .addCase(ChagneImage.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.payload as any;
       });
   },
 });
