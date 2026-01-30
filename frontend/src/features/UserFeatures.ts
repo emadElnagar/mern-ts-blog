@@ -83,7 +83,7 @@ export const GetMe = createAsyncThunk<
 >("user/me", async (_, { getState, rejectWithValue }) => {
   const token = getState().user.token;
 
-  if (!token) return rejectWithValue("No token");
+  if (!token) return rejectWithValue("Unauthorized");
 
   try {
     const res = await axios.get(`${url}/me`, authHeader(token));
@@ -96,11 +96,11 @@ export const GetMe = createAsyncThunk<
 });
 
 // Get all users
-export const GetAllUsers: any = createAsyncThunk(
+export const GetAllUsers = createAsyncThunk<User[]>(
   "users/all",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${url}`);
+      const response = await axios.get<User[]>(`${url}`);
       return response.data;
     } catch (error: any) {
       const message =
@@ -113,11 +113,11 @@ export const GetAllUsers: any = createAsyncThunk(
 );
 
 // Get single user
-export const GetSingleUser: any = createAsyncThunk(
+export const GetSingleUser = createAsyncThunk<User, string>(
   "users/profile",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${url}/${id}`);
+      const response = await axios.get<User>(`${url}/${id}`);
       return response.data;
     } catch (error: any) {
       const message =
@@ -130,50 +130,77 @@ export const GetSingleUser: any = createAsyncThunk(
 );
 
 // Change user role
-export const ChangeUserRole: any = createAsyncThunk(
-  "user/role",
-  async (user: any, { rejectWithValue }) => {
-    try {
-      const response = await axios.patch(
-        `${url}/${user._id}/update/role`,
-        user.newRole,
-      );
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
-    }
-  },
-);
+export const ChangeUserRole = createAsyncThunk<
+  { message: string; user: User },
+  { _id: string; newRole: string },
+  { state: { user: UserState }; rejectValue: string }
+>("user/role", async ({ _id, newRole }, { getState, rejectWithValue }) => {
+  const token = getState().user.token;
+
+  if (!token) return rejectWithValue("Unauthorized");
+
+  try {
+    const response = await axios.patch<{
+      message: string;
+      user: User;
+    }>(`${url}/${_id}/update/role`, { role: newRole }, authHeader(token));
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+
+    return rejectWithValue(message);
+  }
+});
 
 // Delete user
-export const DeleteUser: any = createAsyncThunk(
-  "user/delete",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await axios.delete(`${url}/${id}/delete`);
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
+export const DeleteUser = createAsyncThunk<
+  { message: string },
+  string,
+  { state: { user: UserState }; rejectValue: string }
+>("user/delete", async (id, { getState, rejectWithValue }) => {
+  try {
+    const token = getState().user.token;
+    if (!token) {
+      return rejectWithValue("Unauthorized");
     }
-  },
-);
+
+    const response = await axios.delete<{ message: string }>(
+      `${url}/${id}`,
+      authHeader(token),
+    );
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
 
 // Change user email
-export const changeEmail: any = createAsyncThunk(
+export const changeEmail = createAsyncThunk<
+  { message: string },
+  { _id: string; email: string },
+  { state: { user: UserState }; rejectValue: string }
+>(
   "users/emailchange",
-  async (user: any, { rejectWithValue }) => {
+  async (
+    user: { _id: string; email: string },
+    { getState, rejectWithValue },
+  ) => {
     try {
-      const response = await axios.patch(`${url}/${user._id}/change-email`, {
-        email: user.email,
-      });
+      const token = getState().user.token;
+      if (!token) {
+        return rejectWithValue("Unauthorized");
+      }
+
+      const response = await axios.patch<{ message: string }>(
+        `${url}/change-email`,
+        {
+          email: user.email,
+        },
+        authHeader(token),
+      );
       return response.data;
     } catch (error: any) {
       const message =
@@ -186,44 +213,57 @@ export const changeEmail: any = createAsyncThunk(
 );
 
 // Change User Password
-export const ChangePassword: any = createAsyncThunk(
-  "users/password/change",
-  async (user: any, { rejectWithValue }) => {
-    try {
-      const response = await axios.patch(`${url}/${user._id}/change-password`, {
+export const ChangePassword = createAsyncThunk<
+  { message: string },
+  { _id: string; currentPassword: string; newPassword: string },
+  { state: { user: UserState }; rejectValue: string }
+>("users/password/change", async (user: any, { getState, rejectWithValue }) => {
+  try {
+    const token = getState().user.token;
+    if (!token) {
+      return rejectWithValue("Unauthorized");
+    }
+
+    const response = await axios.patch<{ message: string }>(
+      `${url}/change-password`,
+      {
         currentPassword: user.currentPassword,
         newPassword: user.newPassword,
-      });
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
-    }
-  },
-);
+      },
+      authHeader(token),
+    );
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
 
 // Change user image
-export const ChagneImage: any = createAsyncThunk(
-  "users/image/change",
-  async (data: any, { rejectWithValue }) => {
-    try {
-      const response = await axios.patch(
-        `${url}/${data.id}/update/image`,
-        data.formData,
-      );
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
+export const ChagneImage = createAsyncThunk<
+  { message: string },
+  { id: string; formData: any },
+  { state: { user: UserState }; rejectValue: string }
+>("users/image/change", async (data: any, { getState, rejectWithValue }) => {
+  try {
+    const token = getState().user.token;
+    if (!token) {
+      return rejectWithValue("Unauthorized");
     }
-  },
-);
+
+    const response = await axios.patch<{ message: string }>(
+      `${url}/update/image`,
+      data.formData,
+      authHeader(token),
+    );
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
 
 const userSlice = createSlice({
   name: "user",
@@ -233,7 +273,6 @@ const userSlice = createSlice({
       state.user = null;
       state.token = null;
       state.error = null;
-      localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
@@ -321,7 +360,7 @@ const userSlice = createSlice({
         } = action.meta;
         if (_id) {
           state.users = state.users.map((user) =>
-            user._id === _id ? action.payload : user,
+            user._id === _id ? action.payload.user : user,
           );
         }
       })
@@ -353,11 +392,11 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         const {
-          arg: { _id },
+          arg: { _id, email },
         } = action.meta;
         if (_id) {
           state.users = state.users.map((user) =>
-            user._id === _id ? action.payload : user,
+            user._id === _id ? { ...user, email } : user,
           );
         }
       })
@@ -377,9 +416,7 @@ const userSlice = createSlice({
           arg: { _id },
         } = action.meta;
         if (_id) {
-          state.users = state.users.map((user) =>
-            user._id === _id ? action.payload : user,
-          );
+          // Password change doesn't return user data, so keep the user unchanged
         }
       })
       .addCase(ChangePassword.rejected, (state, action) => {
@@ -395,11 +432,11 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         const {
-          arg: { _id },
+          arg: { id },
         } = action.meta;
-        if (_id) {
+        if (id) {
           state.users = state.users.map((user) =>
-            user._id === _id ? action.payload : user,
+            user._id === id ? { ...user } : user,
           );
         }
       })

@@ -545,6 +545,12 @@ input[type="file"] {
 
 .single-post {
   color: var(--color-text-secondary);
+  .author {
+    text-transform: capitalize;
+    a {
+      color: inherit;
+    }
+  }
   .date {
     color: var(--color-text-muted);
   }

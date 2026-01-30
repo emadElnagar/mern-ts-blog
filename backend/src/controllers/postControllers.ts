@@ -135,7 +135,9 @@ export const GetAllPosts: RequestHandler = async (_req, res) => {
 // Get single post
 export const GetSinglePost: RequestHandler = async (req, res) => {
   try {
-    const post = await Post.findOne({ slug: req.params.slug });
+    const post = await Post.findOne({ slug: req.params.slug })
+      .populate("author", " _id firstName lastName image")
+      .populate("category");
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
@@ -156,7 +158,10 @@ export const GetSimilarPosts: RequestHandler = async (req, res) => {
       await Post.find({ category: post?.category })
         .sort({ createdAt: -1 })
         .limit(3)
-    ).filter((item) => item.slug !== post?.slug);
+        .populate("author", " _id firstName lastName image")
+        .populate("category")
+    )
+      .filter((item) => item.slug !== post?.slug);
     if (!similarPosts) return;
     res.status(200).json(similarPosts);
   } catch (error: any) {
