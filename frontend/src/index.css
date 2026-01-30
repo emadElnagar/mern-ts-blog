@@ -468,12 +468,21 @@ select {
   justify-content: space-between;
   margin-bottom: 20px;
   padding: 0 10px 20px;
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid var(--color-border);
+  div {
+    flex: 1;
+    &:nth-child(2) {
+      text-align: center;
+    }
+    &:last-of-type {
+      text-align: end;
+    }
+  }
   span {
     font-weight: bold;
     text-transform: capitalize;
     a {
-      color: #000;
+      color: inherit;
     }
   }
   button {
@@ -491,6 +500,34 @@ select {
   .delete {
     color: #b00020;
   }
+}
+
+select {
+  appearance: none;
+  width: 100%;
+  font-size: 1.15rem;
+  padding: 0.675em 6em 0.675em 1em;
+  border: 1px solid #caced1;
+  border-radius: 0.25rem;
+  color: #000;
+  cursor: pointer;
+}
+
+.select {
+  display: grid;
+  grid-template-areas: "select";
+  align-items: center;
+}
+
+.select::after {
+  content: "";
+  width: 0.8em;
+  height: 0.5em;
+  background-color: #000;
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  grid-area: select;
+  justify-self: end;
+  transform: translate(-1em, 30px);
 }
 
 .img-container {
