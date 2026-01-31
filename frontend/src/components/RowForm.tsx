@@ -1,30 +1,37 @@
-import { Fragment, useState } from "react"
-import { useDispatch, useSelector } from "react-redux";
+import { Fragment, useState } from "react";
+import { useDispatch } from "react-redux";
 import { NewCategory } from "../features/CategoryFeatures";
+import { useNavigate } from "react-router-dom";
 
 const RowForm = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state: any) => state.user);
-  const [title, setTitle] = useState('');
-  const handleSubmit = (e: {
-    target: any; preventDefault: () => void; 
-  }) => {
+  const navigate = useNavigate();
+  const [title, setTitle] = useState("");
+  const handleSubmit = (e: { target: any; preventDefault: () => void }) => {
     e.preventDefault();
-    dispatch(NewCategory({
-      title,
-      author: user._id
-    }));
+    dispatch(
+      NewCategory({
+        title,
+      })
+        .unwrap()
+        .then(() => navigate("/categories")),
+    );
     e.target.reset();
-    setTitle('');
-  }
+    setTitle("");
+  };
   return (
     <Fragment>
-      <form className="row-form" onSubmit={ handleSubmit }>
-        <input type="text" placeholder="category title" required onChange={(e) => setTitle(e.target.value)} />
+      <form className="row-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="category title"
+          required
+          onChange={(e) => setTitle(e.target.value)}
+        />
         <button>+</button>
       </form>
     </Fragment>
-  )
-}
+  );
+};
 
 export default RowForm;

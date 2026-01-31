@@ -37,7 +37,7 @@ const initialState: UserState = {
 };
 
 // helper
-const authHeader = (token: string | null) => ({
+export const authHeader = (token: string | null) => ({
   headers: {
     Authorization: `Bearer ${token}`,
   },
