@@ -212,16 +212,14 @@ const SinglePost = () => {
                           />
                         </div>
                       )}
-                      {user &&
-                        user._id !== comment.author._id &&
-                        user.role === "admin" && (
-                          <div className="comment-control">
-                            <MdDelete
-                              className="icon"
-                              onClick={() => handleDelete(comment._id)}
-                            />
-                          </div>
-                        )}
+                      {user && user.role === "admin" && (
+                        <div className="comment-control">
+                          <MdDelete
+                            className="icon"
+                            onClick={() => handleDelete(comment._id)}
+                          />
+                        </div>
+                      )}
                       <div className="comment reply">
                         <div className="user">
                           <img
