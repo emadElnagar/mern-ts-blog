@@ -19,7 +19,7 @@ interface PostState {
   post: Post | null;
   similarPosts: Post[];
   isLoading: boolean;
-  error: object | null;
+  error: string | null;
 }
 
 const initialState: PostState = {
@@ -54,7 +54,7 @@ export const NewPost: any = createAsyncThunk(
 );
 
 // Get all posts
-export const GetAllPosts: any = createAsyncThunk(
+export const GetAllPosts = createAsyncThunk<Post[]>(
   "posts/all",
   async (_, { rejectWithValue }) => {
     try {
@@ -71,38 +71,36 @@ export const GetAllPosts: any = createAsyncThunk(
 );
 
 // Get single post
-export const GetSinglePost: any = createAsyncThunk(
-  "posts/single",
-  async (slug: any, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${url}/${slug}`);
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
-    }
-  },
-);
+export const GetSinglePost = createAsyncThunk<
+  Post,
+  string,
+  { rejectValue: string }
+>("posts/single", async (slug: string, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${url}/${slug}`);
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
 
 // Get similar posts
-export const GetSimilarPosts: any = createAsyncThunk(
-  "posts/similar",
-  async (slug: any, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${url}/${slug}/similar`);
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
-    }
-  },
-);
+export const GetSimilarPosts = createAsyncThunk<
+  Post[],
+  string,
+  { rejectValue: string }
+>("posts/similar", async (slug: string, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${url}/${slug}/similar`);
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
 
 // Update post
 export const UpdatePost: any = createAsyncThunk(
@@ -182,7 +180,7 @@ const postSlice = createSlice({
       })
       .addCase(GetAllPosts.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       // Get single post
       .addCase(GetSinglePost.pending, (state) => {
@@ -196,7 +194,7 @@ const postSlice = createSlice({
       })
       .addCase(GetSinglePost.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       // Get similar posts
       .addCase(GetSimilarPosts.pending, (state) => {
@@ -210,7 +208,7 @@ const postSlice = createSlice({
       })
       .addCase(GetSimilarPosts.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       // Update post
       .addCase(UpdatePost.pending, (state) => {
