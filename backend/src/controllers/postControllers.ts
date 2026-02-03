@@ -160,8 +160,7 @@ export const GetSimilarPosts: RequestHandler = async (req, res) => {
         .limit(3)
         .populate("author", " _id firstName lastName image")
         .populate("category")
-    )
-      .filter((item) => item.slug !== post?.slug);
+    ).filter((item) => item.slug !== post?.slug);
     if (!similarPosts) return;
     res.status(200).json(similarPosts);
   } catch (error: any) {
@@ -201,7 +200,7 @@ export const UpdatePost = async (req: AuthenticatedRequest, res: Response) => {
 // Delete post
 export const DeletePost = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    Post.deleteOne({ _id: req.params.id });
+    await Post.deleteOne({ _id: req.params.id });
     res.status(200).json({ message: "Post deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });

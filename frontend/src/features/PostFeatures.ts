@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_POST_URL } from "../Api";
+import { RootState } from "../store";
+import { authHeader } from "./UserFeatures";
 
 const url = API_POST_URL;
 
 export interface Post {
-  _id?: object;
+  _id?: string;
   title: string;
   slug: string;
   author: object;
@@ -31,44 +33,37 @@ const initialState: PostState = {
 };
 
 // Create a new
-export const NewPost: any = createAsyncThunk(
-  "posts/new",
-  async (data: any, { rejectWithValue }) => {
-    try {
-      const token = sessionStorage.getItem("token");
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await axios.post(`${url}`, data, config);
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
-    }
-  },
-);
+export const NewPost = createAsyncThunk<
+  Post,
+  Post,
+  { state: RootState; rejectValue: string }
+>("posts/new", async (data: Post, { getState, rejectWithValue }) => {
+  try {
+    const token = getState().user.token;
+    const response = await axios.post(url, data, authHeader(token));
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
 
 // Get all posts
-export const GetAllPosts = createAsyncThunk<Post[]>(
-  "posts/all",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${url}`);
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
-    }
-  },
-);
+export const GetAllPosts = createAsyncThunk<
+  Post[],
+  void,
+  { rejectValue: string }
+>("posts/all", async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
 
 // Get single post
 export const GetSinglePost = createAsyncThunk<
@@ -103,50 +98,42 @@ export const GetSimilarPosts = createAsyncThunk<
 });
 
 // Update post
-export const UpdatePost: any = createAsyncThunk(
-  "posts/update",
-  async (data: any, { rejectWithValue }) => {
-    try {
-      const token = sessionStorage.getItem("token");
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await axios.put(`${url}/${data._id}`, data, config);
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
-    }
-  },
-);
+export const UpdatePost = createAsyncThunk<
+  Post,
+  Post,
+  { state: RootState; rejectValue: string }
+>("posts/update", async (data: Post, { getState, rejectWithValue }) => {
+  try {
+    const token = getState().user.token;
+    const response = await axios.put(
+      `${url}/${data._id}`,
+      data,
+      authHeader(token),
+    );
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
 
 // Delete post
-export const DeletePost: any = createAsyncThunk(
-  "posts/delete",
-  async (id: any, { rejectWithValue }) => {
-    try {
-      const token = sessionStorage.getItem("token");
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await axios.delete(`${url}/${id}`, config);
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
-    }
-  },
-);
+export const DeletePost = createAsyncThunk<
+  Post,
+  string,
+  { state: RootState; rejectValue: string }
+>("posts/delete", async (id: string, { getState, rejectWithValue }) => {
+  try {
+    const token = getState().user.token;
+    const response = await axios.delete(`${url}/${id}`, authHeader(token));
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
 
 const postSlice = createSlice({
   name: "post",
@@ -166,7 +153,7 @@ const postSlice = createSlice({
       })
       .addCase(NewPost.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       // Get all posts
       .addCase(GetAllPosts.pending, (state) => {
@@ -229,7 +216,7 @@ const postSlice = createSlice({
       })
       .addCase(UpdatePost.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       // Delete post
       .addCase(DeletePost.pending, (state) => {
@@ -239,18 +226,16 @@ const postSlice = createSlice({
       .addCase(DeletePost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        const {
-          arg: { _id },
-        } = action.meta;
-        if (_id) {
-          state.posts = state.posts.filter(
-            (post) => post._id !== action.payload,
+        const id = action.meta.arg;
+        if (id) {
+          state.posts = state.posts.map((post) =>
+            post._id === id ? { ...post, deleted: true } : post,
           );
         }
       })
       .addCase(DeletePost.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       });
   },
 });
