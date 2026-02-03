@@ -1,20 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_CATEGORY_URL } from "../Api";
+import { RootState } from "../store";
+import { authHeader } from "./UserFeatures";
 
 const url = API_CATEGORY_URL;
 
 export interface Category {
-  _id?: object;
+  _id?: string;
   title: string;
-  author: object;
+  author?: object;
+  deleted?: boolean;
 }
 
 interface CategoryState {
   categories: Category[];
   category: Category | null;
   isLoading: boolean;
-  error: object | null;
+  error: string | null;
 }
 
 const initialState: CategoryState = {
@@ -25,18 +28,20 @@ const initialState: CategoryState = {
 };
 
 // Create a new category
-export const NewCategory: any = createAsyncThunk(
+export const NewCategory = createAsyncThunk<
+  Category,
+  Category,
+  { state: RootState; rejectValue: string }
+>(
   "categories/new",
-  async (category: object, { rejectWithValue }) => {
+  async (category: Category, { getState, rejectWithValue }) => {
     try {
-      const token = sessionStorage.getItem("token");
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+      const token = getState().user.token;
+      if (!token) {
+        return rejectWithValue("Unauthorized");
+      }
 
-      const response = await axios.post(`${url}`, category, config);
+      const response = await axios.post(url, category, authHeader(token));
       return response.data;
     } catch (error: any) {
       const message =
@@ -49,40 +54,41 @@ export const NewCategory: any = createAsyncThunk(
 );
 
 // Get all categories
-export const GetAllCategories: any = createAsyncThunk(
-  "categories/all",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${url}`);
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
-    }
-  },
-);
+export const GetAllCategories = createAsyncThunk<
+  Category[],
+  void,
+  { rejectValue: string }
+>("categories/all", async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
 
 // Update category
-export const UpdateCategory: any = createAsyncThunk(
+export const UpdateCategory = createAsyncThunk<
+  Category,
+  Category,
+  { state: RootState; rejectValue: string }
+>(
   "category/update",
-  async (category: any, { rejectWithValue }) => {
+  async (category: Category, { getState, rejectWithValue }) => {
     try {
-      const token = sessionStorage.getItem("token");
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+      const token = getState().user.token;
+      if (!token) {
+        return rejectWithValue("Unauthorized");
+      }
 
       const response = await axios.put(
         `${url}/${category._id}`,
         {
           title: category.title,
         },
-        config,
+        authHeader(token),
       );
       return response.data;
     } catch (error: any) {
@@ -96,27 +102,26 @@ export const UpdateCategory: any = createAsyncThunk(
 );
 
 // Delete category
-export const DeleteCategory: any = createAsyncThunk(
-  "category/delete",
-  async (id: any, { rejectWithValue }) => {
-    try {
-      const token = sessionStorage.getItem("token");
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await axios.delete(`${url}/${id}`, config);
-      return response.data;
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Something went wrong";
-      return rejectWithValue(message);
+export const DeleteCategory = createAsyncThunk<
+  string,
+  string,
+  { state: RootState; rejectValue: string }
+>("category/delete", async (id: string, { getState, rejectWithValue }) => {
+  try {
+    const token = getState().user.token;
+    if (!token) {
+      return rejectWithValue("Unauthorized");
     }
-  },
-);
+    const response = await axios.delete(`${url}/${id}`, authHeader(token));
+    console.log("Id:", id);
+    console.log("Delete response:", response.data);
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
 
 // CATEGORY SLICE
 const categorySlice = createSlice({
@@ -137,7 +142,7 @@ const categorySlice = createSlice({
       })
       .addCase(NewCategory.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       // Get all categories
       .addCase(GetAllCategories.pending, (state) => {
@@ -151,7 +156,7 @@ const categorySlice = createSlice({
       })
       .addCase(GetAllCategories.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       // Update category
       .addCase(UpdateCategory.pending, (state) => {
@@ -172,7 +177,7 @@ const categorySlice = createSlice({
       })
       .addCase(UpdateCategory.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       // Delete category
       .addCase(DeleteCategory.pending, (state, _) => {
@@ -182,18 +187,16 @@ const categorySlice = createSlice({
       .addCase(DeleteCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        const {
-          arg: { _id },
-        } = action.meta;
-        if (_id) {
-          state.categories = state.categories.filter(
-            (category) => category._id !== action.payload,
+        const id = action.meta.arg;
+        if (id) {
+          state.categories = state.categories.map((category) =>
+            category._id === id ? { ...category, deleted: true } : category,
           );
         }
       })
       .addCase(DeleteCategory.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       });
   },
 });
