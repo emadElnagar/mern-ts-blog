@@ -22,15 +22,29 @@ export const newComment = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 
-// Get post comments
+// Get post comments (including nested comments)
 export const GetPostComments: RequestHandler = async (req, res) => {
   try {
-    const comments = await Comment.find({ post: req.params.id })
+    const comments = await Comment.find({
+      post: req.params.id,
+      parentComment: null,
+    })
+      .populate("author", "_id firstName lastName image")
       .sort({ createdAt: -1 })
-      .populate("author");
-    if (!comments)
-      return res.status(404).json({ message: "No comments found" });
-    res.status(200).json(comments);
+      .lean();
+    const commentIds = comments.map((c) => c._id);
+    const replies = await Comment.find({
+      parentComment: { $in: commentIds },
+    })
+      .populate("author", "_id firstName lastName image")
+      .lean();
+    const commentsWithReplies = comments.map((comment) => ({
+      ...comment,
+      replies: replies.filter(
+        (reply) => reply.parentComment?.toString() === comment._id.toString(),
+      ),
+    }));
+    res.status(200).json(commentsWithReplies);
   } catch (error: any) {
     res.status(401).json({ message: error.message });
   }
