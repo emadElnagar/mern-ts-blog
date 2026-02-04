@@ -12,7 +12,7 @@ const commentRouter = Router();
 
 // create a new comment
 commentRouter.post(
-  "/new",
+  "/",
   isAuth as RequestHandler,
   isAdmin as RequestHandler,
   (req, res) => newComment(req as AuthenticatedRequest, res),
