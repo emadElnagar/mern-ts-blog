@@ -187,7 +187,7 @@ export const UpdatePost = async (req: AuthenticatedRequest, res: Response) => {
         lower: true,
         strict: true,
       }),
-      description: req.body.description,
+      content: req.body.content,
       image: req.file?.filename,
     };
     await Post.updateOne({ _id: req.params.id }, { $set: newPost });
@@ -202,6 +202,23 @@ export const DeletePost = async (req: AuthenticatedRequest, res: Response) => {
   try {
     await Post.deleteOne({ _id: req.params.id });
     res.status(200).json({ message: "Post deleted successfully" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Search post
+export const SearchPost: RequestHandler = async (req, res) => {
+  try {
+    const posts = await Post.find({
+      title: { $regex: req.query.q, $options: "i" },
+    })
+      .populate("author", " _id firstName lastName image")
+      .populate("category");
+    if (!posts) {
+      return res.status(404).json({ message: "No posts found" });
+    }
+    res.status(200).json(posts);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

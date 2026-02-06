@@ -4,6 +4,7 @@ import {
   GetAllPosts,
   GetSimilarPosts,
   GetSinglePost,
+  SearchPost,
   UpdatePost,
   newPost,
 } from "../controllers/postControllers";
@@ -21,6 +22,9 @@ postRouter.post(
   upload.single("image"),
   (req, res) => newPost(req as AuthenticatedRequest, res),
 );
+
+// Search posts
+postRouter.get("/search", SearchPost);
 
 // Get all posts
 postRouter.get("/", GetAllPosts);
