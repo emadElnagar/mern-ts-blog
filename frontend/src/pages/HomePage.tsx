@@ -6,6 +6,7 @@ import LoadingScreen from "../components/LoadingScreen";
 import Card from "../components/Card";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import SlideShow from "../components/Slideshow";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const Home = () => {
       <Helmet>
         <title>Magala</title>
       </Helmet>
+      <SlideShow />
       <div className="container">
         {isLoading === true ? (
           <LoadingScreen />
