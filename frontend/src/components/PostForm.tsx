@@ -6,16 +6,16 @@ import { GetAllCategories } from "../features/CategoryFeatures";
 import { NewPost } from "../features/PostFeatures";
 import { useNavigate } from "react-router-dom";
 import { MdCloudUpload } from "react-icons/md";
+import { AppDispatch } from "../store";
 
 const PostForm = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | undefined>();
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const { categories } = useSelector((state: any) => state.category);
-  const { user } = useSelector((state: any) => state.user);
   useEffect(() => {
     dispatch(GetAllCategories());
   }, [dispatch]);
@@ -29,12 +29,12 @@ const PostForm = () => {
     e.preventDefault();
     if (typeof image === "undefined") return;
     const formData = new FormData();
+    formData.append("_id", content);
     formData.append("image", image);
     formData.append("title", title);
     formData.append("content", content);
     formData.append("category", category);
-    formData.append("author", user._id);
-    dispatch(NewPost(formData))
+    dispatch(NewPost({ data: formData }))
       .unwrap()
       .then(() => {
         navigate("/");

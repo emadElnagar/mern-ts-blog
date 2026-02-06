@@ -4,7 +4,7 @@ import { GetMe, UserRegister } from "../../features/UserFeatures";
 import { Fragment, useState } from "react";
 import ErrorAlert from "../../components/ErrorAlert";
 import { Helmet } from "react-helmet";
-import type { AppDispatch } from "../../store"; // Adjust path to your store file
+import type { AppDispatch } from "../../store";
 
 const RegisterPage = () => {
   const search = useLocation().search;

@@ -8,7 +8,8 @@ const url = API_COMMENT_URL;
 
 export interface Comment {
   _id?: string;
-  body: string;
+  content: string;
+  post: string;
   author: object;
   replies?: object[];
 }
@@ -17,6 +18,11 @@ interface PostState {
   comments: Comment[];
   isLoading: boolean;
   error: string | null;
+}
+
+interface CommentUpdatePayload {
+  _id: string;
+  content: string;
 }
 
 const initialState: PostState = {
@@ -78,17 +84,17 @@ export const DeleteComment = createAsyncThunk<
 // Update comment
 export const UpdateComment = createAsyncThunk<
   Comment,
-  Comment,
+  CommentUpdatePayload,
   { state: RootState; rejectValue: string }
 >(
   "comments/update",
-  async (comment: Comment, { getState, rejectWithValue }) => {
+  async (comment: CommentUpdatePayload, { getState, rejectWithValue }) => {
     try {
       const token = getState().user.token;
       const response = await axios.patch(
         `${url}/${comment._id}`,
         {
-          body: comment.body,
+          content: comment.content,
         },
         authHeader(token),
       );

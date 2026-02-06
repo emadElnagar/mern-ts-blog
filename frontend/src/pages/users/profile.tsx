@@ -8,14 +8,16 @@ import { FaCamera } from "react-icons/fa";
 import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
 import { BASE_URL } from "../../Api";
+import type { AppDispatch } from "../../store";
 
 const UserProfile = () => {
   const url = BASE_URL;
   const { id } = useParams();
   const { user, profile, isloading } = useSelector((state: any) => state.user);
   const [image, setImage] = useState<File | undefined>();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
+    if (!id) return;
     dispatch(GetSingleUser(id));
   }, [dispatch, id]);
   // handle upload image
@@ -28,6 +30,7 @@ const UserProfile = () => {
   // handle submit
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    if (!id) return;
     if (typeof image === "undefined") return;
     const formData = new FormData();
     formData.append("profile", image);

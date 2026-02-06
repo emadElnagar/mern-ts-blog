@@ -16,6 +16,15 @@ export interface Post {
   likes?: object[];
 }
 
+interface NewPostData {
+  data: FormData;
+}
+
+interface PostUpdatePayload {
+  _id: string;
+  data: FormData;
+}
+
 interface PostState {
   posts: Post[];
   post: Post | null;
@@ -35,12 +44,12 @@ const initialState: PostState = {
 // Create a new
 export const NewPost = createAsyncThunk<
   Post,
-  Post,
+  NewPostData,
   { state: RootState; rejectValue: string }
->("posts/new", async (data: Post, { getState, rejectWithValue }) => {
+>("posts/new", async (data: NewPostData, { getState, rejectWithValue }) => {
   try {
     const token = getState().user.token;
-    const response = await axios.post(url, data, authHeader(token));
+    const response = await axios.post(url, data.data, authHeader(token));
     return response.data;
   } catch (error: any) {
     const message =
@@ -100,23 +109,28 @@ export const GetSimilarPosts = createAsyncThunk<
 // Update post
 export const UpdatePost = createAsyncThunk<
   Post,
-  Post,
+  PostUpdatePayload,
   { state: RootState; rejectValue: string }
->("posts/update", async (data: Post, { getState, rejectWithValue }) => {
-  try {
-    const token = getState().user.token;
-    const response = await axios.put(
-      `${url}/${data._id}`,
-      data,
-      authHeader(token),
-    );
-    return response.data;
-  } catch (error: any) {
-    const message =
-      error.response?.data?.message || error.message || "Something went wrong";
-    return rejectWithValue(message);
-  }
-});
+>(
+  "posts/update",
+  async (data: PostUpdatePayload, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().user.token;
+      const response = await axios.put(
+        `${url}/${data._id}`,
+        data,
+        authHeader(token),
+      );
+      return response.data;
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
+    }
+  },
+);
 
 // Delete post
 export const DeletePost = createAsyncThunk<

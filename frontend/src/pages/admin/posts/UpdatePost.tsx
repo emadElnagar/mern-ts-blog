@@ -5,14 +5,16 @@ import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { GetSinglePost, UpdatePost } from "../../../features/PostFeatures";
+import { AppDispatch } from "../../../store";
 
 const UpdatePostPage = () => {
   const { categories } = useSelector((state: any) => state.category);
   const { slug } = useParams();
   const { post } = useSelector((state: any) => state.post);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
+    if (!slug) return;
     dispatch(GetSinglePost(slug));
   }, [dispatch, slug]);
   const [title, setTitle] = useState("");
@@ -29,12 +31,13 @@ const UpdatePostPage = () => {
     e.preventDefault();
     if (typeof image === "undefined") return;
     const formData = new FormData();
-    formData.append("_id", post._id);
     formData.append("image", image);
     formData.append("title", title);
     formData.append("content", content);
     formData.append("category", category);
-    dispatch(UpdatePost(formData)).then(() => navigate("/admin/posts"));
+    dispatch(UpdatePost({ _id: post._id, data: formData })).then(() =>
+      navigate("/admin/posts"),
+    );
   };
   return (
     <Fragment>

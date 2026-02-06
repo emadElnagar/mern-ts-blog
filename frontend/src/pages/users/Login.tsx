@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GetMe, Login } from "../../features/UserFeatures";
 import { Helmet } from "react-helmet";
+import type { AppDispatch } from "../../store";
 
 const LoginPage = () => {
   const search = useLocation().search;
   const next = new URLSearchParams(search).get("next");
   const { user } = useSelector((state: any) => state.user);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

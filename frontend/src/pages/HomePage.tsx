@@ -6,10 +6,11 @@ import LoadingScreen from "../components/LoadingScreen";
 import Card from "../components/Card";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import type { AppDispatch } from "../store";
 import SlideShow from "../components/Slideshow";
 
 const Home = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(GetAllPosts());
   }, [dispatch]);

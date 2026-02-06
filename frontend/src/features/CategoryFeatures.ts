@@ -20,6 +20,11 @@ interface CategoryState {
   error: string | null;
 }
 
+interface CategoryUpdate {
+  _id: string;
+  title?: string;
+}
+
 const initialState: CategoryState = {
   categories: [],
   category: null,
@@ -72,11 +77,11 @@ export const GetAllCategories = createAsyncThunk<
 // Update category
 export const UpdateCategory = createAsyncThunk<
   Category,
-  Category,
+  CategoryUpdate,
   { state: RootState; rejectValue: string }
 >(
   "category/update",
-  async (category: Category, { getState, rejectWithValue }) => {
+  async (category: CategoryUpdate, { getState, rejectWithValue }) => {
     try {
       const token = getState().user.token;
       if (!token) {

@@ -15,27 +15,46 @@ import {
 import { MdDelete } from "react-icons/md";
 import { IoPencil } from "react-icons/io5";
 import Swal from "sweetalert2";
+import { AppDispatch } from "../../store";
 
 type UpdateCommentType = {
+  content: string;
+};
+
+type Comment = {
+  _id: string;
+  createdAt: Date;
   body: string;
+  author: {
+    _id: string;
+    image?: string;
+    firstName: string;
+    lastName: string;
+  };
 };
 
 const SinglePost = () => {
-  const dispatch = useDispatch();
-  const { slug } = useParams();
-  const [body, setBody] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+  const { slug } = useParams<{ slug: string }>();
+  const [content, setContent] = useState("");
+
   // Get single post
   useEffect(() => {
+    if (!slug) return;
     dispatch(GetSinglePost(slug));
   }, [dispatch, slug]);
+
   // Get similar posts
   useEffect(() => {
+    if (!slug) return;
     dispatch(GetSimilarPosts(slug));
   }, [dispatch, slug]);
+
   const { post, similarPosts, isLoading } = useSelector(
     (state: any) => state.post,
   );
   const { user } = useSelector((state: any) => state.user);
+
   // Get post comments
   useEffect(() => {
     if (!post) return;
@@ -43,6 +62,7 @@ const SinglePost = () => {
     dispatch(GetComments(id));
   }, [dispatch, post]);
   const { comments } = useSelector((state: any) => state.comment);
+
   // Create a new comment
   const handleNewComment = (e: { target: any; preventDefault: () => void }) => {
     e.preventDefault();
@@ -50,14 +70,15 @@ const SinglePost = () => {
       NewComment({
         post: post._id,
         author: user._id,
-        body,
+        content,
       }),
     );
     e.target.reset();
-    setBody("");
+    setContent("");
   };
+
   // Delete comment
-  const handleDelete = (id: Key) => {
+  const handleDelete = (id: string) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -78,42 +99,40 @@ const SinglePost = () => {
     });
     dispatch(GetComments(post._id));
   };
+
   // Update comment
-  let bodyInput: HTMLInputElement;
-  const handleUpdate = (id: Key) => {
+  const handleUpdate = (id: string) => {
+    let bodyInput: HTMLInputElement;
+
     Swal.fire<UpdateCommentType>({
       title: "Update comment",
       html: `
-        <input type="text" id="body" class="swal2-input" placeholder="body">
-      `,
+      <input type="text" id="content" class="swal2-input" placeholder="content">
+    `,
       confirmButtonText: "Update",
       focusConfirm: false,
       didOpen: () => {
         const popup = Swal.getPopup()!;
-        bodyInput = popup.querySelector("#body") as HTMLInputElement;
+        bodyInput = popup.querySelector("#content") as HTMLInputElement;
         bodyInput.onkeyup = (event) =>
           event.key === "Enter" && Swal.clickConfirm();
       },
       preConfirm: () => {
-        const body = bodyInput.value;
-        if (!body) {
+        const content = bodyInput.value;
+        if (!content) {
           Swal.showValidationMessage(`Please enter the new comment`);
         }
-        return { body };
+        return { content };
       },
     }).then((result) => {
-      const body = result.value?.body;
-      if (result.isConfirmed) {
-        dispatch(
-          UpdateComment({
-            id,
-            body,
-          }),
-        );
+      const content = result.value?.content;
+      if (result.isConfirmed && content) {
+        dispatch(UpdateComment({ _id: id, content }));
+        dispatch(GetComments(post._id));
       }
     });
-    dispatch(GetComments(post._id));
   };
+
   return (
     <Fragment>
       <Helmet>
@@ -150,7 +169,7 @@ const SinglePost = () => {
                   <input
                     type="text"
                     placeholder="Leave a comment"
-                    onChange={(e) => setBody(e.target.value)}
+                    onChange={(e) => setContent(e.target.value)}
                   />
                   <button type="submit"></button>
                 </form>
@@ -167,77 +186,64 @@ const SinglePost = () => {
               )}
               {comments &&
                 comments.length > 0 &&
-                comments.map(
-                  (comment: {
-                    _id: Key;
-                    createdAt: Date;
-                    author: {
-                      _id: Key;
-                      image?: string;
-                      firstName: string;
-                      lastName: string;
-                    };
-                    body: string;
-                  }) => (
-                    <div className="comment" key={comment._id}>
+                comments.map((comment: Comment) => (
+                  <div className="comment" key={comment._id}>
+                    <div className="user">
+                      <img
+                        src={`${
+                          comment.author.image
+                            ? `http://localhost:5000/${comment.author.image}`
+                            : process.env.PUBLIC_URL + "/images/user-avatar.png"
+                        }`}
+                        alt="avatar"
+                      />
+                      <span className="name">
+                        {comment.author.firstName} {comment.author.lastName}
+                      </span>{" "}
+                      <span className="date">
+                        {moment(comment.createdAt).fromNow()}
+                      </span>
+                    </div>
+                    <div>
+                      <p>{comment.body}</p>
+                    </div>
+                    {user && user._id === comment.author._id && (
+                      <div className="comment-control">
+                        <MdDelete
+                          className="icon"
+                          onClick={() => handleDelete(comment._id)}
+                        />
+                        <IoPencil
+                          className="icon"
+                          onClick={() => handleUpdate(comment._id)}
+                        />
+                      </div>
+                    )}
+                    {user && user.role === "admin" && (
+                      <div className="comment-control">
+                        <MdDelete
+                          className="icon"
+                          onClick={() => handleDelete(comment._id)}
+                        />
+                      </div>
+                    )}
+                    <div className="comment reply">
                       <div className="user">
                         <img
                           src={`${
-                            comment.author.image
-                              ? `http://localhost:5000/${comment.author.image}`
-                              : process.env.PUBLIC_URL +
-                                "/images/user-avatar.png"
+                            process.env.PUBLIC_URL + "/images/user-avatar.png"
                           }`}
                           alt="avatar"
                         />
-                        <span className="name">
-                          {comment.author.firstName} {comment.author.lastName}
-                        </span>{" "}
-                        <span className="date">
-                          {moment(comment.createdAt).fromNow()}
-                        </span>
+                        <span className="name">John Doe</span>{" "}
+                        <span className="date">13 hours ago</span>
                       </div>
                       <div>
-                        <p>{comment.body}</p>
-                      </div>
-                      {user && user._id === comment.author._id && (
-                        <div className="comment-control">
-                          <MdDelete
-                            className="icon"
-                            onClick={() => handleDelete(comment._id)}
-                          />
-                          <IoPencil
-                            className="icon"
-                            onClick={() => handleUpdate(comment._id)}
-                          />
-                        </div>
-                      )}
-                      {user && user.role === "admin" && (
-                        <div className="comment-control">
-                          <MdDelete
-                            className="icon"
-                            onClick={() => handleDelete(comment._id)}
-                          />
-                        </div>
-                      )}
-                      <div className="comment reply">
-                        <div className="user">
-                          <img
-                            src={`${
-                              process.env.PUBLIC_URL + "/images/user-avatar.png"
-                            }`}
-                            alt="avatar"
-                          />
-                          <span className="name">John Doe</span>{" "}
-                          <span className="date">13 hours ago</span>
-                        </div>
-                        <div>
-                          <p>This is a great article</p>
-                        </div>
+                        <p>This is a great article</p>
                       </div>
                     </div>
-                  ),
-                )}
+                  </div>
+                ))}
             </div>
             {similarPosts.length > 0 && (
               <div className="similar-posts">
