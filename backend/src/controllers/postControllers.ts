@@ -3,6 +3,7 @@ import Post from "../models/Post";
 import slugify from "slugify";
 import { AuthenticatedRequest } from "../types/authTypes";
 import { Types } from "mongoose";
+import Category from "../models/Category";
 
 // Create a new post
 export const newPost = async (req: AuthenticatedRequest, res: Response) => {
@@ -210,16 +211,27 @@ export const DeletePost = async (req: AuthenticatedRequest, res: Response) => {
 // Search post
 export const SearchPost: RequestHandler = async (req, res) => {
   try {
-    const posts = await Post.find({
-      title: { $regex: req.query.q, $options: "i" },
-    })
-      .populate("author", " _id firstName lastName image")
-      .populate("category");
-    if (!posts) {
+    const { search } = req.query;
+    let filter: any = {};
+    if (search) {
+      const categoryDoc = await Category.findOne({
+        title: { $regex: search, $options: "i" },
+      });
+
+      if (categoryDoc) {
+        filter.category = categoryDoc._id;
+      } else {
+        filter = { title: { $regex: search, $options: "i" } };
+      }
+    }
+    const posts = await Post.find(filter)
+      .populate("category")
+      .populate("author", " _id firstName lastName image");
+    if (!posts || posts.length === 0) {
       return res.status(404).json({ message: "No posts found" });
     }
     res.status(200).json(posts);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching posts", error });
   }
 };
