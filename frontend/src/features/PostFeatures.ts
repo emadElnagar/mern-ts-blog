@@ -27,6 +27,7 @@ interface PostUpdatePayload {
 
 interface PostState {
   posts: Post[];
+  searchResults: Post[];
   post: Post | null;
   similarPosts: Post[];
   isLoading: boolean;
@@ -35,6 +36,7 @@ interface PostState {
 
 const initialState: PostState = {
   posts: [],
+  searchResults: [],
   post: null,
   similarPosts: [],
   isLoading: false,
@@ -149,6 +151,22 @@ export const DeletePost = createAsyncThunk<
   }
 });
 
+// Search posts
+export const SearchPost = createAsyncThunk<
+  Post[],
+  string,
+  { rejectValue: string }
+>("posts/search", async (query: string, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${url}/search?query=${query}`);
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
+
 const postSlice = createSlice({
   name: "post",
   initialState,
@@ -248,6 +266,20 @@ const postSlice = createSlice({
         }
       })
       .addCase(DeletePost.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Search posts
+      .addCase(SearchPost.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(SearchPost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.searchResults = action.payload;
+      })
+      .addCase(SearchPost.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

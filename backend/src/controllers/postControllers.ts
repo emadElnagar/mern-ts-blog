@@ -211,17 +211,17 @@ export const DeletePost = async (req: AuthenticatedRequest, res: Response) => {
 // Search post
 export const SearchPost: RequestHandler = async (req, res) => {
   try {
-    const { search } = req.query;
+    const { query } = req.query;
     let filter: any = {};
-    if (search) {
+    if (query) {
       const categoryDoc = await Category.findOne({
-        title: { $regex: search, $options: "i" },
+        title: { $regex: query, $options: "i" },
       });
 
       if (categoryDoc) {
         filter.category = categoryDoc._id;
       } else {
-        filter = { title: { $regex: search, $options: "i" } };
+        filter = { title: { $regex: query, $options: "i" } };
       }
     }
     const posts = await Post.find(filter)
@@ -231,7 +231,7 @@ export const SearchPost: RequestHandler = async (req, res) => {
       return res.status(404).json({ message: "No posts found" });
     }
     res.status(200).json(posts);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching posts", error });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };
