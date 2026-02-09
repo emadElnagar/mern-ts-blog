@@ -14,7 +14,7 @@ export interface Comment {
   replies?: object[];
 }
 
-interface PostState {
+interface CommentState {
   comments: Comment[];
   isLoading: boolean;
   error: string | null;
@@ -25,7 +25,7 @@ interface CommentUpdatePayload {
   content: string;
 }
 
-const initialState: PostState = {
+const initialState: CommentState = {
   comments: [],
   isLoading: false,
   error: null,

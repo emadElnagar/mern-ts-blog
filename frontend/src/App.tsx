@@ -19,6 +19,7 @@ import AllPosts from "./pages/admin/posts/AllPosts";
 import UpdatePostPage from "./pages/admin/posts/UpdatePost";
 import LoadingScreen from "./components/LoadingScreen";
 import { changeTheme } from "./features/ThemeFeatures";
+import SearchPage from "./pages/posts/Search";
 
 const HoemScreen = lazy(() => import("./pages/HomePage"));
 
@@ -51,6 +52,7 @@ function App() {
         <Route path="/users/register" element={<RegisterPage />} />
         <Route path="/users/profile/:id" element={<UserProfile />} />
         <Route path="/posts/:slug" element={<SinglePost />} />
+        <Route path="/search/:query" element={<SearchPage />} />
         {user && user.role !== "user" && (
           <Fragment>
             <Route path="/posts/new" element={<NewPostPage />} />

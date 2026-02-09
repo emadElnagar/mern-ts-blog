@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Logout } from "../features/UserFeatures";
-import { IoIosMoon, IoIosSunny, IoMdLock } from "react-icons/io";
+import { IoIosMoon, IoIosSunny, IoMdLock, IoIosSearch } from "react-icons/io";
 import { FaUserAlt } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
 import { changeTheme } from "../features/ThemeFeatures";
@@ -33,11 +33,16 @@ const NavBar = () => {
 
       {/* Center */}
       <div className="navbar-center">
-        <input
-          type="text"
-          placeholder="Search articles..."
-          className="search-input"
-        />
+        <form className="search-from">
+          <input
+            type="text"
+            placeholder="Search articles..."
+            className="search-input"
+          />
+          <button className="search-btn">
+            <IoIosSearch />
+          </button>
+        </form>
       </div>
 
       {/* Right */}

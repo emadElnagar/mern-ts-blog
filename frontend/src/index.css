@@ -260,9 +260,15 @@ input {
   justify-content: center;
 }
 
+.search-from {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  position: relative;
+}
+
 .search-input {
   width: 100%;
-  max-width: 420px;
   padding: 10px 14px;
   background: var(--color-bg-muted);
   border: 1px solid var(--color-border);
@@ -278,6 +284,22 @@ input {
 .search-input:focus {
   outline: none;
   border-color: var(--color-primary);
+}
+
+.search-btn {
+  font-size: 14px;
+  color: var(--color-primary);
+  background: transparent;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 11px 20px;
+  border-left: 1px solid var(--color-border);
+  border-radius: 0 999px 999px 0;
+}
+
+.search-from:focus-within .search-btn {
+  border-left: 1px solid var(--color-primary);
 }
 
 /* ===== Right ===== */
