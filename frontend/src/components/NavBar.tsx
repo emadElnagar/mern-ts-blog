@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Logout } from "../features/UserFeatures";
 import { IoIosMoon, IoIosSunny, IoMdLock, IoIosSearch } from "react-icons/io";
@@ -12,12 +12,20 @@ import { BASE_URL } from "../Api";
 const NavBar = () => {
   const url = BASE_URL;
   const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: any) => state.user);
   const { theme } = useSelector((state: any) => state.theme);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [query, setQuery] = useState("");
   const handleLogout = () => {
     dispatch(Logout());
+  };
+  // Search articles
+  const searchHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    // search
+    e.preventDefault();
+    navigate("/search/${query}");
   };
   useEffect(() => {
     setDropdownOpen(false);
@@ -33,7 +41,7 @@ const NavBar = () => {
 
       {/* Center */}
       <div className="navbar-center">
-        <form className="search-from">
+        <form className="search-from" onSubmit={searchHandler}>
           <input
             type="text"
             placeholder="Search articles..."
