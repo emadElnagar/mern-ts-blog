@@ -25,7 +25,7 @@ const NavBar = () => {
   const searchHandler = (e: React.FormEvent<HTMLFormElement>) => {
     // search
     e.preventDefault();
-    navigate("/search/${query}");
+    navigate(`/search/${query}`);
   };
   useEffect(() => {
     setDropdownOpen(false);
@@ -46,6 +46,7 @@ const NavBar = () => {
             type="text"
             placeholder="Search articles..."
             className="search-input"
+            onChange={(e) => setQuery(e.target.value)}
           />
           <button className="search-btn">
             <IoIosSearch />
