@@ -134,6 +134,23 @@ export const UpdatePost = createAsyncThunk<
   },
 );
 
+// Like post
+export const LikePost = createAsyncThunk<
+  { liked: boolean },
+  string,
+  { state: RootState }
+>("posts/toggleLike", async (postId: string, { getState, rejectWithValue }) => {
+  try {
+    const token = getState().user.token;
+    const response = await axios.patch(`${url}/${postId}`, authHeader(token));
+    return response.data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
+
 // Delete post
 export const DeletePost = createAsyncThunk<
   Post,
@@ -247,6 +264,20 @@ const postSlice = createSlice({
         }
       })
       .addCase(UpdatePost.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Like post
+      .addCase(LikePost.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(LikePost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.post?.likes?.push(action.payload);
+      })
+      .addCase(LikePost.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
