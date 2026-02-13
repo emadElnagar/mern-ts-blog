@@ -193,7 +193,7 @@ const SinglePost = () => {
                         src={`${
                           comment.author.image
                             ? `http://localhost:5000/${comment.author.image}`
-                            : process.env.PUBLIC_URL + "/images/user-avatar.png"
+                            : "/images/user-avatar.png"
                         }`}
                         alt="avatar"
                       />
@@ -229,12 +229,7 @@ const SinglePost = () => {
                     )}
                     <div className="comment reply">
                       <div className="user">
-                        <img
-                          src={`${
-                            process.env.PUBLIC_URL + "/images/user-avatar.png"
-                          }`}
-                          alt="avatar"
-                        />
+                        <img src={"/images/user-avatar.png"} alt="avatar" />
                         <span className="name">John Doe</span>{" "}
                         <span className="date">13 hours ago</span>
                       </div>

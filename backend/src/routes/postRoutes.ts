@@ -7,6 +7,7 @@ import {
   SearchPost,
   UpdatePost,
   newPost,
+  LikePost,
 } from "../controllers/postControllers";
 import upload from "../middlewares/Multer";
 import { isAdmin, isAuth } from "../middlewares/auth";
@@ -41,6 +42,11 @@ postRouter.put(
   isAuth as RequestHandler,
   isAdmin as RequestHandler,
   (req, res) => UpdatePost(req as AuthenticatedRequest, res),
+);
+
+// Like post
+postRouter.patch("/:id/like", isAuth as RequestHandler, (req, res) =>
+  LikePost(req as AuthenticatedRequest, res),
 );
 
 // Delete post

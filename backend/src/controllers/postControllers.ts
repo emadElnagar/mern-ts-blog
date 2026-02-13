@@ -198,6 +198,39 @@ export const UpdatePost = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 
+// Like post
+export const LikePost = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const postId = req.params.id;
+    const userId = new Types.ObjectId(req.user._id);
+
+    const alreadyLiked = await Post.exists({
+      _id: postId,
+      likes: userId,
+    });
+
+    const update = alreadyLiked
+      ? { $pull: { likes: userId } }
+      : { $addToSet: { likes: userId } };
+
+    const result = await Post.updateOne({ _id: postId }, update);
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.status(200).json({
+      message: alreadyLiked ? "Like removed" : "Post liked",
+      liked: !alreadyLiked,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: "Failed to toggle like",
+      error: error.message,
+    });
+  }
+};
+
 // Delete post
 export const DeletePost = async (req: AuthenticatedRequest, res: Response) => {
   try {
