@@ -142,7 +142,10 @@ export const LikePost = createAsyncThunk<
 >("posts/toggleLike", async (postId: string, { getState, rejectWithValue }) => {
   try {
     const token = getState().user.token;
-    const response = await axios.patch(`${url}/${postId}`, authHeader(token));
+    const response = await axios.patch(
+      `${url}/${postId}/like`,
+      authHeader(token),
+    );
     return response.data;
   } catch (error: any) {
     const message =
