@@ -18,6 +18,7 @@ import Swal from "sweetalert2";
 import { AppDispatch } from "../../store";
 import CommentItem from "../../components/Comment";
 import { Comment } from "../../types/comment";
+import PostActions from "../../components/PostActions";
 
 type UpdateCommentType = {
   content: string;
@@ -153,6 +154,12 @@ const SinglePost = () => {
               <h1 className="post-title">{post.title}</h1>
               <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
             </div>
+            {/* Post actions (like, comment) */}
+            <PostActions
+              initialLikes={post.likes.length}
+              initialLiked={false}
+              commentsCount={comments.length}
+            />
             <div className="comments">
               {user ? (
                 <form onSubmit={handleNewComment}>
