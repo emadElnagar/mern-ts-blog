@@ -16,21 +16,11 @@ import { MdDelete } from "react-icons/md";
 import { IoPencil } from "react-icons/io5";
 import Swal from "sweetalert2";
 import { AppDispatch } from "../../store";
+import CommentItem from "../../components/Comment";
+import { Comment } from "../../types/comment";
 
 type UpdateCommentType = {
   content: string;
-};
-
-type Comment = {
-  _id: string;
-  createdAt: Date;
-  body: string;
-  author: {
-    _id: string;
-    image?: string;
-    firstName: string;
-    lastName: string;
-  };
 };
 
 const SinglePost = () => {
@@ -184,61 +174,25 @@ const SinglePost = () => {
                   </form>
                 </Link>
               )}
-              {comments &&
-                comments.length > 0 &&
-                comments.map((comment: Comment) => (
-                  <div className="comment" key={comment._id}>
-                    <div className="user">
-                      <img
-                        src={`${
-                          comment.author.image
-                            ? `http://localhost:5000/${comment.author.image}`
-                            : "/images/user-avatar.png"
-                        }`}
-                        alt="avatar"
-                      />
-                      <span className="name">
-                        {comment.author.firstName} {comment.author.lastName}
-                      </span>{" "}
-                      <span className="date">
-                        {moment(comment.createdAt).fromNow()}
-                      </span>
-                    </div>
-                    <div>
-                      <p>{comment.body}</p>
-                    </div>
-                    {user && user._id === comment.author._id && (
-                      <div className="comment-control">
-                        <MdDelete
-                          className="icon"
-                          onClick={() => handleDelete(comment._id)}
-                        />
-                        <IoPencil
-                          className="icon"
-                          onClick={() => handleUpdate(comment._id)}
-                        />
-                      </div>
-                    )}
-                    {user && user.role === "admin" && (
-                      <div className="comment-control">
-                        <MdDelete
-                          className="icon"
-                          onClick={() => handleDelete(comment._id)}
-                        />
-                      </div>
-                    )}
-                    <div className="comment reply">
-                      <div className="user">
-                        <img src={"/images/user-avatar.png"} alt="avatar" />
-                        <span className="name">John Doe</span>{" "}
-                        <span className="date">13 hours ago</span>
-                      </div>
-                      <div>
-                        <p>This is a great article</p>
-                      </div>
-                    </div>
-                  </div>
+              <section className="post-comments">
+                <h3>Comments ({comments.length})</h3>
+
+                {comments.map((comment: Comment) => (
+                  <CommentItem
+                    key={comment._id}
+                    comment={comment}
+                    user={user}
+                    onDelete={handleDelete}
+                    onUpdate={handleUpdate}
+                    onLike={function (id: string): void {
+                      throw new Error("Function not implemented.");
+                    }}
+                    onReply={function (parentId: string, text: string): void {
+                      throw new Error("Function not implemented.");
+                    }}
+                  />
                 ))}
+              </section>
             </div>
             {similarPosts.length > 0 && (
               <div className="similar-posts">

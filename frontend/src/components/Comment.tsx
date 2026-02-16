@@ -29,6 +29,7 @@ const CommentItem = ({
   const isOwner = user?._id === comment.author._id;
   const isAdmin = user?.role === "admin";
   const isLiked = !!user && comment.likes.includes(user._id);
+  const replies = comment.replies ?? [];
 
   const submitReply = () => {
     if (!replyText.trim()) return;
@@ -94,9 +95,9 @@ const CommentItem = ({
       )}
 
       {/* RECURSIVE REPLIES */}
-      {comment && comment.replies && comment.replies?.length > 0 && (
+      {replies?.length > 0 && (
         <div className="replies">
-          {comment.replies.map((reply) => (
+          {replies.map((reply) => (
             <CommentItem
               key={reply._id}
               comment={reply}
