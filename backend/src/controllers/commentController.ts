@@ -1,6 +1,7 @@
 import { RequestHandler, Response } from "express";
 import Comment from "../models/Comment";
 import { AuthenticatedRequest } from "../types/authTypes";
+import { Types } from "mongoose";
 
 // Create a new comment
 export const newComment = async (req: AuthenticatedRequest, res: Response) => {
@@ -70,6 +71,29 @@ export const UpdateComment = async (
       content: req.body.content,
     };
     await Comment.updateOne({ _id: req.params.id }, { $set: newComment });
+    res.status(200).json({ message: "Comment updated successfully" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Like comment
+export const LikeComment = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const commentId = req.params.id;
+    const userId = new Types.ObjectId(req.user._id);
+
+    const alreadyLiked = await Comment.exists({
+      _id: commentId,
+      likes: userId,
+    });
+    const update = alreadyLiked
+      ? { $pull: { likes: userId } }
+      : { $addToSet: { likes: userId } };
+    await Comment.updateOne({ _id: commentId }, update);
+    res
+      .status(200)
+      .json({ message: alreadyLiked ? "Comment unliked" : "Comment liked" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

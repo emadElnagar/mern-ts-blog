@@ -2,6 +2,7 @@ import { RequestHandler, Router } from "express";
 import {
   DeleteComment,
   GetPostComments,
+  LikeComment,
   UpdateComment,
   newComment,
 } from "../controllers/commentController";
@@ -24,6 +25,11 @@ commentRouter.get("/:id", GetPostComments);
 // Update comment
 commentRouter.patch("/:id", isAuth as RequestHandler, (req, res) =>
   UpdateComment(req as AuthenticatedRequest, res),
+);
+
+// Like comment
+commentRouter.post("/:id/like", isAuth as RequestHandler, (req, res) =>
+  LikeComment(req as AuthenticatedRequest, res),
 );
 
 // Delete comment
