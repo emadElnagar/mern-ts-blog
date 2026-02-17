@@ -1,4 +1,4 @@
-import { Fragment, Key, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
@@ -12,8 +12,6 @@ import {
   NewComment,
   UpdateComment,
 } from "../../features/CommentFeature";
-import { MdDelete } from "react-icons/md";
-import { IoPencil } from "react-icons/io5";
 import Swal from "sweetalert2";
 import { AppDispatch } from "../../store";
 import CommentItem from "../../components/Comment";
@@ -157,7 +155,7 @@ const SinglePost = () => {
             {/* Post actions (like, comment) */}
             <PostActions
               initialLikes={post.likes.length}
-              initialLiked={false}
+              initialLiked={post.likes.includes(user?._id)}
               commentsCount={comments.length}
             />
             <div className="comments">
