@@ -20,6 +20,7 @@ import UpdatePostPage from "./pages/admin/posts/UpdatePost";
 import LoadingScreen from "./components/LoadingScreen";
 import { changeTheme } from "./features/ThemeFeatures";
 import SearchPage from "./pages/posts/Search";
+import ScrollToTop from "./components/ScrollToTop";
 
 const HoemScreen = lazy(() => import("./pages/HomePage"));
 
@@ -34,6 +35,7 @@ function App() {
   }, [dispatch]);
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="App">
         <header className="App-header">
           <NavBar />
