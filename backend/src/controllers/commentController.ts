@@ -99,13 +99,24 @@ export const LikeComment = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 
+async function deleteCommentAndReplies(commentId: string) {
+  const replies = await Comment.find({ parentComment: commentId });
+
+  for (const reply of replies) {
+    await deleteCommentAndReplies(reply._id.toString());
+  }
+
+  await Comment.findByIdAndDelete(commentId);
+}
+
 // Delete comment
 export const DeleteComment = async (
   req: AuthenticatedRequest,
   res: Response,
 ) => {
   try {
-    const comment = await Comment.findById(req.params.id);
+    const commentId = req.params.id;
+    const comment = await Comment.findById(commentId);
     const user = req.user;
     if (
       user?.role !== "admin" &&
@@ -118,7 +129,7 @@ export const DeleteComment = async (
     if (!comment) {
       return res.status(404).json({ message: "Comment not found" });
     }
-    await comment.deleteOne();
+    await deleteCommentAndReplies(commentId);
     res.status(200).json({ message: "Comment deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
