@@ -136,17 +136,21 @@ export const UpdatePost = createAsyncThunk<
 
 // Like post
 export const LikePost = createAsyncThunk<
-  { liked: boolean },
+  { liked: boolean; user: object | null },
   string,
-  { state: RootState }
+  { state: RootState; rejectValue: string }
 >("posts/toggleLike", async (postId: string, { getState, rejectWithValue }) => {
   try {
     const token = getState().user.token;
+    const user = getState().user.user;
     const response = await axios.patch(
       `${url}/${postId}/like`,
       authHeader(token),
     );
-    return response.data;
+    return {
+      liked: response.data,
+      user,
+    };
   } catch (error: any) {
     const message =
       error.response?.data?.message || error.message || "Something went wrong";
@@ -278,7 +282,8 @@ const postSlice = createSlice({
       .addCase(LikePost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.post?.likes?.push(action.payload);
+        if (action.payload.user === null) return;
+        state.post?.likes?.push(action.payload.user);
       })
       .addCase(LikePost.rejected, (state, action) => {
         state.isLoading = false;
