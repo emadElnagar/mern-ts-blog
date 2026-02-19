@@ -1,5 +1,6 @@
 import { RequestHandler, Response } from "express";
 import Post from "../models/Post";
+import Comment from "../models/Comment";
 import slugify from "slugify";
 import { AuthenticatedRequest } from "../types/authTypes";
 import { Types } from "mongoose";
@@ -234,6 +235,9 @@ export const LikePost = async (req: AuthenticatedRequest, res: Response) => {
 // Delete post
 export const DeletePost = async (req: AuthenticatedRequest, res: Response) => {
   try {
+    // Delete comments related to the post
+    await Comment.deleteMany({ post: req.params.id });
+    // Delete post
     await Post.deleteOne({ _id: req.params.id });
     res.status(200).json({ message: "Post deleted successfully" });
   } catch (error: any) {

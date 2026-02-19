@@ -99,6 +99,7 @@ export const LikeComment = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 
+// Recursive function to delete a comment and its replies
 async function deleteCommentAndReplies(commentId: string) {
   const replies = await Comment.find({ parentComment: commentId });
 
