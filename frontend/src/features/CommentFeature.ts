@@ -11,7 +11,9 @@ export interface Comment {
   content: string;
   post: string;
   author: object;
+  user?: object;
   replies?: object[];
+  likes?: string[];
 }
 
 interface CommentState {
@@ -109,6 +111,31 @@ export const UpdateComment = createAsyncThunk<
   },
 );
 
+// Like comment
+export const LikeComment = createAsyncThunk<
+  Comment,
+  string,
+  { state: RootState; rejectValue: string }
+>("comments/like", async (id: string, { getState, rejectWithValue }) => {
+  try {
+    const token = getState().user.token;
+    const user = getState().user.user;
+    const response = await axios.post(
+      `${url}/like/${id}`,
+      {},
+      authHeader(token),
+    );
+    return {
+      ...response.data,
+      user,
+    };
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message || error.message || "Something went wrong";
+    return rejectWithValue(message);
+  }
+});
+
 const commentSlice = createSlice({
   name: "comments",
   initialState,
@@ -180,6 +207,23 @@ const commentSlice = createSlice({
         }
       })
       .addCase(UpdateComment.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Like comment
+      .addCase(LikeComment.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(LikeComment.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        if (action.payload.user === null) return;
+        state.comments = state.comments.map((comment) =>
+          comment._id === action.payload._id ? action.payload : comment,
+        );
+      })
+      .addCase(LikeComment.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });
