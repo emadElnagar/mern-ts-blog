@@ -12,11 +12,8 @@ import { AuthenticatedRequest } from "../types/authTypes";
 const commentRouter = Router();
 
 // create a new comment
-commentRouter.post(
-  "/",
-  isAuth as RequestHandler,
-  isAdmin as RequestHandler,
-  (req, res) => newComment(req as AuthenticatedRequest, res),
+commentRouter.post("/", isAuth as RequestHandler, (req, res) =>
+  newComment(req as AuthenticatedRequest, res),
 );
 
 // Get post comments
