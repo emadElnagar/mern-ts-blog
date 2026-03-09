@@ -949,3 +949,27 @@ input[type="file"] {
 .comment-control .icon:not(:first-of-type) {
   margin-inline-start: 10px;
 }
+
+.reply-box {
+  margin-block-start: 10px;
+  margin-inline-start: 30px;
+  display: flex;
+  gap: 10px;
+  textarea {
+    width: 100%;
+    padding: 5px;
+    resize: none;
+    background: var(--color-bg-surface);
+    color: var(--color-text-main);
+    &:focus {
+      outline: none;
+    }
+  }
+  button {
+    padding: 10px 15px;
+    background: var(--color-primary);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+  }
+}
