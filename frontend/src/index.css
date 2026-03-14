@@ -938,6 +938,18 @@ input[type="file"] {
   margin-block-end: 0;
 }
 
+.comment-actions {
+  display: flex;
+  gap: 10px;
+  button {
+    background: none;
+    border: none;
+    color: var(--color-text-main);
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+}
+
 .comment-control .icon {
   cursor: pointer;
 }
@@ -957,7 +969,7 @@ input[type="file"] {
   gap: 10px;
   textarea {
     width: 100%;
-    padding: 5px;
+    padding: 0 5px;
     resize: none;
     background: var(--color-bg-surface);
     color: var(--color-text-main);

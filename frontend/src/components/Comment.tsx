@@ -3,6 +3,8 @@ import { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { IoPencil } from "react-icons/io5";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
+import { LuReply } from "react-icons/lu";
+import { BiSolidSend } from "react-icons/bi";
 import { User } from "../types/user";
 import { Comment } from "../types/comment";
 
@@ -64,13 +66,15 @@ const CommentItem = ({
 
       {/* ACTIONS */}
       <div className="comment-actions">
-        <button onClick={() => onLike(comment._id)}>
-          {isLiked ? <AiFillLike /> : <AiOutlineLike />}
+        <button title="Like" onClick={() => onLike(comment._id)}>
+          {isLiked ? <AiFillLike /> : <AiOutlineLike />}{" "}
           <span>{comment.likes.length}</span>
         </button>
 
         {user && (
-          <button onClick={() => setShowReply(!showReply)}>Reply</button>
+          <button title="Reply" onClick={() => setShowReply(!showReply)}>
+            <LuReply />
+          </button>
         )}
       </div>
 
@@ -85,12 +89,14 @@ const CommentItem = ({
       {/* REPLY INPUT */}
       {showReply && (
         <div className="reply-box">
-          <textarea
+          <input
             placeholder="Write a reply..."
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
           />
-          <button onClick={submitReply}>Reply</button>
+          <button onClick={submitReply}>
+            <BiSolidSend />
+          </button>
         </div>
       )}
 
