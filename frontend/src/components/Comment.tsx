@@ -7,6 +7,7 @@ import { LuReply } from "react-icons/lu";
 import { BiSolidSend } from "react-icons/bi";
 import { User } from "../types/user";
 import { Comment } from "../types/comment";
+import { BASE_URL } from "../Api";
 
 interface Props {
   comment: Comment;
@@ -47,7 +48,7 @@ const CommentItem = ({
         <img
           src={
             comment.author.image
-              ? `http://localhost:5000/${comment.author.image}`
+              ? `${BASE_URL}/${comment.author.image}`
               : "/images/user-avatar.png"
           }
           alt="avatar"
