@@ -6,21 +6,12 @@ import { GetSimilarPosts, GetSinglePost } from "../../features/PostFeatures";
 import LoadingScreen from "../../components/LoadingScreen";
 import moment from "moment";
 import Card from "../../components/Card";
-import {
-  DeleteComment,
-  GetComments,
-  UpdateComment,
-} from "../../features/CommentFeature";
-import Swal from "sweetalert2";
+import { GetComments } from "../../features/CommentFeature";
 import { AppDispatch } from "../../store";
 import CommentItem from "../../components/Comment";
 import { Comment } from "../../types/comment";
 import PostActions from "../../components/PostActions";
 import { useComments } from "../../hooks/CommentHooks";
-
-type UpdateCommentType = {
-  content: string;
-};
 
 const SinglePost = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -44,7 +35,7 @@ const SinglePost = () => {
   );
   const { user } = useSelector((state: any) => state.user);
 
-  const { createComment } = useComments(post?._id);
+  const { createComment, handleDelete, handleUpdate } = useComments(post?._id);
 
   // Get post comments
   useEffect(() => {
@@ -53,62 +44,6 @@ const SinglePost = () => {
     dispatch(GetComments(id));
   }, [dispatch, post]);
   const { comments } = useSelector((state: any) => state.comment);
-
-  // Delete comment
-  const handleDelete = (id: string) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(DeleteComment(id));
-        Swal.fire({
-          title: "Deleted!",
-          text: "Comment has been deleted.",
-          icon: "success",
-        });
-      }
-    });
-    dispatch(GetComments(post._id));
-  };
-
-  // Update comment
-  const handleUpdate = (id: string) => {
-    let bodyInput: HTMLInputElement;
-
-    Swal.fire<UpdateCommentType>({
-      title: "Update comment",
-      html: `
-      <input type="text" id="content" class="swal2-input" placeholder="content">
-    `,
-      confirmButtonText: "Update",
-      focusConfirm: false,
-      didOpen: () => {
-        const popup = Swal.getPopup()!;
-        bodyInput = popup.querySelector("#content") as HTMLInputElement;
-        bodyInput.onkeyup = (event) =>
-          event.key === "Enter" && Swal.clickConfirm();
-      },
-      preConfirm: () => {
-        const content = bodyInput.value;
-        if (!content) {
-          Swal.showValidationMessage(`Please enter the new comment`);
-        }
-        return { content };
-      },
-    }).then((result) => {
-      const content = result.value?.content;
-      if (result.isConfirmed && content) {
-        dispatch(UpdateComment({ _id: id, content }));
-        dispatch(GetComments(post._id));
-      }
-    });
-  };
 
   return (
     <Fragment>
