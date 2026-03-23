@@ -10,7 +10,7 @@ export interface Comment {
   _id?: string;
   content: string;
   post: string;
-  author: object;
+  author?: object;
   user?: object;
   replies?: object[];
   likes?: string[];

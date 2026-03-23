@@ -9,7 +9,6 @@ import Card from "../../components/Card";
 import {
   DeleteComment,
   GetComments,
-  NewComment,
   UpdateComment,
 } from "../../features/CommentFeature";
 import Swal from "sweetalert2";
@@ -17,6 +16,7 @@ import { AppDispatch } from "../../store";
 import CommentItem from "../../components/Comment";
 import { Comment } from "../../types/comment";
 import PostActions from "../../components/PostActions";
+import { useComments } from "../../hooks/CommentHooks";
 
 type UpdateCommentType = {
   content: string;
@@ -44,6 +44,8 @@ const SinglePost = () => {
   );
   const { user } = useSelector((state: any) => state.user);
 
+  const { createComment } = useComments(post?._id);
+
   // Get post comments
   useEffect(() => {
     if (!post) return;
@@ -51,20 +53,6 @@ const SinglePost = () => {
     dispatch(GetComments(id));
   }, [dispatch, post]);
   const { comments } = useSelector((state: any) => state.comment);
-
-  // Create a new comment
-  const handleNewComment = (e: { target: any; preventDefault: () => void }) => {
-    e.preventDefault();
-    dispatch(
-      NewComment({
-        post: post._id,
-        author: user._id,
-        content,
-      }),
-    );
-    e.target.reset();
-    setContent("");
-  };
 
   // Delete comment
   const handleDelete = (id: string) => {
@@ -160,7 +148,11 @@ const SinglePost = () => {
             />
             <div className="comments">
               {user ? (
-                <form onSubmit={handleNewComment}>
+                <form
+                  onSubmit={(e: { target: any; preventDefault: () => void }) =>
+                    createComment(content, e)
+                  }
+                >
                   <input
                     type="text"
                     placeholder="Leave a comment"
