@@ -24,6 +24,24 @@ export const useComments = (postId: string) => {
       NewComment({
         post: postId,
         content,
+        parent: null,
+      }),
+    );
+    e.target.reset();
+  };
+
+  // Reply to a comment
+  const createReply = (
+    e: { target: any; preventDefault: () => void },
+    content: string,
+    parentId: string,
+  ) => {
+    e.preventDefault();
+    dispatch(
+      NewComment({
+        post: postId,
+        content,
+        parent: parentId,
       }),
     );
     e.target.reset();
@@ -85,5 +103,5 @@ export const useComments = (postId: string) => {
     });
   };
 
-  return { createComment, handleDelete, handleUpdate };
+  return { createComment, handleDelete, handleUpdate, createReply };
 };

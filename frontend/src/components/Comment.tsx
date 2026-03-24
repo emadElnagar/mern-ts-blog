@@ -15,7 +15,11 @@ interface Props {
   onDelete: (id: string) => void;
   onUpdate: (id: string) => void;
   onLike: (id: string) => void;
-  onReply: (parentId: string, text: string) => void;
+  onReply: (
+    e: { target: any; preventDefault: () => void },
+    parentId: string,
+    text: string,
+  ) => void;
 }
 
 const CommentItem = ({
@@ -34,9 +38,10 @@ const CommentItem = ({
   const isLiked = !!user && comment.likes.includes(user._id);
   const replies = comment.replies ?? [];
 
-  const submitReply = () => {
+  const submitReply = (e: { target: any; preventDefault: () => void }) => {
+    e.preventDefault();
     if (!replyText.trim()) return;
-    onReply(comment._id, replyText);
+    onReply(e, comment._id, replyText);
     setReplyText("");
     setShowReply(false);
   };

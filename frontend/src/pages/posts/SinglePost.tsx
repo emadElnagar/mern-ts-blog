@@ -35,7 +35,8 @@ const SinglePost = () => {
   );
   const { user } = useSelector((state: any) => state.user);
 
-  const { createComment, handleDelete, handleUpdate } = useComments(post?._id);
+  const { createComment, handleDelete, handleUpdate, createReply } =
+    useComments(post?._id);
 
   // Get post comments
   useEffect(() => {
@@ -119,9 +120,7 @@ const SinglePost = () => {
                     onLike={function (id: string): void {
                       throw new Error("Function not implemented.");
                     }}
-                    onReply={function (parentId: string, text: string): void {
-                      throw new Error("Function not implemented.");
-                    }}
+                    onReply={createReply}
                   />
                 ))}
               </section>
