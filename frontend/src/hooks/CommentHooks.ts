@@ -3,6 +3,7 @@ import { AppDispatch } from "../store";
 import {
   DeleteComment,
   GetComments,
+  LikeComment,
   NewComment,
   UpdateComment,
 } from "../features/CommentFeature";
@@ -103,5 +104,11 @@ export const useComments = (postId: string) => {
     });
   };
 
-  return { createComment, handleDelete, handleUpdate, createReply };
+  // Like comment
+  const handleLike = (e: { preventDefault: () => void }, id: string) => {
+    e.preventDefault();
+    dispatch(LikeComment(id));
+  };
+
+  return { createComment, handleDelete, handleUpdate, createReply, handleLike };
 };

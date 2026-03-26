@@ -14,7 +14,7 @@ interface Props {
   user: User | null;
   onDelete: (id: string) => void;
   onUpdate: (id: string) => void;
-  onLike: (id: string) => void;
+  onLike: (e: { preventDefault: () => void }, id: string) => void;
   onReply: (
     e: { target: any; preventDefault: () => void },
     parentId: string,
@@ -72,7 +72,7 @@ const CommentItem = ({
 
       {/* ACTIONS */}
       <div className="comment-actions">
-        <button title="Like" onClick={() => onLike(comment._id)}>
+        <button title="Like" onClick={(e) => onLike(e, comment._id)}>
           {isLiked ? <AiFillLike /> : <AiOutlineLike />}{" "}
           <span>{comment.likes.length}</span>
         </button>

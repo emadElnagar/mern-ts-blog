@@ -35,7 +35,7 @@ const SinglePost = () => {
   );
   const { user } = useSelector((state: any) => state.user);
 
-  const { createComment, handleDelete, handleUpdate, createReply } =
+  const { createComment, handleDelete, handleUpdate, createReply, handleLike } =
     useComments(post?._id);
 
   // Get post comments
@@ -117,9 +117,7 @@ const SinglePost = () => {
                     user={user}
                     onDelete={handleDelete}
                     onUpdate={handleUpdate}
-                    onLike={function (id: string): void {
-                      throw new Error("Function not implemented.");
-                    }}
+                    onLike={handleLike}
                     onReply={createReply}
                   />
                 ))}
