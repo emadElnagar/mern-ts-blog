@@ -203,7 +203,7 @@ export const UpdatePost = async (req: AuthenticatedRequest, res: Response) => {
 export const LikePost = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const postId = req.params.id;
-    const userId = new Types.ObjectId(req.user._id);
+    const userId = req.user;
 
     const alreadyLiked = await Post.exists({
       _id: postId,

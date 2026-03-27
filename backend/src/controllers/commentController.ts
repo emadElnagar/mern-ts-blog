@@ -81,7 +81,7 @@ export const UpdateComment = async (
 export const LikeComment = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const commentId = req.params.id;
-    const userId = new Types.ObjectId(req.user._id);
+    const userId = req.user;
 
     const alreadyLiked = await Comment.exists({
       _id: commentId,
