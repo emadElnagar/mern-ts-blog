@@ -145,6 +145,7 @@ export const LikePost = createAsyncThunk<
     const user = getState().user.user;
     const response = await axios.patch(
       `${url}/${postId}/like`,
+      {},
       authHeader(token),
     );
     return {

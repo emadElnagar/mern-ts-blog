@@ -2,7 +2,11 @@ import { Fragment, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { GetSimilarPosts, GetSinglePost } from "../../features/PostFeatures";
+import {
+  GetSimilarPosts,
+  GetSinglePost,
+  LikePost,
+} from "../../features/PostFeatures";
 import LoadingScreen from "../../components/LoadingScreen";
 import moment from "moment";
 import Card from "../../components/Card";
@@ -29,6 +33,11 @@ const SinglePost = () => {
     if (!slug) return;
     dispatch(GetSimilarPosts(slug));
   }, [dispatch, slug]);
+
+  // Like post
+  const handlePostLike = (id: string) => {
+    dispatch(LikePost(id));
+  };
 
   const { post, similarPosts, isLoading } = useSelector(
     (state: any) => state.post,
@@ -81,6 +90,7 @@ const SinglePost = () => {
               initialLikes={post.likes.length}
               initialLiked={post.likes.includes(user?._id)}
               commentsCount={comments.length}
+              onLikePost={() => handlePostLike(post._id)}
             />
             <div className="comments">
               {user ? (

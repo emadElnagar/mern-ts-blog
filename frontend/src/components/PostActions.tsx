@@ -6,18 +6,20 @@ interface Props {
   initialLikes: number;
   initialLiked: boolean;
   commentsCount: number;
+  onLikePost: () => void;
 }
 
-const PostActions = ({ initialLikes, initialLiked, commentsCount }: Props) => {
+const PostActions = ({
+  initialLikes,
+  initialLiked,
+  commentsCount,
+  onLikePost,
+}: Props) => {
   const [liked, setLiked] = useState(initialLiked);
   const [likes, setLikes] = useState(initialLikes);
 
   const handleLike = () => {
-    if (liked) {
-      setLikes((prev) => prev - 1);
-    } else {
-      setLikes((prev) => prev + 1);
-    }
+    onLikePost();
     setLiked(!liked);
   };
 
