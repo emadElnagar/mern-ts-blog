@@ -18,14 +18,16 @@ export const useComments = (postId: string) => {
   // Create a new comment
   const createComment = (
     content: string,
+    parentId: string | null,
     e: { target: any; preventDefault: () => void },
   ) => {
     e.preventDefault();
+    const parent = parentId ? parentId : null;
     dispatch(
       NewComment({
         post: postId,
         content,
-        parent: null,
+        parent,
       }),
     );
     e.target.reset();
