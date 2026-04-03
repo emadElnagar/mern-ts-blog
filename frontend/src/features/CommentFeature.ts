@@ -10,7 +10,7 @@ export interface Comment {
   _id?: string;
   content: string;
   post: string;
-  parent: string | null;
+  parentComment?: string | null;
   author?: object;
   user?: object;
   replies?: object[];
