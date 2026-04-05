@@ -91,6 +91,7 @@ const SinglePost = () => {
               initialLiked={post.likes.includes(user?._id)}
               commentsCount={comments.length}
               onLikePost={() => handlePostLike(post._id)}
+              postSlug={post.slug}
             />
             <div className="comments">
               {user ? (

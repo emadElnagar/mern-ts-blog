@@ -941,6 +941,7 @@ input[type="file"] {
 .comment-actions {
   display: flex;
   gap: 10px;
+  cursor: pointer;
   button {
     background: none;
     border: none;
