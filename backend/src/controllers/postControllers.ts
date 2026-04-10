@@ -3,7 +3,7 @@ import Post from "../models/Post";
 import Comment from "../models/Comment";
 import slugify from "slugify";
 import { AuthenticatedRequest } from "../types/authTypes";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import Category from "../models/Category";
 
 // Create a new post
@@ -203,7 +203,16 @@ export const UpdatePost = async (req: AuthenticatedRequest, res: Response) => {
 export const LikePost = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const postId = req.params.id;
-    const userId = req.user;
+    const user = req.user;
+    const userIdRaw = typeof user === "string" ? user : (user as any)?._id;
+
+    if (!userIdRaw || !mongoose.Types.ObjectId.isValid(userIdRaw)) {
+      return res.status(400).json({
+        message: "Invalid user id format",
+      });
+    }
+
+    const userId = new mongoose.Types.ObjectId(userIdRaw);
 
     const alreadyLiked = await Post.exists({
       _id: postId,
