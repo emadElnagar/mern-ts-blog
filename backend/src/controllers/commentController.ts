@@ -1,7 +1,7 @@
 import { RequestHandler, Response } from "express";
 import Comment from "../models/Comment";
 import { AuthenticatedRequest } from "../types/authTypes";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 // Create a new comment
 export const newComment = async (req: AuthenticatedRequest, res: Response) => {
@@ -81,7 +81,16 @@ export const UpdateComment = async (
 export const LikeComment = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const commentId = req.params.id;
-    const userId = req.user;
+    const user = req.user;
+    const userIdRaw = typeof user === "string" ? user : (user as any)?._id;
+
+    if (!userIdRaw || !mongoose.Types.ObjectId.isValid(userIdRaw)) {
+      return res.status(400).json({
+        message: "Invalid user id format",
+      });
+    }
+
+    const userId = new mongoose.Types.ObjectId(userIdRaw);
 
     const alreadyLiked = await Comment.exists({
       _id: commentId,
@@ -90,10 +99,17 @@ export const LikeComment = async (req: AuthenticatedRequest, res: Response) => {
     const update = alreadyLiked
       ? { $pull: { likes: userId } }
       : { $addToSet: { likes: userId } };
-    await Comment.updateOne({ _id: commentId }, update);
-    res
-      .status(200)
-      .json({ message: alreadyLiked ? "Comment unliked" : "Comment liked" });
+    const result = await Comment.updateOne({ _id: commentId }, update);
+
+    // Not found check
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    res.status(200).json({
+      message: alreadyLiked ? "Like removed" : "Comment liked",
+      liked: !alreadyLiked,
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
