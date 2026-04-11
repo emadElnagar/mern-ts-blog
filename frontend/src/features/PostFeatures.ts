@@ -13,7 +13,7 @@ export interface Post {
   author: object;
   description: string;
   image: string;
-  likes?: object[];
+  likes?: string[];
 }
 
 interface NewPostData {
@@ -136,7 +136,7 @@ export const UpdatePost = createAsyncThunk<
 
 // Like post
 export const LikePost = createAsyncThunk<
-  { liked: boolean; user: object | null },
+  { liked: boolean; userId: string | undefined },
   string,
   { state: RootState; rejectValue: string }
 >("posts/toggleLike", async (postId: string, { getState, rejectWithValue }) => {
@@ -149,8 +149,8 @@ export const LikePost = createAsyncThunk<
       authHeader(token),
     );
     return {
-      liked: response.data,
-      user,
+      liked: response.data.liked,
+      userId: user?._id,
     };
   } catch (error: any) {
     const message =
@@ -283,8 +283,22 @@ const postSlice = createSlice({
       .addCase(LikePost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        if (action.payload.user === null) return;
-        state.post?.likes?.push(action.payload.user);
+
+        if (!state.post || !action.payload.userId) return;
+
+        const userId = action.payload.userId;
+
+        if (!state.post.likes) {
+          state.post.likes = [];
+        }
+
+        const userLiked = state.post.likes.includes(userId);
+
+        if (userLiked) {
+          state.post.likes = state.post.likes.filter((like) => like !== userId);
+        } else {
+          state.post.likes.push(userId);
+        }
       })
       .addCase(LikePost.rejected, (state, action) => {
         state.isLoading = false;
