@@ -25,7 +25,7 @@ commentRouter.patch("/:id", isAuth as RequestHandler, (req, res) =>
 );
 
 // Like comment
-commentRouter.post("/:id/like", isAuth as RequestHandler, (req, res) =>
+commentRouter.patch("/:id/like", isAuth as RequestHandler, (req, res) =>
   LikeComment(req as AuthenticatedRequest, res),
 );
 

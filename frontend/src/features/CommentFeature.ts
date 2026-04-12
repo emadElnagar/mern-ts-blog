@@ -19,6 +19,7 @@ export interface Comment {
 
 interface CommentState {
   comments: Comment[];
+  comment: Comment | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -30,6 +31,7 @@ interface CommentUpdatePayload {
 
 const initialState: CommentState = {
   comments: [],
+  comment: null,
   isLoading: false,
   error: null,
 };
@@ -114,21 +116,21 @@ export const UpdateComment = createAsyncThunk<
 
 // Like comment
 export const LikeComment = createAsyncThunk<
-  Comment,
+  { liked: boolean; userId: string | undefined },
   string,
   { state: RootState; rejectValue: string }
 >("comments/like", async (id: string, { getState, rejectWithValue }) => {
   try {
     const token = getState().user.token;
     const user = getState().user.user;
-    const response = await axios.post(
-      `${url}/like/${id}`,
+    const response = await axios.patch(
+      `${url}/${id}/like`,
       {},
       authHeader(token),
     );
     return {
-      ...response.data,
-      user,
+      liked: response.data.liked,
+      userId: user?._id,
     };
   } catch (error: any) {
     const message =
@@ -219,10 +221,24 @@ const commentSlice = createSlice({
       .addCase(LikeComment.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        if (action.payload.user === null) return;
-        state.comments = state.comments.map((comment) =>
-          comment._id === action.payload._id ? action.payload : comment,
-        );
+
+        if (!state.comment || !action.payload.userId) return;
+
+        const userId = action.payload.userId;
+
+        if (!state.comment.likes) {
+          state.comment.likes = [];
+        }
+
+        const userLiked = state.comment.likes.includes(userId);
+
+        if (userLiked) {
+          state.comment.likes = state.comment.likes.filter(
+            (like) => like !== userId,
+          );
+        } else {
+          state.comment.likes.push(userId);
+        }
       })
       .addCase(LikeComment.rejected, (state, action) => {
         state.isLoading = false;
