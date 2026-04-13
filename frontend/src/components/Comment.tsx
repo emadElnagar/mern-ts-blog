@@ -41,7 +41,7 @@ const CommentItem = ({
   const submitReply = (e: { target: any; preventDefault: () => void }) => {
     e.preventDefault();
     if (!replyText.trim()) return;
-    onReply(e, comment._id, replyText);
+    onReply(e, replyText, comment._id);
     setReplyText("");
     setShowReply(false);
   };
@@ -72,16 +72,23 @@ const CommentItem = ({
 
       {/* ACTIONS */}
       <div className="comment-actions">
-        <button title="Like" onClick={(e) => onLike(e, comment._id)}>
+        <button
+          title="Like"
+          className={`like-btn sm-btn ${isLiked ? "active" : ""}`}
+          onClick={(e) => onLike(e, comment._id)}
+        >
           {isLiked ? <AiFillLike /> : <AiOutlineLike />}{" "}
           <span>{comment.likes.length}</span>
         </button>
 
-        {user && (
-          <button title="Reply" onClick={() => setShowReply(!showReply)}>
-            <LuReply />
-          </button>
-        )}
+        <button title="Reply" onClick={() => setShowReply(!showReply)}>
+          <LuReply />{" "}
+          {replies.length === 1 ? (
+            <span className="replies-count">1 reply</span>
+          ) : replies.length > 1 ? (
+            <span className="replies-count">{replies.length} replies</span>
+          ) : null}
+        </button>
       </div>
 
       {/* CONTROLS */}
@@ -93,7 +100,7 @@ const CommentItem = ({
       )}
 
       {/* REPLY INPUT */}
-      {showReply && (
+      {showReply && user && (
         <div className="reply-box">
           <input
             placeholder="Write a reply..."
@@ -107,7 +114,7 @@ const CommentItem = ({
       )}
 
       {/* RECURSIVE REPLIES */}
-      {replies?.length > 0 && (
+      {showReply && replies?.length > 0 && (
         <div className="replies">
           {replies.map((reply) => (
             <CommentItem

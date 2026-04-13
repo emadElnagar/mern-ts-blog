@@ -436,7 +436,10 @@ input {
 
 /* Like Button */
 .like-btn svg {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
+  .sm-btn & {
+    font-size: 1rem;
+  }
 }
 
 .like-btn.active {
@@ -496,10 +499,9 @@ input {
 }
 
 .comment .user img {
-  width: 50px;
-  height: 50px;
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
-  object-fit: cover;
 }
 
 .comment .info {
@@ -508,6 +510,7 @@ input {
 }
 
 .comment .name {
+  text-transform: capitalize;
   font-weight: 600;
   font-size: 0.95rem;
   color: var(--color-text-main);
@@ -912,30 +915,15 @@ input[type="file"] {
   }
 }
 
-.comment {
-  margin-block-end: 10px;
-  .user {
-    display: flex;
-    align-items: center;
-    .name {
-      margin-inline-end: 5px;
-    }
-    img {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      margin-inline-end: 10px;
-    }
-  }
-  p {
-    margin-inline-start: 30px;
-  }
-}
-
 .comment.reply {
   padding-block-start: 10px;
   margin-inline-start: 30px;
   margin-block-end: 0;
+}
+
+.replies-count {
+  font-size: 0.75rem;
+  color: #2563eb;
 }
 
 .comment-actions {
