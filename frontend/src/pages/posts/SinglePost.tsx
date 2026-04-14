@@ -16,6 +16,7 @@ import CommentItem from "../../components/Comment";
 import { Comment } from "../../types/comment";
 import PostActions from "../../components/PostActions";
 import { useComments } from "../../hooks/CommentHooks";
+import DOMPurify from "dompurify";
 
 const SinglePost = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -83,7 +84,7 @@ const SinglePost = () => {
                 </span>
               </div>
               <h1 className="post-title">{post.title}</h1>
-              <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}></div>
             </div>
             {/* Post actions (like, comment) */}
             <PostActions
