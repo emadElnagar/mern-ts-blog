@@ -17,21 +17,17 @@ import { Comment } from "../../types/comment";
 import PostActions from "../../components/PostActions";
 import { useComments } from "../../hooks/CommentHooks";
 import DOMPurify from "dompurify";
+import { BASE_URL } from "../../Api";
 
 const SinglePost = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { slug } = useParams<{ slug: string }>();
   const [content, setContent] = useState("");
 
-  // Get single post
+  // Get single post and similar posts
   useEffect(() => {
     if (!slug) return;
     dispatch(GetSinglePost(slug));
-  }, [dispatch, slug]);
-
-  // Get similar posts
-  useEffect(() => {
-    if (!slug) return;
     dispatch(GetSimilarPosts(slug));
   }, [dispatch, slug]);
 
@@ -50,10 +46,9 @@ const SinglePost = () => {
 
   // Get post comments
   useEffect(() => {
-    if (!post) return;
-    const id = post._id;
-    dispatch(GetComments(id));
-  }, [dispatch, post]);
+    if (!post?._id) return;
+    dispatch(GetComments(post._id));
+  }, [dispatch, post?._id]);
   const { comments } = useSelector((state: any) => state.comment);
 
   return (
@@ -69,7 +64,7 @@ const SinglePost = () => {
             <div className="single-post">
               <div className="post-img-container">
                 <img
-                  src={`http://localhost:5000/${post.image}`}
+                  src={`${BASE_URL}/${post.image}`}
                   alt="It's problem showing images"
                 />
                 <span className="author">
@@ -84,12 +79,16 @@ const SinglePost = () => {
                 </span>
               </div>
               <h1 className="post-title">{post.title}</h1>
-              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}></div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(post.content),
+                }}
+              ></div>
             </div>
             {/* Post actions (like, comment) */}
             <PostActions
               initialLikes={post.likes.length}
-              initialLiked={post.likes.includes(user?._id)}
+              initialLiked={user ? post.likes.includes(user?._id) : false}
               commentsCount={comments.length}
               onLikePost={() => handlePostLike(post._id)}
               postSlug={post.slug}
@@ -97,16 +96,18 @@ const SinglePost = () => {
             <div className="comments">
               {user ? (
                 <form
-                  onSubmit={(e: { target: any; preventDefault: () => void }) =>
-                    createComment(content, e)
-                  }
+                  onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                    createComment(content, e);
+                    setContent("");
+                  }}
                 >
                   <input
                     type="text"
                     placeholder="Leave a comment"
+                    value={content}
                     onChange={(e) => setContent(e.target.value)}
                   />
-                  <button type="submit"></button>
+                  <button type="submit" style={{ display: "none" }}></button>
                 </form>
               ) : (
                 <Link to={`/users/login?next=/posts/${post.slug}`}>
@@ -122,7 +123,7 @@ const SinglePost = () => {
               <section className="post-comments">
                 <h3>Comments ({comments.length})</h3>
 
-                {comments.map((comment: Comment) => (
+                {comments?.map((comment: Comment) => (
                   <CommentItem
                     key={comment._id}
                     comment={comment}
@@ -135,14 +136,13 @@ const SinglePost = () => {
                 ))}
               </section>
             </div>
-            {similarPosts.length > 0 && (
+            {similarPosts?.length > 0 && (
               <div className="similar-posts">
                 <h2 className="text-center">You may also like</h2>
                 <div className="posts-container">
                   {similarPosts.map((post: any) => (
-                    <Link to={`/posts/${post.slug}`}>
+                    <Link key={post._id} to={`/posts/${post.slug}`}>
                       <Card
-                        key={post._id}
                         _id={post._id}
                         title={post.title}
                         content={post.content}
