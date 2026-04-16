@@ -51,6 +51,15 @@ const SinglePost = () => {
   }, [dispatch, post?._id]);
   const { comments } = useSelector((state: any) => state.comment);
 
+  // submit comment
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!content.trim()) return;
+    createComment(content, e);
+    dispatch(GetComments(post._id));
+    setContent("");
+  };
+
   return (
     <Fragment>
       <Helmet>
@@ -95,12 +104,7 @@ const SinglePost = () => {
             />
             <div className="comments">
               {user ? (
-                <form
-                  onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-                    createComment(content, e);
-                    setContent("");
-                  }}
-                >
+                <form onSubmit={handleSubmit}>
                   <input
                     type="text"
                     placeholder="Leave a comment"

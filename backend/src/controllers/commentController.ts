@@ -17,7 +17,12 @@ export const newComment = async (req: AuthenticatedRequest, res: Response) => {
       parentComment,
     });
     await comment.save();
-    res.status(201).json(comment);
+    // Populate the author field before sending the response
+    const populatedComment = await comment.populate(
+      "author",
+      "firstName lastName image",
+    );
+    res.status(201).json(populatedComment);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
