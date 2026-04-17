@@ -4,7 +4,6 @@ import { MdDelete } from "react-icons/md";
 import { IoPencil } from "react-icons/io5";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { LuReply } from "react-icons/lu";
-import { BiSolidSend } from "react-icons/bi";
 import { User } from "../types/user";
 import { Comment } from "../types/comment";
 import { BASE_URL } from "../Api";
@@ -102,14 +101,14 @@ const CommentItem = ({
       {/* REPLY INPUT */}
       {showReply && user && (
         <div className="reply-box">
-          <input
-            placeholder="Write a reply..."
-            value={replyText}
-            onChange={(e) => setReplyText(e.target.value)}
-          />
-          <button onClick={submitReply}>
-            <BiSolidSend />
-          </button>
+          <form onSubmit={submitReply}>
+            <input
+              placeholder="Write a reply..."
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+            />
+            <button type="submit" style={{ display: "none" }}></button>
+          </form>
         </div>
       )}
 
