@@ -136,6 +136,7 @@ const SinglePost = () => {
                     onUpdate={handleUpdate}
                     onLike={handleLike}
                     onReply={createReply}
+                    postSlug={post.slug}
                   />
                 ))}
               </section>

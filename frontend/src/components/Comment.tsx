@@ -7,10 +7,12 @@ import { LuReply } from "react-icons/lu";
 import { User } from "../types/user";
 import { Comment } from "../types/comment";
 import { BASE_URL } from "../Api";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   comment: Comment;
   user: User | null;
+  postSlug: string;
   onDelete: (id: string) => void;
   onUpdate: (id: string) => void;
   onLike: (e: { preventDefault: () => void }, id: string) => void;
@@ -24,6 +26,7 @@ interface Props {
 const CommentItem = ({
   comment,
   user,
+  postSlug,
   onDelete,
   onUpdate,
   onLike,
@@ -31,6 +34,8 @@ const CommentItem = ({
 }: Props) => {
   const [showReply, setShowReply] = useState(false);
   const [replyText, setReplyText] = useState("");
+
+  const navigate = useNavigate();
 
   const isOwner = user?._id === comment.author._id;
   const isAdmin = user?.role === "admin";
@@ -74,7 +79,11 @@ const CommentItem = ({
         <button
           title="Like"
           className={`like-btn sm-btn ${isLiked ? "active" : ""}`}
-          onClick={(e) => onLike(e, comment._id)}
+          onClick={
+            user
+              ? (e) => onLike(e, comment._id)
+              : () => navigate(`/users/login?next=/posts/${postSlug}`)
+          }
         >
           {isLiked ? <AiFillLike /> : <AiOutlineLike />}{" "}
           <span>{comment.likes.length}</span>
@@ -124,6 +133,7 @@ const CommentItem = ({
               onUpdate={onUpdate}
               onLike={onLike}
               onReply={onReply}
+              postSlug={postSlug}
             />
           ))}
         </div>
