@@ -26,9 +26,21 @@ const PostActions = ({
 
   const navigate = useNavigate();
 
-  const handleLike = () => {
-    onLikePost();
-    setLiked(!liked);
+  const handleLike = async () => {
+    let previousLiked = liked;
+
+    setLiked((prevLiked) => {
+      setLikes((prevLikes) => (prevLiked ? prevLikes - 1 : prevLikes + 1));
+      return !prevLiked;
+    });
+
+    try {
+      await onLikePost();
+    } catch (error) {
+      // rollback
+      setLiked(previousLiked);
+      setLikes((prev) => (previousLiked ? prev + 1 : prev - 1));
+    }
   };
 
   return (
