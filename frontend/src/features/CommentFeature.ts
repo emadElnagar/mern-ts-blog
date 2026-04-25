@@ -219,30 +219,28 @@ const commentSlice = createSlice({
         state.error = null;
       })
       .addCase(LikeComment.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.error = null;
+        const commentId = action.meta.arg;
 
-        if (!state.comment || !action.payload.userId) return;
+        const updateLike = (comments: any[]) => {
+          comments.forEach((comment) => {
+            if (comment._id === commentId) {
+              // toggle like
+              if (comment.likes.includes(action.payload.userId)) {
+                comment.likes = comment.likes.filter(
+                  (id: string | undefined) => id !== action.payload.userId,
+                );
+              } else {
+                comment.likes.push(action.payload.userId);
+              }
+            }
 
-        const userId = action.payload.userId;
+            if (comment.replies) {
+              updateLike(comment.replies);
+            }
+          });
+        };
 
-        if (!state.comment.likes) {
-          state.comment.likes = [];
-        }
-
-        const userLiked = state.comment.likes.includes(userId);
-
-        if (userLiked) {
-          state.comment.likes = state.comment.likes.filter(
-            (like) => like !== userId,
-          );
-        } else {
-          state.comment.likes.push(userId);
-        }
-      })
-      .addCase(LikeComment.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload as string;
+        updateLike(state.comments);
       });
   },
 });
