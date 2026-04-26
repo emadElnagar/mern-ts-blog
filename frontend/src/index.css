@@ -437,7 +437,7 @@ input {
 /* Like Button */
 .like-btn svg {
   font-size: 1.2rem;
-  .sm-btn & {
+  .sm-btn svg {
     font-size: 1rem;
   }
 }
@@ -446,7 +446,7 @@ input {
   color: #2563eb;
 }
 
-.like-btn.active svg {
+.like-btn:active svg {
   animation: pop 0.25s ease;
 }
 
