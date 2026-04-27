@@ -284,20 +284,19 @@ const postSlice = createSlice({
         state.isLoading = false;
         state.error = null;
 
-        if (!state.post || !action.payload.userId) return;
+        if (!state.post) return;
 
         const userId = action.payload.userId;
+        if (!userId) return;
 
-        if (!state.post.likes) {
-          state.post.likes = [];
-        }
+        const likes = state.post.likes ?? [];
 
-        const userLiked = state.post.likes.includes(userId);
+        const index = likes.indexOf(userId);
 
-        if (userLiked) {
-          state.post.likes = state.post.likes.filter((like) => like !== userId);
+        if (index !== -1) {
+          state.post.likes = likes.filter((id) => id !== userId);
         } else {
-          state.post.likes.push(userId);
+          state.post.likes = [...likes, userId];
         }
       })
       .addCase(LikePost.rejected, (state, action) => {

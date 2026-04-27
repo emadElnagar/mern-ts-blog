@@ -1,58 +1,35 @@
-import { useState } from "react";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { FaRegCommentDots } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
-  initialLikes: number;
-  initialLiked: boolean;
+  likesCount: number;
+  isLiked: boolean;
   commentsCount: number;
   onLikePost: () => void;
   postSlug: string;
 }
 
 const PostActions = ({
-  initialLikes,
-  initialLiked,
+  likesCount,
+  isLiked,
   commentsCount,
   onLikePost,
   postSlug,
 }: Props) => {
   const { user } = useSelector((state: any) => state.user);
-
-  const [liked, setLiked] = useState(initialLiked);
-  const [likes, setLikes] = useState(initialLikes);
-
   const navigate = useNavigate();
-
-  const handleLike = async () => {
-    let previousLiked = liked;
-
-    setLiked((prevLiked) => {
-      setLikes((prevLikes) => (prevLiked ? prevLikes - 1 : prevLikes + 1));
-      return !prevLiked;
-    });
-
-    try {
-      await onLikePost();
-    } catch (error) {
-      // rollback
-      setLiked(previousLiked);
-      setLikes((prev) => (previousLiked ? prev + 1 : prev - 1));
-    }
-  };
 
   return (
     <div className="post-actions">
-      {/* Like Button */}
       {user ? (
         <button
-          className={`like-btn ${liked ? "active" : ""}`}
-          onClick={handleLike}
+          className={`like-btn ${isLiked ? "active" : ""}`}
+          onClick={onLikePost}
         >
-          {liked ? <AiFillLike /> : <AiOutlineLike />}
-          <span>{likes}</span>
+          {isLiked ? <AiFillLike /> : <AiOutlineLike />}
+          <span>{likesCount}</span>
         </button>
       ) : (
         <button
@@ -60,11 +37,10 @@ const PostActions = ({
           onClick={() => navigate(`/users/login?next=/posts/${postSlug}`)}
         >
           <AiOutlineLike />
-          <span>{likes}</span>
+          <span>{likesCount}</span>
         </button>
       )}
 
-      {/* Comment Button */}
       <button className="comment-btn">
         <FaRegCommentDots />
         <span>{commentsCount} Comments</span>

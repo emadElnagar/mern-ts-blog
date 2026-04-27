@@ -96,8 +96,8 @@ const SinglePost = () => {
             </div>
             {/* Post actions (like, comment) */}
             <PostActions
-              initialLikes={post.likes.length}
-              initialLiked={user ? post.likes.includes(user?._id) : false}
+              likesCount={post.likes.length}
+              isLiked={user ? post.likes.includes(user._id) : false}
               commentsCount={comments.length}
               onLikePost={() => handlePostLike(post._id)}
               postSlug={post.slug}
