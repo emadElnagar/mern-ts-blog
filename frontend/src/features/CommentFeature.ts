@@ -218,9 +218,15 @@ const commentSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
+      .addCase(LikeComment.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
       .addCase(LikeComment.fulfilled, (state, action) => {
-        const commentId = action.meta.arg;
+        state.isLoading = false;
+        state.error = null;
 
+        const commentId = action.meta.arg;
         const updateLike = (comments: any[]) => {
           comments.forEach((comment) => {
             if (comment._id === commentId) {
