@@ -153,20 +153,42 @@ export const GetSinglePost: RequestHandler = async (req, res) => {
 export const GetSimilarPosts: RequestHandler = async (req, res) => {
   try {
     const post = await Post.findOne({ slug: req.params.slug });
+    const limit = 4;
+
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
-    const similarPosts = (
-      await Post.find({ category: post?.category })
+
+    // 1. Get similar posts (same category)
+    let similarPosts = await Post.find({
+      category: post.category,
+      slug: { $ne: post.slug }, // exclude current post
+    })
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .populate("author", "_id firstName lastName image")
+      .populate("category");
+
+    // 2. If less than 4, fill with latest posts
+    if (similarPosts.length < limit) {
+      const needed = limit - similarPosts.length;
+
+      const excludeSlugs = [post.slug, ...similarPosts.map((p) => p.slug)];
+
+      const fallbackPosts = await Post.find({
+        slug: { $nin: excludeSlugs },
+      })
         .sort({ createdAt: -1 })
-        .limit(3)
-        .populate("author", " _id firstName lastName image")
-        .populate("category")
-    ).filter((item) => item.slug !== post?.slug);
-    if (!similarPosts) return;
-    res.status(200).json(similarPosts);
+        .limit(needed)
+        .populate("author", "_id firstName lastName image")
+        .populate("category");
+
+      similarPosts = [...similarPosts, ...fallbackPosts];
+    }
+
+    return res.status(200).json(similarPosts);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
