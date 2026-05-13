@@ -600,7 +600,7 @@ input {
 }
 
 /* Content */
-.post-content {
+.post-card.post-content {
   padding: 20px 22px;
 }
 
@@ -862,35 +862,76 @@ input[type="file"] {
   cursor: pointer;
 }
 
+/* layout split */
+.page-layout {
+  display: grid;
+  grid-template-columns: 3fr 1.2fr;
+  gap: 30px;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== POST ===== */
 .single-post {
-  color: var(--color-text-secondary);
-  .author {
-    text-transform: capitalize;
-    a {
-      color: inherit;
-    }
-  }
-  .date {
-    color: var(--color-text-muted);
-  }
-  h1,
-  h2 {
-    color: var(--color-text-main);
-    margin-block: 20px;
-  }
-  h1.post-title {
-    font-size: 32px;
-    line-height: 1.6;
-    text-align: center;
-  }
-  h2 {
-    font-size: 24px;
-    line-height: 1.5;
-  }
-  li {
-    list-style-type: disc;
-    margin-inline-start: 20px;
-  }
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+}
+
+/* image */
+.post-img-container img {
+  width: 100%;
+  border-radius: 12px;
+  max-height: 420px;
+  object-fit: cover;
+}
+
+/* meta */
+.author,
+.date {
+  display: inline-block;
+  margin-top: 10px;
+  margin-right: 15px;
+  font-size: 13px;
+  color: #777;
+}
+
+.author a {
+  font-weight: 500;
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* title */
+.post-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 20px 0;
+  color: #111;
+  line-height: 1.3;
+}
+
+/* content */
+.post-card .post-content {
+  font-size: 18px;
+  line-height: 1.9;
+  color: #333;
+}
+
+.post-card .post-content p {
+  margin-bottom: 18px;
+}
+
+.post-card .post-content img {
+  width: 100%;
+  border-radius: 10px;
+  margin: 20px 0;
 }
 
 .comments {
@@ -973,4 +1014,28 @@ input[type="file"] {
     color: #fff;
     cursor: pointer;
   }
+}
+/* ===== SIDEBAR ===== */
+.sidebar {
+  position: sticky;
+  top: 20px;
+}
+
+.similar-posts {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.similar-posts h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+/* cards grid */
+.similar-posts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
