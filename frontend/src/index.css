@@ -600,7 +600,7 @@ input {
 }
 
 /* Content */
-.post-card.post-content {
+.post-card .post-content {
   padding: 20px 22px;
 }
 
@@ -780,7 +780,7 @@ select {
     margin-inline: 10px;
   }
   .delete {
-    color: #b00020;
+    color: var(--color-error);
   }
 }
 
@@ -854,7 +854,7 @@ input[type="file"] {
 .upload-label {
   font-size: 1.2rem;
   background: var(--color-secondary);
-  color: #fff;
+  color: var(--color-bg-main);
   width: 200px;
   margin-bottom: 20px;
   text-align: center;
@@ -878,7 +878,7 @@ input[type="file"] {
 
 /* ===== POST ===== */
 .single-post {
-  background: #fff;
+  background: var(--color-bg-main);
   border-radius: 16px;
   padding: 30px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
@@ -899,12 +899,12 @@ input[type="file"] {
   margin-top: 10px;
   margin-right: 15px;
   font-size: 13px;
-  color: #777;
+  color: var(--color-text-muted);
 }
 
 .author a {
   font-weight: 500;
-  color: #007bff;
+  color: var(--color-primary);
   text-decoration: none;
 }
 
@@ -913,22 +913,28 @@ input[type="file"] {
   font-size: 36px;
   font-weight: 700;
   margin: 20px 0;
-  color: #111;
+  color: var(--color-text-main);
   line-height: 1.3;
 }
 
 /* content */
-.post-card .post-content {
+.single-post .post-content {
   font-size: 18px;
   line-height: 1.9;
-  color: #333;
+  color: var(--color-text-secondary);
 }
 
-.post-card .post-content p {
+.single-post .post-content h3 {
+  color: var(--color-text-main);
+  font-size: 1.5rem;
+}
+
+.single-post .post-content p {
   margin-bottom: 18px;
+  line-height: 1.5;
 }
 
-.post-card .post-content img {
+.single-post .post-content img {
   width: 100%;
   border-radius: 10px;
   margin: 20px 0;
@@ -1011,7 +1017,7 @@ input[type="file"] {
     padding: 10px 15px;
     background: var(--color-primary);
     border: none;
-    color: #fff;
+    color: var(--color-bg-main);
     cursor: pointer;
   }
 }
@@ -1022,7 +1028,7 @@ input[type="file"] {
 }
 
 .similar-posts {
-  background: #fff;
+  background: var(--color-bg-surface);
   padding: 20px;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
