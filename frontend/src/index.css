@@ -1045,3 +1045,28 @@ input[type="file"] {
   flex-direction: column;
   gap: 15px;
 }
+
+/* Similar posts card */
+.similar-posts-card {
+  background: var(--color-bg-surface);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  img {
+    border-radius: 10px;
+    margin-bottom: 12px;
+    aspect-ratio: 1.5 / 1;
+  }
+  h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--color-text-main);
+  }
+  span {
+    color: var(--color-text-muted);
+    display: block;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+  }
+}

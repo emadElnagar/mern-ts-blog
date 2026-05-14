@@ -9,7 +9,6 @@ import {
 } from "../../features/PostFeatures";
 import LoadingScreen from "../../components/LoadingScreen";
 import moment from "moment";
-import Card from "../../components/Card";
 import { GetComments } from "../../features/CommentFeature";
 import { AppDispatch } from "../../store";
 import CommentItem from "../../components/Comment";
@@ -18,6 +17,7 @@ import PostActions from "../../components/PostActions";
 import { useComments } from "../../hooks/CommentHooks";
 import DOMPurify from "dompurify";
 import { BASE_URL } from "../../Api";
+import { CiHeart } from "react-icons/ci";
 
 const SinglePost = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -161,17 +161,27 @@ const SinglePost = () => {
                     <div className="similar-posts-container">
                       {similarPosts.map((post: any) => (
                         <Link key={post._id} to={`/posts/${post.slug}`}>
-                          <Card
-                            _id={post._id}
-                            title={post.title}
-                            content={post.content}
-                            category={post.category?.title}
-                            image={post.image}
-                            author={`${post.author?.firstName} ${post.author?.lastName}`}
-                            authorImage={post.author?.image}
-                            commentsCount={post.commentsCount}
-                            date={new Date(post.createdAt).toLocaleDateString()}
-                          />
+                          <div className="similar-posts-card">
+                            <div className="post-img">
+                              <img
+                                src={`${BASE_URL}/${post.image}`}
+                                alt="It's problem showing images"
+                              />
+                            </div>
+                            <div>
+                              <h3>{post.title}</h3>
+                              <span>
+                                {moment(post.createdAt).format("MMMM Do YYYY")}
+                              </span>
+                              <span>
+                                By: {post.author?.firstName}{" "}
+                                {post.author?.lastName}
+                              </span>
+                              <span>
+                                {post.likes.length} <CiHeart />
+                              </span>
+                            </div>
+                          </div>
                         </Link>
                       ))}
                     </div>
